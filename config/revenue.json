@@ -1,0 +1,42 @@
+{
+  "currency": "USD",
+  "targets": {
+    "monthly_revenue_min": 20000,
+    "monthly_revenue_max": 30000,
+    "monthly_new_clients": 10
+  },
+  "markets": [
+    { "id": "dubai", "label": "Dubai / UAE", "priority": 1, "fit": 1.0, "timezone": "Asia/Dubai",
+      "keywords": ["dubai", "uae", "united arab emirates", "abu dhabi", "sharjah", "ajman", "ras al khaimah", "emirates"] },
+    { "id": "usa", "label": "United States", "priority": 2, "fit": 0.85, "timezone": "America/New_York",
+      "keywords": ["united states", "usa", "u.s.", " us ", "new york", "california", "texas", "florida", "miami", "los angeles", "chicago", "houston", "dallas", "austin", "atlanta", "phoenix", "seattle", "boston", "denver", "las vegas", "san diego", "san francisco", "nashville", "charlotte", "tampa", "orlando"] },
+    { "id": "uk", "label": "United Kingdom", "priority": 3, "fit": 0.8, "timezone": "Europe/London",
+      "keywords": ["united kingdom", "uk", "england", "london", "manchester", "birmingham", "scotland", "edinburgh", "glasgow", "wales", "cardiff", "leeds", "liverpool", "bristol", "great britain"] }
+  ],
+  "icp": {
+    "industry_keywords": ["real estate", "realestate", "realtor", "realty", "property", "properties", "broker", "brokerage", "estate agent", "estate agency", "letting", "lettings", "homes", "off-plan", "off plan", "mortgage", "keller williams", "remax", "re/max", "coldwell", "century 21", "compass", "exp realty", "emaar", "damac", "betterhomes", "allsopp", "haus & haus", "fäm", "fam properties", "savills", "knight frank", "foxtons", "purplebricks"],
+    "titles": {
+      "founder": ["founder", "co-founder", "owner", "agency owner", "managing director", "md", "ceo", "principal", "partner", "director"],
+      "leader": ["team leader", "team lead", "head of sales", "sales director", "sales manager", "general manager", "broker owner", "managing broker"],
+      "broker": ["real estate broker", "broker", "senior broker", "associate broker"],
+      "agent": ["real estate agent", "realtor", "property consultant", "real estate consultant", "estate agent", "sales agent", "property advisor", "property adviser", "agent", "consultant", "advisor"]
+    },
+    "seniority_values": { "founder": 1.0, "leader": 0.85, "broker": 0.75, "agent": 0.6 },
+    "disqualifiers": ["student", "intern", "looking for opportunities", "open to work", "retired", "unemployed"]
+  },
+  "caps": {
+    "max_ai_drafts_per_morning": 25,
+    "max_classifications_per_run": 200,
+    "max_reply_analyses_per_run": 40,
+    "max_content_ideas_per_week": 14,
+    "connection_note_max_chars": 280,
+    "inmail_subject_max_chars": 200,
+    "inmail_body_max_chars": 1900,
+    "message_max_chars": 1200
+  },
+  "follow_up": {
+    "default_gap_days": 4,
+    "max_unanswered_follow_ups": 3,
+    "stale_after_days": 21
+  }
+}

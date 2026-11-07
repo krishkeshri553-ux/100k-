@@ -1,0 +1,12 @@
+{
+  "_note": "Cron expressions are UTC and must match .github/workflows/revenue-ops.yml. Owner timezone is Asia/Kolkata (UTC+05:30).",
+  "workflows": {
+    "morning":  { "cron": "47 2 * * *",        "ist": "08:17 daily",            "description": "Rescore, review old leads, follow-ups due, outreach drafts, priority list" },
+    "daytime":  { "cron": "17 6,9,12,15 * * *", "ist": "11:47, 14:47, 17:47, 20:47", "description": "Process new records, analyse replies, response drafts, booking opportunities, hot-lead alerts" },
+    "content":  { "cron": "17 4 * * 1-6",      "ist": "09:47 Mon–Sat",          "description": "Content ideas, drafts, carousels into approval queue" },
+    "evening":  { "cron": "37 15 * * *",       "ist": "21:07 daily",            "description": "Daily performance report" },
+    "weekly":   { "cron": "7 12 * * 0",        "ist": "17:37 Sunday",           "description": "Weekly revenue intelligence and optimisation report" },
+    "backup":   { "cron": "23 17 * * *",       "ist": "22:53 daily",            "description": "Encrypted database backup" },
+    "knowledge":{ "cron": "53 3 * * 1",        "ist": "09:23 Monday",           "description": "Website change check for the business brain" }
+  }
+}

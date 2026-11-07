@@ -1,0 +1,19 @@
+{
+  "owner_timezone": "Asia/Kolkata",
+  "meeting_duration_minutes": 30,
+  "buffer_minutes": 10,
+  "min_notice_hours": 12,
+  "lookahead_days": 10,
+  "max_suggestions": 6,
+  "working_hours": {
+    "mon": [["11:00", "20:30"]],
+    "tue": [["11:00", "20:30"]],
+    "wed": [["11:00", "20:30"]],
+    "thu": [["11:00", "20:30"]],
+    "fri": [["11:00", "20:30"]],
+    "sat": [["11:00", "16:00"]],
+    "sun": []
+  },
+  "event_title_template": "HustleGrowthz strategy call — {name}",
+  "conferencing": "google_meet"
+}

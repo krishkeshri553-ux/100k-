@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "weights": {
+    "icp_fit": 20,
+    "business_potential": 15,
+    "content_opportunity": 20,
+    "recent_activity": 15,
+    "buying_signals": 15,
+    "ability_to_invest": 15
+  },
+  "unknown_value": 0.5,
+  "min_known_weight_for_high": 0.6,
+  "classes": [
+    { "min": 85, "id": "hot", "label": "Hot" },
+    { "min": 70, "id": "high", "label": "High priority" },
+    { "min": 50, "id": "warm", "label": "Warm" },
+    { "min": 30, "id": "low", "label": "Low priority" },
+    { "min": 0, "id": "not_qualified", "label": "Not qualified" }
+  ]
+}

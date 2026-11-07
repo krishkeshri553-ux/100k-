@@ -1,0 +1,233 @@
+{
+  "name": "HUSTLEGROWTHZ_BUSINESS_BRAIN",
+  "version": 1,
+  "last_verified": "2026-11-07",
+  "verification_method": "Full scrape of https://www.hustlegrowthz.com (homepage + 17 routes + /for/real-estate-agents). Verbatim snapshots in knowledge/website_snapshot/. Every website claim below carries a source URL.",
+  "rules": [
+    "Website claims (kind=website) may be stated to prospects as written.",
+    "Owner-defined items (kind=owner) are internal strategy, not public claims; do not present them as facts about past results.",
+    "Never invent an offer feature, result, testimonial, guarantee, price, discount or client industry.",
+    "No testimonial on the website names an industry. Do NOT claim real-estate client results or 'agents we work with achieved X'. You MAY say the service works with real estate agents and that the same offer applies (source: /for/real-estate-agents).",
+    "LinkedIn publishing is NOT part of the standard service (source: /for/consultants). Do not promise LinkedIn posting. Videos produced are the client's to post on LinkedIn themselves.",
+    "Never guarantee leads, clients, revenue, views or followers.",
+    "Discounts, custom pricing, refunds and contract changes require owner approval and must never be offered by the AI."
+  ],
+  "company": {
+    "legal_name": { "text": "HustleGrowthz Private Limited, registered in India. CIN available on request.", "kind": "website", "source": "https://www.hustlegrowthz.com/about" },
+    "founder": { "text": "Krish Keshri, leading a remote team of strategists, scriptwriters and editors.", "kind": "website", "source": "https://www.hustlegrowthz.com/about" },
+    "positioning": { "text": "Done-for-you short-form social media for experts: 'We run your social media. You record for an hour a week.'", "kind": "website", "source": "https://www.hustlegrowthz.com/" },
+    "markets_served": { "text": "Clients in the US, UK, Canada, Australia, Europe and the UAE, and anywhere else in the world. Everything runs remotely through Discord and shared drives.", "kind": "website", "source": "https://www.hustlegrowthz.com/faq" },
+    "values": { "text": "We don't publish claims we can't back up, on this site or in your reports. Honest numbers: we report what happened, including what didn't work.", "kind": "website", "source": "https://www.hustlegrowthz.com/about" }
+  },
+  "offers": [
+    {
+      "id": "authority_flywheel",
+      "name": "Authority Flywheel™",
+      "summary": { "text": "A complete, done-for-you social media system for coaches, consultants and high-ticket experts. You bring the expertise and about an hour a week on camera. We handle the strategy, scripts, editing, publishing and the DM system behind it.", "kind": "website", "source": "https://www.hustlegrowthz.com/authority-flywheel" },
+      "not_just_editing": { "text": "It replaces the strategist, scriptwriter, editor, social media manager and DM setter you'd otherwise hire, brief and manage.", "kind": "website", "source": "https://www.hustlegrowthz.com/" },
+      "deliverables": [
+        { "text": "Authority positioning and content strategy (roadmap, positioning strategy PDF and content blueprint within 48 hours of completing onboarding)", "source": "https://www.hustlegrowthz.com/pricing" },
+        { "text": "Market and competitor research before scripting starts", "source": "https://www.hustlegrowthz.com/services" },
+        { "text": "30 scripts written for you every month, in your voice", "source": "https://www.hustlegrowthz.com/pricing" },
+        { "text": "30 short-form videos edited and branded every month (retention-focused editing: hooks, pacing, on-brand styling)", "source": "https://www.hustlegrowthz.com/services" },
+        { "text": "Publishing on Instagram, TikTok, YouTube Shorts and Facebook", "source": "https://www.hustlegrowthz.com/pricing" },
+        { "text": "ManyChat comment-to-DM automation, lead-qualification questions and call booking flow", "source": "https://www.hustlegrowthz.com/services" },
+        { "text": "Weekly tracking reports and monthly angle optimisation", "source": "https://www.hustlegrowthz.com/pricing" },
+        { "text": "Private 1:1 Discord channel with the team", "source": "https://www.hustlegrowthz.com/pricing" },
+        { "text": "Podcast repurposing into short-form clips is included", "source": "https://www.hustlegrowthz.com/services" }
+      ],
+      "process": [
+        { "step": "Position", "text": "Onboarding form and positioning session, then market and competitor research. Within 48 hours: roadmap, positioning strategy and content blueprint.", "source": "https://www.hustlegrowthz.com/" },
+        { "step": "Produce", "text": "We write every script in your voice. You record in about 45–60 minutes a week on phone or webcam. We edit into branded short-form videos.", "source": "https://www.hustlegrowthz.com/" },
+        { "step": "Publish", "text": "Scheduled and published to Instagram, TikTok, YouTube Shorts and Facebook on a consistent calendar.", "source": "https://www.hustlegrowthz.com/" },
+        { "step": "Convert & learn", "text": "ManyChat comment-to-DM automation qualifies people and offers the booking link. Weekly tracking shapes next month's scripts.", "source": "https://www.hustlegrowthz.com/" }
+      ],
+      "limits": [
+        { "text": "30 videos a month. Not unlimited.", "source": "https://www.hustlegrowthz.com/authority-flywheel" },
+        { "text": "You record. We don't film on location.", "source": "https://www.hustlegrowthz.com/authority-flywheel" },
+        { "text": "Four platforms. Other channels are outside the standard scope.", "source": "https://www.hustlegrowthz.com/authority-flywheel" },
+        { "text": "We don't do graphic-only posting or paid ads.", "source": "https://www.hustlegrowthz.com/services" },
+        { "text": "Long-form YouTube editing, thumbnails and upload are quoted separately on a call.", "source": "https://www.hustlegrowthz.com/services" },
+        { "text": "LinkedIn publishing isn't part of the standard service, but the videos we produce are yours to post there too. If LinkedIn is your main channel, raise it on the call.", "source": "https://www.hustlegrowthz.com/for/consultants" },
+        { "text": "Requires access to the client's accounts and a ManyChat account connected to their profile.", "source": "https://www.hustlegrowthz.com/authority-flywheel" },
+        { "text": "Month one is mostly setup: positioning, research, scripts, the automation.", "source": "https://www.hustlegrowthz.com/authority-flywheel" }
+      ],
+      "real_estate_angle": {
+        "source": "https://www.hustlegrowthz.com/for/real-estate-agents",
+        "headline": "Content that wins the listing for you.",
+        "problem": "Showings, calls and paperwork fill the week. Content gets whatever energy is left — a listing photo, a 'just sold' post, or nothing for a fortnight. The account looks like every other agent's account.",
+        "pillars": [
+          "Point of view — what you see in your market that most agents won't say out loud: pricing myths, timing, what really sells a home.",
+          "Method — how you work: your pricing approach, how you prepare a listing, how you negotiate.",
+          "Proof in motion — real deals (with permission): the situation, what you did, how it closed. No hype, no invented numbers.",
+          "Objections — commission, timing, 'should I wait?', answered in public."
+        ],
+        "dm_system": "A video ends with a prompt: comment a word to get a seller checklist or neighbourhood guide. ManyChat sends it, then asks buying-or-selling and timeline. People who fit get the booking link.",
+        "faqs": [
+          { "q": "Do you film the videos?", "a": "No. You record on your phone using scripts we write, about 45–60 minutes a week, often in or around your listings and your area." },
+          { "q": "Which markets do you work with?", "a": "Agents in the US, UK, Canada, Australia, Europe and the UAE. Scripts are written for your local market." },
+          { "q": "Can you post my listings?", "a": "Listing tours can be part of the mix, but most videos focus on building trust before someone is ready to list." }
+        ]
+      }
+    }
+  ],
+  "pricing": {
+    "currency": "USD",
+    "approved_amounts": [999, 5999, 11988, 5989, 499.92],
+    "plans": [
+      { "id": "monthly", "name": "Monthly", "price": 999, "period": "month", "billing": "Billed in advance each month, renewing automatically until cancelled.", "source": "https://www.hustlegrowthz.com/terms-and-conditions" },
+      { "id": "annual", "name": "Annual", "price": 5999, "period": "year", "billing": "Billed once in advance for 12 months. Works out to $499.92 a month; saves $5,989 vs twelve monthly payments ($11,988), about 50%.", "source": "https://www.hustlegrowthz.com/pricing" }
+    ],
+    "same_service": { "text": "Both plans include exactly the same service.", "source": "https://www.hustlegrowthz.com/pricing" },
+    "taxes": { "text": "Prices are in USD and exclude taxes and bank or currency fees.", "source": "https://www.hustlegrowthz.com/pricing" },
+    "start_monthly": { "text": "Most people start with the monthly plan to see how we work.", "source": "https://www.hustlegrowthz.com/pricing" },
+    "discount_policy": { "text": "No discounts are published. Any discount or custom price requires owner approval.", "kind": "owner" }
+  },
+  "payment_terms": [
+    { "text": "All payments are non-refundable, including partially used months (monthly) and the full 12 months (annual).", "source": "https://www.hustlegrowthz.com/refund-policy" },
+    { "text": "Monthly can be cancelled any time by emailing info@hustlegrowthz.com before the next billing date; service continues to the end of the paid period.", "source": "https://www.hustlegrowthz.com/terms-and-conditions" },
+    { "text": "Annual is a 12-month commitment and cannot be cancelled for a refund part-way through. We contact you before it ends to agree whether to renew.", "source": "https://www.hustlegrowthz.com/pricing" },
+    { "text": "Billing errors: email within 7 days of payment.", "source": "https://www.hustlegrowthz.com/refund-policy" },
+    { "text": "Once paid in full, you own the final videos and scripts delivered for that period.", "source": "https://www.hustlegrowthz.com/terms-and-conditions" },
+    { "text": "Delays caused by missing recordings, approvals or access do not extend or reduce the fees due. Clients respond to approvals within 48 business hours.", "source": "https://www.hustlegrowthz.com/terms-and-conditions" }
+  ],
+  "guarantees": {
+    "policy": { "text": "No guarantee of leads, clients, revenue, followers or views. We commit to the work: the strategy, 30 scripted and edited videos a month, consistent publishing, the DM system and weekly tracking.", "source": "https://www.hustlegrowthz.com/faq" },
+    "testimonial_disclaimer": { "text": "These are individual clients describing their own results. They are not typical or guaranteed. Results depend on your offer, your market, your effort and many factors outside our control.", "source": "https://www.hustlegrowthz.com/results" }
+  },
+  "proof": {
+    "aggregate": [
+      { "id": "views_250m", "text": "250M+ views generated for clients", "numbers": ["250M"], "source": "https://www.hustlegrowthz.com/results" },
+      { "id": "clients_200", "text": "200+ clients served worldwide", "numbers": ["200"], "source": "https://www.hustlegrowthz.com/results" }
+    ],
+    "case_studies": [
+      { "id": "alex", "name": "Alex", "claim": "180K+ followers. 25M+ views.", "numbers": ["180K", "25M"], "format": "video testimonial", "url": "https://vimeo.com/1215442620", "industry": null, "source": "https://www.hustlegrowthz.com/results", "best_for": ["skeptical", "case_study_request", "curious"] },
+      { "id": "vadym", "name": "Vadym", "claim": "200 leads in 60 days, while engagement climbed.", "numbers": ["200", "60"], "format": "video testimonial", "url": "https://vimeo.com/1240371011", "industry": null, "source": "https://www.hustlegrowthz.com/results", "best_for": ["interested", "price_sensitive", "case_study_request"] },
+      { "id": "amy", "name": "Amy", "claim": "1M+ views, 1,500+ new followers and 300+ qualified leads in under two weeks.", "numbers": ["1M", "1,500", "300"], "format": "video testimonial", "url": "https://vimeo.com/1240386465", "industry": null, "source": "https://www.hustlegrowthz.com/results", "best_for": ["skeptical", "case_study_request", "comparing_competitors"] },
+      { "id": "tracy_business", "name": "Tracy", "claim": "Content that brought in sales and leads, not just views.", "numbers": [], "format": "video testimonial", "url": "https://vimeo.com/1238450682", "industry": null, "source": "https://www.hustlegrowthz.com/results", "best_for": ["price_sensitive", "skeptical"] },
+      { "id": "jamell", "name": "Jamell", "claim": "Real results. Real authority. Real growth — once his content was running every week.", "numbers": [], "format": "video testimonial", "url": "https://vimeo.com/1238453804", "industry": null, "source": "https://www.hustlegrowthz.com/results", "best_for": ["busy", "not_ready"] },
+      { "id": "tracy_reach", "name": "Tracy", "claim": "A jump in reach, engagement and views.", "numbers": [], "format": "video testimonial", "url": "https://vimeo.com/1240386642", "industry": null, "source": "https://www.hustlegrowthz.com/results", "best_for": ["curious"] }
+    ],
+    "screenshot_testimonials": [
+      { "name": "Tracey", "text": "I got 4.4 million views on this reel.", "numbers": ["4.4M", "4.4 million"] },
+      { "name": "Tai", "text": "A post hit 1M views; followers went from 3K to 6K on the same post.", "numbers": ["1M", "3K", "6K"] },
+      { "name": "Bruce (US)", "text": "One video passed 200K viewers; the account went from 2 to 358 followers.", "numbers": ["200K", "358"] },
+      { "name": "Sina", "text": "96,504 views, 98.3% from non-followers, 59,370 accounts reached.", "numbers": ["96,504", "98.3", "59,370"] },
+      { "name": "Robert", "text": "91,000 views and 40 comments on Facebook in a week; a post went viral and 40 people asked for info.", "numbers": ["91,000", "40"] }
+    ],
+    "proof_offer": { "text": "If you'd like to speak to a current client before deciding, ask us on the call.", "source": "https://www.hustlegrowthz.com/results" },
+    "industry_note": "No published testimonial names the client's industry. There are NO published real-estate-specific case studies."
+  },
+  "icp": {
+    "website_fit": { "text": "Coaches, consultants, founders, real estate agents and podcast hosts with high-value offers. Works best for offers priced above $1,000.", "source": "https://www.hustlegrowthz.com/services" },
+    "website_not_fit": { "text": "Low-ticket products; people looking for shortcuts or overnight results; anyone unwilling to record consistently; people who only need an editor for videos already planned.", "source": "https://www.hustlegrowthz.com/faq" },
+    "audience_size": { "text": "No existing audience needed — built to work with 500 or 50,000 followers. What matters is a clear, proven offer people already pay for.", "source": "https://www.hustlegrowthz.com/faq" },
+    "owner_targets": {
+      "kind": "owner",
+      "primary": "Dubai real estate agents, property consultants, brokers, agency founders and team leaders",
+      "secondary": "United States real estate agents and brokers",
+      "third": "United Kingdom real estate agents and brokers",
+      "priority": ["dubai", "usa", "uk"],
+      "note": "Dubai is not named on the website; the website says the UAE. Prospect-facing copy should say 'we work with agents in the UAE' — not imply a Dubai client roster."
+    }
+  },
+  "qualification_criteria": {
+    "kind": "owner",
+    "must_have": [
+      "Runs a real estate business (agent, broker, consultant, team leader or agency owner)",
+      "Has a legitimate commercial reason to invest in marketing (active listings, sales volume, team, or agency)",
+      "Willing to record about 45–60 minutes a week"
+    ],
+    "strong_signals": [
+      "Publishes inconsistently or only listing photos / 'just sold' posts (visible content gap)",
+      "Already tries video but without scripts, consistency or a DM system",
+      "Asked about price, process or results",
+      "Team leader or agency founder (higher deal capacity)",
+      "High-ticket market (Dubai off-plan/luxury, US/UK residential with meaningful commission per deal)"
+    ],
+    "disqualifiers": [
+      "Not in real estate or no active business",
+      "Explicitly unwilling to appear on camera",
+      "Wants guaranteed leads or overnight results",
+      "Only wants video editing of already-planned content",
+      "Has asked not to be contacted"
+    ],
+    "vanity_warning": "Follower count is not buying intent. Score commercial suitability, not audience size."
+  },
+  "competitive_advantages": [
+    { "text": "One team owns the whole system — strategy, scripts, editing, publishing and DM automation — instead of a freelancer for each part.", "source": "https://www.hustlegrowthz.com/faq" },
+    { "text": "The client's only job is recording ~45–60 min a week from finished scripts.", "source": "https://www.hustlegrowthz.com/" },
+    { "text": "The DM system turns comments into qualified conversations and booked calls; a person still reads replies daily.", "source": "https://www.hustlegrowthz.com/authority-flywheel" },
+    { "text": "A loop, not a line: what started real conversations this month shapes next month's scripts.", "source": "https://www.hustlegrowthz.com/" },
+    { "text": "Honest reporting and no guarantees — a deliberate contrast with agencies that promise leads.", "source": "https://www.hustlegrowthz.com/faq" },
+    { "text": "Monthly plan can be cancelled before the next billing date; most people start monthly.", "source": "https://www.hustlegrowthz.com/pricing" }
+  ],
+  "faqs": [
+    { "q": "What exactly does HustleGrowthz do?", "a": "We run your short-form social media: positioning, research, scripts, editing, publishing on Instagram, TikTok, YouTube Shorts and Facebook, and the DM automation that turns interested viewers into conversations and booked calls. You record.", "source": "https://www.hustlegrowthz.com/faq" },
+    { "q": "How much of my time does this take?", "a": "45–60 minutes a week to record from finished scripts, plus a few minutes in Discord. Phone or webcam is enough. Onboarding week takes a little longer.", "source": "https://www.hustlegrowthz.com/faq" },
+    { "q": "Do I need an existing audience?", "a": "No. It's built for 500 or 50,000 followers. A clear, proven offer matters more.", "source": "https://www.hustlegrowthz.com/faq" },
+    { "q": "What's the difference between monthly and annual?", "a": "Only the billing. Monthly is $999 billed every month. Annual is $5,999 once for 12 months — about 50% less than $11,988.", "source": "https://www.hustlegrowthz.com/faq" },
+    { "q": "Can I cancel?", "a": "Monthly: yes, before your next billing date. Annual: a 12-month commitment, paid upfront.", "source": "https://www.hustlegrowthz.com/faq" },
+    { "q": "Do you guarantee leads, clients or revenue?", "a": "No, and be careful with anyone who does. We commit to the work.", "source": "https://www.hustlegrowthz.com/faq" },
+    { "q": "How fast do we start?", "a": "Discord on day one; roadmap, positioning and content blueprint within 48 hours of completing onboarding.", "source": "https://www.hustlegrowthz.com/faq" },
+    { "q": "Who owns the content?", "a": "You do, once a payment is made in full.", "source": "https://www.hustlegrowthz.com/faq" },
+    { "q": "What happens on the strategy call?", "a": "A free 30-minute call: we look at your offer, current content and where clients come from, and tell you honestly whether it makes sense.", "source": "https://www.hustlegrowthz.com/faq" },
+    { "q": "Why not just hire a freelance editor?", "a": "An editor edits. Nobody owns the whole system — positioning, scripts, publishing, DMs. We do. If you only need editing, a freelancer may be the better choice, and we'll say so.", "source": "https://www.hustlegrowthz.com/faq" },
+    { "q": "Do you post on LinkedIn?", "a": "LinkedIn publishing isn't part of the standard service, but the videos are yours to post there too.", "source": "https://www.hustlegrowthz.com/for/consultants" }
+  ],
+  "objections": [
+    { "id": "price", "objection": "It's too expensive / no budget", "response": "Acknowledge. Clarify what it replaces (strategist, scriptwriter, editor, social manager, DM setter). Mention most people start monthly and can cancel before the next billing date. Never offer a discount.", "sources": ["https://www.hustlegrowthz.com/", "https://www.hustlegrowthz.com/pricing"] },
+    { "id": "time", "objection": "I'm too busy", "response": "Their part is ~45–60 minutes a week recording from finished scripts; everything before and after the camera is handled.", "sources": ["https://www.hustlegrowthz.com/faq"] },
+    { "id": "camera", "objection": "I'm not comfortable on camera", "response": "Scripts remove the 'what do I say' decision, so recording becomes a routine. But if they will not show up on camera, it is genuinely not a fit — say so.", "sources": ["https://www.hustlegrowthz.com/services", "https://www.hustlegrowthz.com/faq"] },
+    { "id": "guarantee", "objection": "Can you guarantee leads?", "response": "No — and be careful with anyone who does. Explain what is committed: the work, consistency, DM system, weekly tracking.", "sources": ["https://www.hustlegrowthz.com/faq"] },
+    { "id": "proof", "objection": "Show me results / does it work for agents?", "response": "Share published testimonials with the disclaimer. Be honest that published case studies don't name industries; offer to connect them with a current client on the call. Do not claim real-estate-specific results.", "sources": ["https://www.hustlegrowthz.com/results"] },
+    { "id": "agency_already", "objection": "We already have an agency / marketing team", "response": "Ask what the current setup covers. Position the gap: personal-brand short-form + DM system in the agent's own voice, versus listing ads or brand marketing. No disparaging competitors.", "sources": [] },
+    { "id": "editor", "objection": "I'll just hire an editor", "response": "An editor edits; nobody owns positioning, scripts, publishing and DMs. If they truly only need editing, recommend a freelancer.", "sources": ["https://www.hustlegrowthz.com/faq"] },
+    { "id": "timing", "objection": "Not right now / maybe later", "response": "Respect it. Offer something useful (no pitch), ask permission to check back at a specific time, record the date.", "sources": [] },
+    { "id": "linkedin", "objection": "I mainly use LinkedIn", "response": "LinkedIn publishing isn't in the standard service; videos are theirs to post there. Be straight about fit and raise it on the call.", "sources": ["https://www.hustlegrowthz.com/for/consultants"] },
+    { "id": "listings", "objection": "Can you just post my listings?", "response": "Listing tours can be part of the mix, but content that wins clients is about market knowledge. We plan both.", "sources": ["https://www.hustlegrowthz.com/for/real-estate-agents"] }
+  ],
+  "sales_strategies": {
+    "kind": "owner",
+    "interested": { "goal": "Move to a strategy call quickly", "approach": "Confirm interest, ask one discovery question about their current content and lead flow, offer 2–3 call times.", "cta": "Free 30-minute strategy call" },
+    "curious": { "goal": "Turn curiosity into a specific problem", "approach": "Explain the Flywheel in one or two lines, ask what content they post now and what happens when someone comments.", "cta": "Ask a discovery question before offering a call" },
+    "skeptical": { "goal": "Earn trust with honesty", "approach": "Lead with no-guarantee honesty, share one published testimonial with its disclaimer, offer to connect them with a current client on the call.", "cta": "Short call to see if it fits — no obligation" },
+    "price_sensitive": { "goal": "Reframe cost against what it replaces", "approach": "State approved pricing only ($999/month or $5,999/year). Mention most start monthly. Never discount.", "cta": "Walk through first month on a call" },
+    "busy": { "goal": "Respect time", "approach": "Ultra-short message. Their part is 45–60 min a week. Offer a 30-minute call at their convenience.", "cta": "Two time options or 'reply later'" },
+    "case_study_request": { "goal": "Share proof honestly", "approach": "Send 1–2 published testimonials (Vimeo links) plus the disclaimer; note industries aren't named; offer a client reference call.", "cta": "Ask which result is closest to what they want" },
+    "comparing_competitors": { "goal": "Differentiate without disparaging", "approach": "Ask what the other option includes. Contrast: whole system vs single service; scripts in their voice; DM system; honest reporting; no guarantees.", "cta": "Call to compare side by side" },
+    "not_ready": { "goal": "Stay helpful and get permission to follow up", "approach": "Give one useful idea for their content. Ask when it makes sense to reconnect.", "cta": "Permission-based check-in date" },
+    "reactivation": { "goal": "Restart a stalled conversation with relevance", "approach": "Reference the last real point in the conversation, add something new and specific to them, ask a low-friction question. Never 'just bumping this'.", "cta": "Simple yes/no question" }
+  },
+  "discovery_questions": [
+    "What does your content look like right now — what do you post and how often?",
+    "Where do most of your clients come from today: referrals, portals, ads, or social?",
+    "When someone comments or DMs about a property or service, what happens next?",
+    "Are you mainly working with buyers, sellers, investors or off-plan clients?",
+    "Roughly how much is one closed deal worth to you?",
+    "Could you set aside about an hour a week to record if the scripts were written for you?"
+  ],
+  "brand_voice": {
+    "kind": "website-derived",
+    "traits": ["Direct and plain-spoken", "Honest, no hype", "Confident but never pushy", "Specific over generic", "Short sentences", "Respectful of the prospect's time"],
+    "do": ["Use the prospect's real context", "State limits openly", "Say 'not a fit' when true", "Use approved numbers only"],
+    "dont": ["Guarantees", "Fake urgency or scarcity", "Invented stats", "Emojis in first-touch messages", "'Just bumping this'", "Disparaging competitors", "Claiming LinkedIn publishing"],
+    "source": "https://www.hustlegrowthz.com/about"
+  },
+  "urls": {
+    "home": "https://www.hustlegrowthz.com/",
+    "authority_flywheel": "https://www.hustlegrowthz.com/authority-flywheel",
+    "services": "https://www.hustlegrowthz.com/services",
+    "how_it_works": "https://www.hustlegrowthz.com/how-it-works",
+    "pricing": "https://www.hustlegrowthz.com/pricing",
+    "results": "https://www.hustlegrowthz.com/results",
+    "faq": "https://www.hustlegrowthz.com/faq",
+    "real_estate": "https://www.hustlegrowthz.com/for/real-estate-agents",
+    "book_a_call": "https://www.hustlegrowthz.com/book-a-call",
+    "calendly": "https://calendly.com/hustlegrowthz-info/authority-strategy-session",
+    "terms": "https://www.hustlegrowthz.com/terms-and-conditions",
+    "refund_policy": "https://www.hustlegrowthz.com/refund-policy",
+    "email": "info@hustlegrowthz.com",
+    "instagram": "https://www.instagram.com/hustlegrowthz_official/"
+  }
+}

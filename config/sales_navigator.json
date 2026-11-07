@@ -1,0 +1,19 @@
+{
+  "_note": "Fill this in from your own Sales Navigator account (Settings > Subscription). Nothing here is assumed. Unknown stays null.",
+  "subscription_type": null,
+  "verified_on": null,
+  "features": {
+    "inmail": null,
+    "inmail_credits_per_month": null,
+    "saved_searches": null,
+    "lead_lists": null,
+    "account_lists": null,
+    "buyer_intent": null,
+    "crm_sync": null,
+    "smart_links": null,
+    "teamlink": null,
+    "api_access": false
+  },
+  "inmail_credits_known_balance": null,
+  "inmail_credits_balance_checked_on": null
+}

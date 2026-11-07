@@ -1,0 +1,31 @@
+{
+  "name": "hustlegrowthz-revenue-department",
+  "version": "1.0.0",
+  "private": true,
+  "description": "HustleGrowthz AI Revenue Department: lead reactivation, scoring, outreach preparation, appointments, content, and the Revenue Command Tracker.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm run test",
+    "cli": "tsx src/cli.ts",
+    "workflow": "tsx src/cli.ts workflow",
+    "dev:tracker": "tsx scripts/dev-server.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.6.0",
+    "@supabase/supabase-js": "^2.119.0",
+    "csv-parse": "^7.0.3",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "@vercel/node": "^30.0.0",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0"
+  }
+}
