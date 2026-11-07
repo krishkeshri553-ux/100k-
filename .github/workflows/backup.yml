@@ -1,0 +1,37 @@
+name: Database backup
+
+on:
+  schedule:
+    - cron: "23 17 * * *" # 22:53 IST daily
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency: { group: backup, cancel-in-progress: false }
+    env:
+      APP_ENV: production
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      BACKUP_ENCRYPTION_KEY: ${{ secrets.BACKUP_ENCRYPTION_KEY }}
+      NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Refuse unencrypted production backups
+        run: test -n "$BACKUP_ENCRYPTION_KEY" || { echo "::error::Set the BACKUP_ENCRYPTION_KEY secret"; exit 1; }
+      - run: npm run cli -- workflow backup
+      - uses: actions/upload-artifact@v4
+        with:
+          name: backup-${{ github.run_id }}
+          path: backups/*.json
+          retention-days: 30
+          if-no-files-found: error

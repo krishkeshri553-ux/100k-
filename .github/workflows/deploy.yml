@@ -1,0 +1,45 @@
+name: Deploy tracker
+
+# Tests must pass before deployment. Vercel's own git auto-deploy is disabled in vercel.json.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency: { group: deploy, cancel-in-progress: false }
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Skip when Vercel is not configured
+        id: cfg
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then echo "::warning::VERCEL_TOKEN not set — deployment skipped"; echo "skip=1" >> "$GITHUB_OUTPUT"; fi
+      - if: steps.cfg.outputs.skip != '1'
+        run: npx --yes vercel@39.3.0 pull --yes --environment=production --token="$VERCEL_TOKEN"
+      - if: steps.cfg.outputs.skip != '1'
+        run: npx --yes vercel@39.3.0 deploy --prod --token="$VERCEL_TOKEN"

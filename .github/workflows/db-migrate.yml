@@ -1,0 +1,20 @@
+name: DB migrate
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply migrations (idempotent)
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          test -n "$SUPABASE_DB_URL" || { echo "::error::Set SUPABASE_DB_URL"; exit 1; }
+          for f in supabase/migrations/*.sql; do echo "Applying $f"; psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f "$f"; done

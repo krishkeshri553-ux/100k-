@@ -1,0 +1,71 @@
+name: Revenue operations
+
+# Finite scheduled jobs (no polling, no keep-alive). Times are UTC; owner timezone is Asia/Kolkata (UTC+05:30).
+# Must stay in sync with config/schedule.json. GitHub runs schedules from the default branch only.
+on:
+  schedule:
+    - cron: "47 2 * * *"          # morning   08:17 IST
+    - cron: "17 6,9,12,15 * * *"  # daytime   11:47 / 14:47 / 17:47 / 20:47 IST
+    - cron: "17 4 * * 1-6"        # content   09:47 IST Mon–Sat
+    - cron: "37 15 * * *"         # evening   21:07 IST
+    - cron: "7 12 * * 0"          # weekly    17:37 IST Sunday
+    - cron: "53 3 * * 1"          # knowledge 09:23 IST Monday
+  workflow_dispatch:
+    inputs:
+      workflow:
+        description: Workflow to run
+        required: true
+        type: choice
+        options: [morning, daytime, content, evening, weekly, knowledge]
+      force:
+        description: Re-run even if this slot already succeeded
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    concurrency:
+      group: revenue-ops-${{ github.event.inputs.workflow || github.event.schedule }}
+      cancel-in-progress: false
+    env:
+      APP_ENV: production
+      OWNER_NAME: ${{ vars.OWNER_NAME }}
+      OWNER_LINKEDIN_URL: ${{ vars.OWNER_LINKEDIN_URL }}
+      OWNER_TIMEZONE: Asia/Kolkata
+      CLAUDE_MODEL: ${{ vars.CLAUDE_MODEL || 'claude-opus-5-5' }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+      GOOGLE_CALENDAR_ID: ${{ vars.GOOGLE_CALENDAR_ID || 'primary' }}
+      NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Resolve workflow
+        id: which
+        run: |
+          if [ -n "${{ github.event.inputs.workflow }}" ]; then echo "name=${{ github.event.inputs.workflow }}" >> "$GITHUB_OUTPUT"; exit 0; fi
+          case "${{ github.event.schedule }}" in
+            "47 2 * * *") n=morning ;;
+            "17 6,9,12,15 * * *") n=daytime ;;
+            "17 4 * * 1-6") n=content ;;
+            "37 15 * * *") n=evening ;;
+            "7 12 * * 0") n=weekly ;;
+            "53 3 * * 1") n=knowledge ;;
+            *) echo "::error::Unknown schedule"; exit 1 ;;
+          esac
+          echo "name=$n" >> "$GITHUB_OUTPUT"
+      - name: Run ${{ steps.which.outputs.name }}
+        run: npm run cli -- workflow ${{ steps.which.outputs.name }} ${{ github.event.inputs.force == 'true' && '--force' || '' }}
