@@ -73,7 +73,8 @@ function templatePackage(p: Prospect, kinds: DraftKind[], msgs: Message[]): Pack
   const lastIn = [...msgs].filter((m) => m.direction === "inbound").sort((a, b) => a.sent_at.localeCompare(b.sent_at)).at(-1);
   if (specifics.length === 0 && !lastIn) return null; // nothing specific → refuse to write a generic message
   const where = p.company ? ` at ${p.company}` : "";
-  const mkt = marketLabel ? ` in ${marketLabel.split(" /")[0]}` : "";
+  // Brain rule: the website names the UAE, not Dubai — never imply a Dubai client roster.
+  const mkt = p.market === "dubai" ? " in the UAE" : p.market === "usa" ? " in the US" : p.market === "uk" ? " in the UK" : "";
   const role = p.title ? p.title.toLowerCase() : "agent";
   const cls = classifyByRules(p, msgs);
   const quote = lastIn ? lastIn.body.replace(/\s+/g, " ").slice(0, 90) : null;

@@ -23,13 +23,23 @@ export interface AiRequest<S extends z.ZodType> {
   maxTokens?: number;
 }
 
+export interface WebResearchResult {
+  text: string;
+  /** URLs that actually appeared in web search results (the only URLs allowed as evidence). */
+  sources: { url: string; title: string }[];
+}
+
 /** Everything that needs intelligence goes through this interface. Tests inject a fake. */
 export interface Ai {
   readonly available: boolean;
   readonly model: string;
   json<S extends z.ZodType>(req: AiRequest<S>): Promise<z.infer<S>>;
+  /** Public-web research via Claude's server-side web search. LinkedIn is blocked: we never scrape it. */
+  webResearch(question: string, opts?: { maxSearches?: number }): Promise<WebResearchResult>;
   usage(): AiUsage;
 }
+
+export const RESEARCH_BLOCKED_DOMAINS = ["linkedin.com"];
 
 export class AiUnavailableError extends Error {
   constructor(reason = "ANTHROPIC_API_KEY is not configured") {
@@ -80,6 +90,35 @@ export class ClaudeAi implements Ai {
     return req.schema.parse(parsed);
   }
 
+  async webResearch(question: string, opts: { maxSearches?: number } = {}): Promise<WebResearchResult> {
+    const messages: Anthropic.MessageParam[] = [{ role: "user", content: question }];
+    const sources = new Map<string, string>();
+    let text = "";
+    for (let i = 0; i < 4; i++) {
+      const response = await this.client.messages.create({
+        model: this.model,
+        max_tokens: 12000,
+        system: BASE_SYSTEM + "\nYou are doing public-web competitor research. Report only what the sources show; label anything inferred as an estimate. Never claim private metrics (reach, impressions, conversions).",
+        tools: [{ type: "web_search_20260209", name: "web_search", max_uses: opts.maxSearches ?? 6, blocked_domains: RESEARCH_BLOCKED_DOMAINS }],
+        output_config: { effort: "medium" },
+        messages,
+      });
+      this.totals.calls++;
+      this.totals.input_tokens += response.usage.input_tokens;
+      this.totals.output_tokens += response.usage.output_tokens;
+      for (const block of response.content) {
+        if (block.type === "web_search_tool_result" && Array.isArray(block.content)) {
+          for (const r of block.content) if (r.type === "web_search_result") sources.set(r.url, r.title);
+        }
+        if (block.type === "text") text += block.text;
+      }
+      if (response.stop_reason === "refusal") throw new Error("Claude declined the research request");
+      if (response.stop_reason !== "pause_turn") break;
+      messages.push({ role: "assistant", content: response.content });
+    }
+    return { text, sources: [...sources].map(([url, title]) => ({ url, title })) };
+  }
+
   usage(): AiUsage {
     return { ...this.totals };
   }
@@ -90,6 +129,9 @@ export class NoAi implements Ai {
   readonly available = false;
   readonly model = "none";
   async json<S extends z.ZodType>(): Promise<z.infer<S>> {
+    throw new AiUnavailableError();
+  }
+  async webResearch(): Promise<WebResearchResult> {
     throw new AiUnavailableError();
   }
   usage(): AiUsage {
@@ -106,7 +148,12 @@ export class FakeAi implements Ai {
   readonly available = true;
   readonly model = "fake";
   calls: { task: string; input: string }[] = [];
-  constructor(private responders: Record<string, (input: string) => unknown>) {}
+  constructor(private responders: Record<string, (input: string) => unknown>, private research?: WebResearchResult) {}
+  async webResearch(question: string): Promise<WebResearchResult> {
+    this.calls.push({ task: "web_research", input: question });
+    if (!this.research) throw new Error("FakeAi: no research fixture");
+    return this.research;
+  }
   async json<S extends z.ZodType>(req: AiRequest<S>): Promise<z.infer<S>> {
     this.calls.push({ task: req.task, input: req.input });
     const r = this.responders[req.task];
