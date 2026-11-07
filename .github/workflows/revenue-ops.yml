@@ -47,13 +47,27 @@ jobs:
       GOOGLE_CALENDAR_ID: ${{ vars.GOOGLE_CALENDAR_ID || 'primary' }}
       NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      # Until the database is configured there is nothing to work on: finish green with a warning instead of failing.
+      - name: Check configuration
+        id: cfg
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+            msg="Skipped: SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY secrets are not set yet. See DEPLOYMENT.md."
+            echo "::warning::$msg"
+            echo "$msg" >> "$GITHUB_STEP_SUMMARY"
+            echo "skip=1" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.cfg.outputs.skip != '1'
+        uses: actions/checkout@v4
+      - if: steps.cfg.outputs.skip != '1'
+        uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
+      - if: steps.cfg.outputs.skip != '1'
+        run: npm ci
       - name: Resolve workflow
+        if: steps.cfg.outputs.skip != '1'
         id: which
         run: |
           if [ -n "${{ github.event.inputs.workflow }}" ]; then echo "name=${{ github.event.inputs.workflow }}" >> "$GITHUB_OUTPUT"; exit 0; fi
@@ -68,4 +82,5 @@ jobs:
           esac
           echo "name=$n" >> "$GITHUB_OUTPUT"
       - name: Run ${{ steps.which.outputs.name }}
+        if: steps.cfg.outputs.skip != '1'
         run: npm run cli -- workflow ${{ steps.which.outputs.name }} ${{ github.event.inputs.force == 'true' && '--force' || '' }}

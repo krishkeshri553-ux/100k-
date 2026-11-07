@@ -26,6 +26,21 @@ describe("cloud schedule", () => {
       expect(y).toMatch(/permissions:\s*\n\s*contents: read/);
     }
   });
+  it("scheduled jobs skip quietly (green + warning) until the database secrets exist", () => {
+    for (const f of ["revenue-ops.yml", "backup.yml"]) {
+      const y = read(`.github/workflows/${f}`);
+      expect(y).toMatch(/id: cfg/);
+      expect(y).toMatch(/\[ -z "\$SUPABASE_URL" \] \|\| \[ -z "\$SUPABASE_SERVICE_ROLE_KEY" \]/);
+      expect(y).toMatch(/::warning::/);
+      // Every step after the check must be gated on it.
+      const steps = y.split("\n      - ").slice(1);
+      const afterCheck = steps.slice(steps.findIndex((s) => s.includes("id: cfg")) + 1);
+      expect(afterCheck.length).toBeGreaterThan(3);
+      for (const s of afterCheck) expect(s, `${f}: ${s.split("\n")[0]}`).toContain("if: steps.cfg.outputs.skip != '1'");
+    }
+    // Backups still refuse to run unencrypted once a real database is configured.
+    expect(read(".github/workflows/backup.yml")).toMatch(/BACKUP_ENCRYPTION_KEY is not set — refusing/);
+  });
   it("no secrets are hardcoded in workflow files", () => {
     for (const f of ["revenue-ops.yml", "backup.yml", "deploy.yml", "db-migrate.yml"]) {
       const y = read(`.github/workflows/${f}`);

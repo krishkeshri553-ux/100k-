@@ -20,16 +20,33 @@ jobs:
       BACKUP_ENCRYPTION_KEY: ${{ secrets.BACKUP_ENCRYPTION_KEY }}
       NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      # No database yet → nothing to back up: finish green with a warning.
+      # Once the database IS configured, a missing encryption key fails loudly (real data must not go unprotected).
+      - name: Check configuration
+        id: cfg
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+            msg="Skipped: database secrets are not set yet, so there is nothing to back up. See DEPLOYMENT.md."
+            echo "::warning::$msg"
+            echo "$msg" >> "$GITHUB_STEP_SUMMARY"
+            echo "skip=1" >> "$GITHUB_OUTPUT"
+          elif [ -z "$BACKUP_ENCRYPTION_KEY" ]; then
+            echo "::error::Database is configured but BACKUP_ENCRYPTION_KEY is not set — refusing to write unencrypted backups."
+            exit 1
+          fi
+      - if: steps.cfg.outputs.skip != '1'
+        uses: actions/checkout@v4
+      - if: steps.cfg.outputs.skip != '1'
+        uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
-      - name: Refuse unencrypted production backups
-        run: test -n "$BACKUP_ENCRYPTION_KEY" || { echo "::error::Set the BACKUP_ENCRYPTION_KEY secret"; exit 1; }
-      - run: npm run cli -- workflow backup
-      - uses: actions/upload-artifact@v4
+      - if: steps.cfg.outputs.skip != '1'
+        run: npm ci
+      - if: steps.cfg.outputs.skip != '1'
+        run: npm run cli -- workflow backup
+      - if: steps.cfg.outputs.skip != '1'
+        uses: actions/upload-artifact@v4
         with:
           name: backup-${{ github.run_id }}
           path: backups/*.json

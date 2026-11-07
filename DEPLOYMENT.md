@@ -34,7 +34,11 @@ Everything runs in the cloud after this. You need accounts at Supabase, Vercel, 
 
 ## 5. Branch and schedules
 
-GitHub only runs scheduled workflows from the **default branch**. Merge this branch into `main` (and make `main` the default) for the cron jobs to start. Then:
+GitHub only runs scheduled workflows from the **default branch**. This repo currently has a single branch (`claude/hustlegrowthz-ai-revenue-dept-amzp5b`), so it is the default and the schedule is already active. If you later create `main` and make it the default, merge into it first. (`deploy.yml` deploys on pushes to `main`; until then use **Actions → Deploy tracker → Run workflow**.)
+
+Until the Supabase secrets exist, the scheduled jobs and backups **skip quietly**: each run finishes green with a "Skipped: … not set yet" warning in its summary. Once the database is configured they run for real — and the backup job then fails loudly if `BACKUP_ENCRYPTION_KEY` is missing, so real data is never backed up unencrypted.
+
+After adding the secrets:
 
 - **Actions → Revenue operations → Run workflow → `daytime`** once: it records integration status (System Health turns green for what's connected).
 - **Actions → Database backup → Run workflow** once: confirms backups.
