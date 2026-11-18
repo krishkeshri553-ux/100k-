@@ -1,0 +1,28 @@
+---
+import Breadcrumbs from './Breadcrumbs.astro';
+export interface Props {
+  eyebrow: string;
+  /** Plain text before the italic accent. */
+  title: string;
+  accent?: string;
+  lede?: string;
+  crumbs?: { name: string; path: string }[];
+}
+const { eyebrow, title, accent, lede, crumbs } = Astro.props;
+---
+<section class="phero">
+  <div class="container">
+    {crumbs && <div class="phero__crumbs"><Breadcrumbs crumbs={crumbs} /></div>}
+    <p class="eyebrow" data-reveal>{eyebrow}</p>
+    <h1 class="phero__title" data-reveal style="--d:80ms">{title}{accent && <> <em class="serif">{accent}</em></>}</h1>
+    {lede && <p class="lede phero__lede" data-reveal style="--d:160ms">{lede}</p>}
+    <slot />
+  </div>
+</section>
+<style>
+  .phero { padding-top: clamp(2rem, 1rem + 4vw, 5rem); padding-bottom: clamp(3rem, 2rem + 4vw, 6rem); border-bottom: 1px solid var(--line); }
+  .phero__crumbs { margin-bottom: var(--s-6); }
+  .phero__title { font-size: var(--fs-h1); letter-spacing: -0.05em; line-height: 0.95; margin-top: var(--s-5); max-width: 16ch; }
+  .phero__title em { color: var(--green); }
+  .phero__lede { margin-top: var(--s-6); }
+</style>

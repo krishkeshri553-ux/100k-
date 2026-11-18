@@ -1,0 +1,55 @@
+---
+/** Native <details> accordion: works without JavaScript, keyboard accessible. */
+import { faqs, type Faq } from '../data/faq';
+
+export interface Props { items?: Faq[]; title?: string; intro?: string }
+const {
+  items = faqs,
+  title = 'Questions, answered.',
+  intro = 'The things people ask before sending their first video.',
+} = Astro.props;
+---
+<section class="section faq" id="faq" aria-labelledby="faq-title">
+  <div class="container faq__grid">
+    <div class="faq__intro">
+      <p class="eyebrow" data-reveal>FAQ</p>
+      <h2 id="faq-title" class="h2" data-reveal style="--d:80ms">{title}</h2>
+      <p class="lede" data-reveal style="--d:140ms">{intro}</p>
+      <p data-reveal style="--d:200ms">Still unsure? <a class="link" href="/contact/">Ask us directly</a>.</p>
+    </div>
+    <div class="faq__list">
+      {items.map((f) => (
+        <details class="faq__item" data-reveal>
+          <summary>
+            <span>{f.q}</span>
+            <span class="faq__icon" aria-hidden="true"></span>
+          </summary>
+          <div class="faq__a"><p>{f.a}</p></div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq__grid { display: grid; gap: var(--s-7); }
+  .faq__intro { display: grid; gap: var(--s-5); align-content: start; }
+  @media (min-width: 1000px) {
+    .faq__grid { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: var(--s-9); }
+    .faq__intro { position: sticky; top: 6rem; }
+  }
+  .faq__list { border-top: 1px solid var(--line-strong); }
+  .faq__item { border-bottom: 1px solid var(--line); }
+  .faq__item summary {
+    list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: var(--s-5);
+    padding: var(--s-5) 0; color: var(--ink); font-size: var(--fs-lg); font-weight: 600; letter-spacing: -0.02em; line-height: 1.3;
+  }
+  .faq__item summary::-webkit-details-marker { display: none; }
+  .faq__item summary:hover { color: var(--green); }
+  .faq__icon { position: relative; width: 1.75rem; height: 1.75rem; flex: none; border: 1px solid var(--line-strong); border-radius: 50%; }
+  .faq__icon::before, .faq__icon::after { content: ''; position: absolute; left: 50%; top: 50%; width: 10px; height: 1.5px; background: currentColor; translate: -50% -50%; transition: rotate var(--t-med) var(--ease); }
+  .faq__icon::after { rotate: 90deg; }
+  .faq__item[open] .faq__icon::after { rotate: 0deg; }
+  .faq__item[open] .faq__icon { background: var(--green); border-color: var(--green); color: var(--white); }
+  .faq__a { padding: 0 3rem var(--s-5) 0; max-width: 46rem; }
+</style>

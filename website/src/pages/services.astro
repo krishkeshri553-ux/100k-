@@ -1,0 +1,117 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Formats from '../components/Formats.astro';
+import Capabilities from '../components/Capabilities.astro';
+import Reasons from '../components/Reasons.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { serviceSchema, breadcrumbSchema } from '../lib/schema';
+import { plans, formatPrice, facts } from '../config/pricing';
+import { cta } from '../config/site';
+
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Services', path: '/services/' }];
+---
+<Base
+  title="Long-Form Video Editing Services"
+  description="One service, done properly: long-form video editing for YouTube, podcasts, education and brands. Pacing, cuts, B-roll, sound design, music and a thumbnail on every video."
+  path="/services/"
+  schema={[serviceSchema(), breadcrumbSchema(crumbs)]}
+>
+  <PageHero
+    crumbs={crumbs}
+    eyebrow="Services"
+    title="One service."
+    accent="Done properly."
+    lede="We edit long-form video — and nothing else. You send the raw recording; we shape it into a finished video with pacing, B-roll, sound, music and a thumbnail, ready to publish."
+  >
+    <div class="svc-ctas" data-reveal style="--d:220ms">
+      <a href={cta.primary.href} class="btn">{cta.primary.label} <span class="btn__arrow" aria-hidden="true">→</span></a>
+      <a href="/pricing/" class="btn btn--ghost">See pricing</a>
+    </div>
+  </PageHero>
+
+  <section class="section section--tight">
+    <div class="container svc-split">
+      <div data-reveal>
+        <p class="eyebrow">What we do</p>
+        <h2 class="h3">Done-for-you editing for videos of ten minutes and up.</h2>
+      </div>
+      <div class="svc-cols" data-reveal style="--d:100ms">
+        <div>
+          <h3 class="mono svc-label">You handle</h3>
+          <ul role="list" class="svc-list">
+            <li>Recording your footage</li>
+            <li>A short brief and any references</li>
+            <li>Feedback on the draft</li>
+            <li>Publishing the final video</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="mono svc-label">We handle</h3>
+          <ul role="list" class="svc-list svc-list--us">
+            <li>Organising your footage</li>
+            <li>The full edit — story, cuts, pacing</li>
+            <li>B-roll, sound design and music</li>
+            <li>The thumbnail</li>
+            <li>Revisions until it's right</li>
+            <li>Final export, ready to upload</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="mono svc-label">We don't do</h3>
+          <ul role="list" class="svc-list svc-list--no">
+            <li>Short-form clips, reels or shorts</li>
+            <li>Social media management</li>
+            <li>Marketing or channel strategy</li>
+            <li>Thumbnail-only orders</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Formats />
+  <Capabilities />
+  <Reasons />
+
+  <section class="section section--tight">
+    <div class="container svc-price" data-reveal>
+      <div>
+        <p class="eyebrow">Packages</p>
+        <h2 class="h3">Three ways to work with us.</h2>
+      </div>
+      <ul role="list" class="svc-price__list">
+        {plans.map((p) => (
+          <li><a href={`/contact/?package=${p.id}`}><span>{p.name}</span><strong>{formatPrice(p.price)}</strong><span class="muted">{p.period}</span><span aria-hidden="true" class="svc-price__arrow">→</span></a></li>
+        ))}
+      </ul>
+      <p class="muted">Every package: thumbnail included, unlimited revisions, first draft within {facts.firstDraft}. <a class="link" href="/pricing/">Compare packages</a></p>
+    </div>
+  </section>
+
+  <FinalCta />
+</Base>
+
+<style>
+  .svc-ctas { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-6); }
+  .svc-split { display: grid; gap: var(--s-7); }
+  .svc-split .h3 { margin-top: var(--s-4); max-width: 18ch; }
+  .svc-cols { display: grid; gap: var(--s-6); }
+  @media (min-width: 760px) { .svc-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (min-width: 1100px) { .svc-split { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--s-9); } }
+  .svc-label { text-transform: uppercase; color: var(--muted); font-weight: 500; margin-bottom: var(--s-3); }
+  .svc-list { border-top: 1px solid var(--line-strong); }
+  .svc-list li { padding: 0.7rem 0 0.7rem 1.5rem; border-bottom: 1px solid var(--line); position: relative; color: var(--ink); font-size: 0.9875rem; }
+  .svc-list li::before { content: '—'; position: absolute; left: 0; color: var(--muted); }
+  .svc-list--us li::before { content: '✓'; color: var(--green); font-weight: 700; }
+  .svc-list--no li { color: var(--muted); }
+  .svc-list--no li::before { content: '×'; }
+  .svc-price { display: grid; gap: var(--s-6); }
+  .svc-price__list { border-top: 1px solid var(--line-strong); }
+  .svc-price__list a { display: grid; grid-template-columns: 1fr auto auto 1.5rem; gap: var(--s-4); align-items: baseline; padding: var(--s-5) 0; border-bottom: 1px solid var(--line); transition: padding var(--t-med) var(--ease), color var(--t-fast); }
+  .svc-price__list a > span:first-child { color: var(--ink); font-size: var(--fs-h4); font-weight: 600; letter-spacing: -0.025em; }
+  .svc-price__list strong { color: var(--ink); font-size: var(--fs-h4); letter-spacing: -0.03em; }
+  .svc-price__list a:hover { padding-left: var(--s-3); color: var(--green); }
+  .svc-price__arrow { color: var(--green); }
+  @media (max-width: 560px) { .svc-price__list a { grid-template-columns: 1fr auto; } .svc-price__list .muted, .svc-price__arrow { display: none; } }
+</style>

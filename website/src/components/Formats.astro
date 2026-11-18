@@ -1,0 +1,41 @@
+---
+import { formats } from '../data/services';
+export interface Props { headingLevel?: 'h2' | 'h3' }
+---
+<section class="section sunken formats" aria-labelledby="formats-title">
+  <div class="container">
+    <div class="section-head section-head--split">
+      <div>
+        <p class="eyebrow" data-reveal>What we edit</p>
+        <h2 id="formats-title" class="h2" data-reveal style="--d:80ms">Eight formats. <em class="serif">One length:</em> long.</h2>
+      </div>
+      <p class="lede" data-reveal style="--d:140ms">
+        Different formats need different editing instincts. These are the long-form videos we cut every week —
+        all part of the same service, all built to be watched start to finish.
+      </p>
+    </div>
+
+    <ol class="fmt" role="list">
+      {formats.map((f, i) => (
+        <li class="fmt__row" data-reveal style={`--d:${(i % 4) * 50}ms`}>
+          <span class="fmt__num mono">{String(i + 1).padStart(2, '0')}</span>
+          <h3 class="fmt__name">{f.name}</h3>
+          <p class="fmt__detail">{f.detail}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .fmt { border-top: 1px solid var(--line-strong); }
+  .fmt__row { display: grid; grid-template-columns: 2.5rem 1fr; gap: var(--s-2) var(--s-4); padding: var(--s-5) 0; border-bottom: 1px solid var(--line); }
+  .fmt__num { color: var(--green); padding-top: 0.6em; }
+  .fmt__name { font-size: clamp(1.625rem, 1.1rem + 2.4vw, 3.25rem); letter-spacing: -0.045em; line-height: 1; transition: color var(--t-med) var(--ease), transform var(--t-med) var(--ease); }
+  .fmt__detail { grid-column: 2; color: var(--ink-2); max-width: 30rem; font-size: 0.9875rem; }
+  @media (min-width: 900px) {
+    .fmt__row { grid-template-columns: 3.5rem minmax(0, 1.25fr) minmax(0, 1fr); align-items: center; gap: var(--s-6); padding: var(--s-5) 0; }
+    .fmt__detail { grid-column: 3; }
+    .fmt__row:hover .fmt__name { color: var(--green); transform: translateX(0.5rem); }
+  }
+</style>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+<defs>
+<linearGradient id="g04" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#173a2b"/><stop offset="1" stop-color="#0f2a1f"/></linearGradient>
+<radialGradient id="l04" cx="0.4" cy="0.4" r="0.6"><stop offset="0" stop-color="#d8f5c4" stop-opacity="0.55"/><stop offset="1" stop-color="#d8f5c4" stop-opacity="0"/></radialGradient>
+<filter id="b04" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="14"/></filter>
+<radialGradient id="v04" cx="0.5" cy="0.5" r="0.75"><stop offset="0.55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.55"/></radialGradient>
+</defs>
+<rect width="1600" height="900" fill="url(#g04)"/>
+<rect width="1600" height="900" fill="url(#l04)"/>
+<g filter="url(#b04)"><rect x="240" y="180" width="760" height="480" fill="#e8efe4" fill-opacity="0.16"/><path d="M320 560 L480 420 L620 480 L800 300" stroke="#b9f27a" stroke-width="10" fill="none" stroke-opacity="0.7"/><circle cx="1250" cy="400" r="100" fill="#c2ae90" fill-opacity="0.45"/><path d="M1060 900c15-190 100-300 190-300s175 110 190 300z" fill="#2a2a26" fill-opacity="0.8"/></g>
+<rect width="1600" height="900" fill="url(#v04)"/>
+<g fill="none" stroke="#fff" stroke-opacity="0.22" stroke-width="2">
+<path d="M80 130V80h50M1520 130V80h-50M80 770v50h50M1520 770v50h-50"/>
+</g>
+<text x="80" y="860" font-family="ui-monospace,Menlo,monospace" font-size="22" letter-spacing="3" fill="#fff" fill-opacity="0.45">PLACEHOLDER · EDUCATIONAL</text>
+</svg>

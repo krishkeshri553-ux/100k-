@@ -1,0 +1,112 @@
+---
+/**
+ * Homepage showcase: an editorial index of projects beside a large frame.
+ * Hovering or focusing a row switches the frame (desktop). On mobile each
+ * row carries its own frame. Data: src/data/portfolio.ts.
+ */
+import Media from './Media.astro';
+import { portfolio, hasRealWork } from '../data/portfolio';
+
+export interface Props { limit?: number }
+const { limit = 4 } = Astro.props;
+const items = [...portfolio].sort((a, b) => Number(!!b.featured) - Number(!!a.featured)).slice(0, limit);
+---
+<section class="section work" id="work" aria-labelledby="work-title">
+  <div class="container">
+    <div class="section-head section-head--split">
+      <div>
+        <p class="eyebrow" data-reveal>Selected work</p>
+        <h2 id="work-title" class="h2" data-reveal style="--d:80ms">The edit is the <em class="serif">proof.</em></h2>
+      </div>
+      <p class="lede" data-reveal style="--d:140ms">
+        {hasRealWork
+          ? 'A selection of long-form edits across formats. Hover a project to preview it.'
+          : 'Our reel is being added now. Each slot below is reserved for a real long-form edit in that format — no stand-in clients, no borrowed footage.'}
+      </p>
+    </div>
+
+    <div class="work__grid" data-showcase>
+      <div class="work__stage" aria-hidden="true">
+        {items.map((item, i) => (
+          <div class:list={['work__stage-item', { 'is-active': i === 0 }]} data-stage={item.slug}>
+            <Media item={item} />
+          </div>
+        ))}
+        <span class="work__counter mono" data-counter>01 / {String(items.length).padStart(2, '0')}</span>
+      </div>
+
+      <ol class="work__list" role="list">
+        {items.map((item, i) => (
+          <li data-reveal style={`--d:${i * 70}ms`}>
+            <a href={`/work/#${item.slug}`} class:list={['work__row', { 'is-active': i === 0 }]} data-row={item.slug} data-preview={item.preview ? '' : undefined}>
+              <span class="work__thumb"><Media item={item} /></span>
+              <span class="work__num mono">{String(i + 1).padStart(2, '0')}</span>
+              <span class="work__meta">
+                <span class="work__title">{item.title}</span>
+                <span class="work__desc">{item.description}</span>
+              </span>
+              <span class="work__tags">
+                <span class="tag">{item.category}</span>
+                {item.placeholder && <span class="tag tag--placeholder">Placeholder</span>}
+                {item.runtime && <span class="tag">{item.runtime}</span>}
+              </span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+
+    <div class="work__more" data-reveal>
+      <a href="/work/" class="btn btn--ghost">See all work <span class="btn__arrow" aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-showcase]').forEach((root) => {
+    const rows = root.querySelectorAll<HTMLElement>('[data-row]');
+    const stages = root.querySelectorAll<HTMLElement>('[data-stage]');
+    const counter = root.querySelector<HTMLElement>('[data-counter]');
+    const total = String(rows.length).padStart(2, '0');
+    const activate = (slug: string, idx: number) => {
+      rows.forEach((r) => r.classList.toggle('is-active', r.dataset.row === slug));
+      stages.forEach((s) => s.classList.toggle('is-active', s.dataset.stage === slug));
+      if (counter) counter.textContent = `${String(idx + 1).padStart(2, '0')} / ${total}`;
+    };
+    rows.forEach((row, idx) => {
+      row.addEventListener('pointerenter', () => activate(row.dataset.row!, idx));
+      row.addEventListener('focus', () => activate(row.dataset.row!, idx));
+    });
+  });
+</script>
+
+<style>
+  .work__grid { display: grid; gap: var(--s-6); }
+  .work__stage { display: none; }
+  .work__list { border-top: 1px solid var(--line); }
+  .work__row {
+    display: grid; grid-template-columns: 2.25rem 1fr; gap: var(--s-2) var(--s-4); align-items: start;
+    padding: var(--s-5) 0; border-bottom: 1px solid var(--line); position: relative;
+  }
+  .work__thumb { grid-column: 1 / -1; margin-bottom: var(--s-3); }
+  .work__num { color: var(--muted); padding-top: 0.35rem; transition: color var(--t-fast); }
+  .work__meta { display: grid; gap: var(--s-1); }
+  .work__title { color: var(--ink); font-size: var(--fs-h4); font-weight: 600; letter-spacing: -0.025em; line-height: 1.15; }
+  .work__desc { font-size: var(--fs-sm); color: var(--muted); max-width: 34rem; }
+  .work__tags { grid-column: 2; display: flex; flex-wrap: wrap; gap: var(--s-2); }
+  .work__more { margin-top: var(--s-7); }
+
+  @media (min-width: 1000px) {
+    .work__grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--s-8); align-items: start; }
+    .work__stage { display: block; position: sticky; top: 6rem; aspect-ratio: 16/9; }
+    .work__stage-item { position: absolute; inset: 0; opacity: 0; transform: scale(1.015); transition: opacity var(--t-med) var(--ease), transform var(--t-slow) var(--ease); }
+    .work__stage-item.is-active { opacity: 1; transform: none; }
+    .work__counter { position: absolute; right: 0; top: calc(100% + 0.75rem); color: var(--muted); }
+    .work__thumb { display: none; }
+    .work__row { grid-template-columns: 2.5rem 1fr; padding: var(--s-5) var(--s-3) var(--s-5) 0; transition: padding var(--t-med) var(--ease); }
+    .work__row::before { content: ''; position: absolute; left: 0; top: -1px; height: 1px; width: 0; background: var(--green); transition: width var(--t-med) var(--ease); }
+    .work__row.is-active::before { width: 100%; }
+    .work__row.is-active .work__num { color: var(--green); }
+    .work__row.is-active { padding-left: var(--s-3); }
+  }
+</style>

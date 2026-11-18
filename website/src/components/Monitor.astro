@@ -1,0 +1,90 @@
+---
+/**
+ * The hero "edit bay": a program monitor over a four-track timeline.
+ * It shows what we do — cutting footage into a video — rather than an
+ * abstract decoration. The screen plays the showreel once one is supplied
+ * (src/data/portfolio.ts → showreel).
+ */
+import { showreel } from '../data/portfolio';
+
+// Deterministic dialogue waveform.
+const bars = Array.from({ length: 120 }, (_, i) => {
+  const v = Math.abs(Math.sin(i * 0.9) * 0.55 + Math.sin(i * 0.23) * 0.35 + Math.sin(i * 2.7) * 0.15);
+  const gap = i % 23 === 0 || i % 37 === 0; // cuts — removed dead air
+  return gap ? 0.04 : Math.min(1, 0.12 + v);
+});
+
+const v1 = [ [0, 17], [17.4, 12], [29.8, 21], [51.2, 9], [60.6, 19], [80, 20] ];
+const v2 = [ [6, 8, 'Hook'], [33, 11, 'B-roll'], [62, 7, 'Title'], [84, 10, 'B-roll'] ];
+const ruler = ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'];
+---
+<figure class="bay" aria-label="Illustration of a long-form edit: program monitor above a timeline with video, graphics, dialogue and music tracks">
+  <div class="bay__screen">
+    {showreel.src ? (
+      <video class="bay__video" muted loop playsinline preload="none" poster={showreel.poster} data-ambient aria-label="Longform Edits showreel">
+        {showreel.srcWebm && <source data-src={showreel.srcWebm} type="video/webm" />}
+        <source data-src={showreel.src} type="video/mp4" />
+      </video>
+    ) : (
+      <img class="bay__video" src={showreel.poster} alt="" width="1600" height="900" fetchpriority="high" decoding="async" />
+    )}
+    <div class="bay__hud" aria-hidden="true">
+      <span class="bay__chip"><i></i>Program</span>
+      <span class="bay__tc" data-timecode>00:12:48:16</span>
+    </div>
+    {showreel.placeholder && <span class="bay__ph tag tag--placeholder">Placeholder — showreel goes here</span>}
+  </div>
+
+  <div class="tl" aria-hidden="true">
+    <div class="tl__ruler">{ruler.map((r) => <span>{r}</span>)}</div>
+    <div class="tl__tracks">
+      <div class="tl__row"><b>V2</b><div class="tl__lane">
+        {v2.map(([l, w, t]) => <span class="clip clip--gfx" style={`left:${l}%;width:${w}%`}>{t}</span>)}
+      </div></div>
+      <div class="tl__row"><b>V1</b><div class="tl__lane">
+        {v1.map(([l, w], i) => <span class="clip clip--v" style={`left:${l}%;width:${w}%`}>{i === 0 ? 'A-roll' : ''}</span>)}
+      </div></div>
+      <div class="tl__row"><b>A1</b><div class="tl__lane tl__wave">
+        {bars.map((h) => <i style={`--h:${h.toFixed(2)}`}></i>)}
+      </div></div>
+      <div class="tl__row"><b>A2</b><div class="tl__lane">
+        <span class="clip clip--a" style="left:0;width:48%">Music</span>
+        <span class="clip clip--a" style="left:49%;width:51%">Music</span>
+      </div></div>
+      <span class="tl__head"></span>
+    </div>
+  </div>
+</figure>
+
+<style>
+  .bay { background: var(--forest); border-radius: var(--r-2); padding: clamp(0.5rem, 0.3rem + 0.8vw, 0.875rem); color: var(--on-forest-muted); box-shadow: 0 40px 80px -40px rgb(12 42 29 / 0.55); }
+  .bay__screen { position: relative; aspect-ratio: 16/9; overflow: hidden; border-radius: 3px; background: #07140e; }
+  .bay__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .bay__hud { position: absolute; inset: 0.75rem 0.9rem auto; display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(255 255 255 / 0.8); }
+  .bay__chip { display: inline-flex; align-items: center; gap: 0.45rem; }
+  .bay__chip i { width: 0.45rem; height: 0.45rem; border-radius: 50%; background: var(--signal); animation: pulse 2s var(--ease-in-out) infinite; }
+  .bay__tc { font-variant-numeric: tabular-nums; color: var(--signal); }
+  .bay__ph { position: absolute; left: 0.9rem; bottom: 0.75rem; background: rgb(7 20 14 / 0.7); color: rgb(255 255 255 / 0.75); border-color: rgb(255 255 255 / 0.3); }
+  @keyframes pulse { 50% { opacity: 0.25; } }
+
+  .tl { margin-top: 0.6rem; font-family: var(--font-mono); font-size: 0.625rem; letter-spacing: 0.05em; }
+  .tl__ruler { display: flex; justify-content: space-between; padding: 0 0 0.35rem 2rem; color: rgb(238 243 236 / 0.4); border-bottom: 1px solid var(--forest-line); }
+  .tl__tracks { position: relative; display: grid; gap: 4px; padding-top: 6px; }
+  .tl__row { display: grid; grid-template-columns: 2rem 1fr; align-items: center; }
+  .tl__row b { font-weight: 500; color: rgb(238 243 236 / 0.45); }
+  .tl__lane { position: relative; height: clamp(1rem, 0.7rem + 0.9vw, 1.5rem); background: rgb(255 255 255 / 0.03); border-radius: 2px; }
+  .clip { position: absolute; top: 0; bottom: 0; border-radius: 2px; padding: 0 0.4rem; display: flex; align-items: center; overflow: hidden; white-space: nowrap; color: var(--forest); font-weight: 500; text-transform: uppercase; }
+  .clip--v { background: #6fb68b; }
+  .clip--gfx { background: var(--signal); }
+  .clip--a { background: #2f6b4c; color: rgb(238 243 236 / 0.7); }
+  .tl__wave { display: flex; align-items: center; gap: 1px; padding: 0 1px; }
+  .tl__wave i { flex: 1; height: calc(var(--h) * 100%); background: #4e9a70; border-radius: 1px; }
+  .tl__head { position: absolute; top: -4px; bottom: 0; left: calc(2rem + 38%); width: 1.5px; background: var(--signal); animation: playhead 22s linear infinite; }
+  .tl__head::before { content: ''; position: absolute; top: -4px; left: -4px; border: 5px solid transparent; border-top-color: var(--signal); }
+  @keyframes playhead { from { left: 2rem; } to { left: 100%; } }
+  @media (max-width: 520px) {
+    .tl__ruler span:nth-child(even) { visibility: hidden; }
+    .clip { font-size: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .tl__head { animation: none; } }
+</style>

@@ -1,0 +1,43 @@
+---
+import BlogCard from './BlogCard.astro';
+import { categories } from '../config/blog';
+import type { Post } from '../lib/blog';
+
+export interface Props { posts: Post[]; active?: string }
+const { posts, active } = Astro.props;
+const [lead, ...rest] = posts;
+---
+<nav class="bi__cats" aria-label="Blog categories">
+  <a href="/blog/" aria-current={!active ? 'page' : undefined}>All</a>
+  {categories.map((c) => <a href={`/blog/category/${c.slug}/`} aria-current={active === c.slug ? 'page' : undefined}>{c.name}</a>)}
+</nav>
+
+{posts.length === 0 ? (
+  <div class="bi__empty">
+    <p class="h4">No articles in this category yet.</p>
+    <p class="muted">We publish practical guides on editing long-form video. <a class="link" href="/blog/">See all articles</a>.</p>
+  </div>
+) : (
+  <div class="bi">
+    {!active && lead ? (
+      <>
+        <div class="bi__lead"><BlogCard post={lead} large /></div>
+        <div class="bi__list">{rest.map((p, i) => <BlogCard post={p} index={i + 1} />)}</div>
+      </>
+    ) : (
+      <div class="bi__list bi__list--full">{posts.map((p, i) => <BlogCard post={p} index={i} />)}</div>
+    )}
+  </div>
+)}
+<style>
+  .bi__cats { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-bottom: var(--s-7); }
+  .bi__cats a { padding: 0.5rem 0.95rem; border: 1px solid var(--line-strong); border-radius: var(--r-pill); font-size: 0.9375rem; font-weight: 500; transition: background var(--t-fast), color var(--t-fast); }
+  .bi__cats a:hover { border-color: var(--ink); color: var(--ink); }
+  .bi__cats a[aria-current='page'] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .bi { display: grid; gap: var(--s-6); border-top: 1px solid var(--line-strong); }
+  @media (min-width: 1000px) {
+    .bi { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--s-8); }
+    .bi__list--full { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--s-8); }
+  }
+  .bi__empty { padding: var(--s-7) 0; border-top: 1px solid var(--line-strong); display: grid; gap: var(--s-3); }
+</style>

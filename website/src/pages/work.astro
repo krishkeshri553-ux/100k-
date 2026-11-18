@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import PortfolioGrid from '../components/PortfolioGrid.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { hasRealWork } from '../data/portfolio';
+import { breadcrumbSchema } from '../lib/schema';
+
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Work', path: '/work/' }];
+---
+<Base
+  title="Our Work — Long-Form Video Editing Portfolio"
+  description="Long-form video edits by Longform Edits across talking-head, podcast, documentary, educational, business and faceless YouTube formats."
+  path="/work/"
+  schema={[breadcrumbSchema(crumbs)]}
+>
+  <PageHero
+    crumbs={crumbs}
+    eyebrow="Work"
+    title="Judge us by"
+    accent="the cut."
+    lede={hasRealWork
+      ? 'Long-form edits across the formats we work in. Every project here was edited by our team.'
+      : 'Our portfolio is being added now. Each slot below marks a format it will cover — never filled with borrowed footage or invented clients. Want samples in your format today? Ask on the contact form.'}
+  />
+  <section class="section">
+    <div class="container">
+      <PortfolioGrid />
+    </div>
+  </section>
+  <FinalCta title="Want to see it on your footage?" body="The quickest way to judge an editor is a real video. Start with a Single Video and see exactly what we do with your recording." />
+</Base>

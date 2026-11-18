@@ -1,0 +1,21 @@
+{
+  "name": "longformedits-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Marketing website for Longform Edits — done-for-you long-form video editing. https://longformedits.com",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check:site": "node scripts/qa.mjs",
+    "og": "node scripts/make-og.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter-tight": "5.3.0",
+    "@fontsource-variable/jetbrains-mono": "5.3.0",
+    "@fontsource/instrument-serif": "5.3.0",
+    "astro": "5.18.2"
+  }
+}

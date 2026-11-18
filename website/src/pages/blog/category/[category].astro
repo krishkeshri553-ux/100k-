@@ -1,0 +1,32 @@
+---
+import Base from '../../../layouts/Base.astro';
+import PageHero from '../../../components/PageHero.astro';
+import BlogIndex from '../../../components/BlogIndex.astro';
+import FinalCta from '../../../components/FinalCta.astro';
+import { categories } from '../../../config/blog';
+import { getPosts } from '../../../lib/blog';
+import { breadcrumbSchema } from '../../../lib/schema';
+
+export function getStaticPaths() {
+  return categories.map((c) => ({ params: { category: c.slug }, props: { category: c } }));
+}
+const { category } = Astro.props;
+const posts = (await getPosts()).filter((p) => p.data.category === category.slug);
+const path = `/blog/category/${category.slug}/`;
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Blog', path: '/blog/' }, { name: category.name, path }];
+// Empty or draft-only category pages are kept out of the index until they have published content.
+const thin = posts.filter((p) => !p.data.draft).length === 0;
+---
+<Base
+  title={`${category.name} — Blog`}
+  description={`${category.description} Guides from Longform Edits, a long-form video editing service.`}
+  path={path}
+  noindex={thin}
+  schema={[breadcrumbSchema(crumbs)]}
+>
+  <PageHero crumbs={crumbs} eyebrow="Blog category" title={category.name} lede={category.description} />
+  <section class="section section--tight">
+    <div class="container"><BlogIndex posts={posts} active={category.slug} /></div>
+  </section>
+  <FinalCta />
+</Base>

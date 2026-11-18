@@ -1,0 +1,92 @@
+---
+import { plans, formatPrice, perVideo, facts } from '../config/pricing';
+
+export interface Props { headingTag?: 'h1' | 'h2'; id?: string }
+const { headingTag: H = 'h2', id = 'pricing' } = Astro.props;
+---
+<section class="section sunken price" id={id} aria-labelledby="pricing-title">
+  <div class="container">
+    <div class="section-head section-head--split">
+      <div>
+        <p class="eyebrow" data-reveal>Pricing</p>
+        <H id="pricing-title" class="h2" data-reveal style="--d:80ms">Clear prices. <em class="serif">No quote calls.</em></H>
+      </div>
+      <p class="lede" data-reveal style="--d:140ms">
+        Start with one video, or set up a monthly plan for a steady publishing schedule. Every package includes a thumbnail, unlimited revisions and a first draft within {facts.firstDraft}.
+      </p>
+    </div>
+
+    <div class="plans">
+      {plans.map((p, i) => (
+        <article class:list={['plan', { 'plan--mid': i === 1 }]} data-reveal style={`--d:${i * 80}ms`} aria-labelledby={`plan-${p.id}`}>
+          <header class="plan__head">
+            <div class="plan__row">
+              <h3 id={`plan-${p.id}`} class="plan__name">{p.name}</h3>
+              <span class="tag">{p.recurring ? 'Monthly' : 'One-off'}</span>
+            </div>
+            <p class="plan__fit">{p.fit}</p>
+          </header>
+
+          <div class="plan__price">
+            <span class="plan__amount">{formatPrice(p.price)}</span>
+            <span class="plan__period">{p.period}</span>
+          </div>
+          <p class="plan__per mono">
+            {p.videos > 1 ? `${p.videos} videos · ${formatPrice(perVideo(p))} each` : '1 video · pay once'}
+          </p>
+
+          <ul class="plan__list" role="list">
+            {p.features.map((f) => (
+              <li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>{f}</li>
+            ))}
+          </ul>
+
+          <a href={`/contact/?package=${p.id}`} class:list={['btn', 'btn--block', { 'btn--ghost': i !== 1 }]}>
+            {p.cta} <span class="btn__arrow" aria-hidden="true">→</span>
+          </a>
+        </article>
+      ))}
+    </div>
+
+    <p class="price__note muted" data-reveal>
+      Prices in USD. Not sure which plan fits? <a href="/contact/?package=unsure" class="link">Tell us about your channel</a> and we'll recommend one.
+    </p>
+  </div>
+</section>
+
+<style>
+  .plans { display: grid; gap: var(--s-4); }
+  @media (min-width: 960px) { .plans { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; } }
+  .plan {
+    display: flex; flex-direction: column; gap: var(--s-5);
+    background: var(--white); border: 1px solid var(--line); padding: clamp(1.5rem, 1.2rem + 1.2vw, 2.5rem);
+    border-radius: var(--r-2);
+  }
+  @media (min-width: 960px) {
+    .plan { border-radius: 0; }
+    .plan:first-child { border-radius: var(--r-2) 0 0 var(--r-2); }
+    .plan:last-child { border-radius: 0 var(--r-2) var(--r-2) 0; }
+    .plan + .plan { border-left: 0; }
+  }
+  .plan--mid { background: var(--forest); border-color: var(--forest); color: var(--on-forest-muted); }
+  .plan--mid .plan__name, .plan--mid .plan__amount { color: var(--on-forest); }
+  .plan--mid .tag { border-color: var(--forest-line); color: var(--on-forest-muted); }
+  .plan--mid .plan__list li { border-color: var(--forest-line); }
+  .plan--mid .plan__list svg, .plan--mid .plan__per { color: var(--signal); }
+  .plan--mid .btn { --btn-bg: var(--signal); --btn-fg: var(--forest); --btn-bd: var(--signal); }
+  .plan--mid .btn:hover { --btn-bg: var(--on-forest); --btn-bd: var(--on-forest); }
+
+  .plan__head { display: grid; gap: var(--s-3); }
+  .plan__row { display: flex; justify-content: space-between; align-items: center; gap: var(--s-3); }
+  .plan__name { font-size: var(--fs-h4); letter-spacing: -0.03em; }
+  .plan__fit { font-size: 0.9375rem; min-height: 3em; }
+  .plan__price { display: flex; align-items: baseline; gap: var(--s-2); }
+  .plan__amount { font-size: clamp(3rem, 2.4rem + 2.4vw, 4.5rem); font-weight: 600; letter-spacing: -0.06em; color: var(--ink); line-height: 1; }
+  .plan__period { color: var(--muted); }
+  .plan--mid .plan__period { color: var(--on-forest-muted); }
+  .plan__per { color: var(--green); margin-top: calc(var(--s-4) * -1); }
+  .plan__list { display: grid; flex: 1; align-content: start; }
+  .plan__list li { display: flex; gap: var(--s-3); align-items: flex-start; padding: 0.55rem 0; border-top: 1px solid var(--line); font-size: 0.9375rem; }
+  .plan__list svg { width: 1rem; flex: none; margin-top: 0.25rem; color: var(--green); }
+  .price__note { margin-top: var(--s-6); font-size: var(--fs-sm); }
+</style>

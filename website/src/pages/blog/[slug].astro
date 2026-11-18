@@ -1,0 +1,175 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import { getPosts, relatedPosts, readingTime, formatDate, type Post } from '../../lib/blog';
+import { authors, categoryBySlug } from '../../config/blog';
+import { site, cta } from '../../config/site';
+import { plans, formatPrice, facts } from '../../config/pricing';
+import { breadcrumbSchema } from '../../lib/schema';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post, posts } }));
+}
+
+const { post, posts } = Astro.props as { post: Post; posts: Post[] };
+const { Content, headings } = await render(post);
+const d = post.data;
+const cat = categoryBySlug(d.category)!;
+const author = authors[d.author as keyof typeof authors];
+const path = `/blog/${post.id}/`;
+const url = new URL(path, site.url).href;
+const related = relatedPosts(post, posts);
+const toc = headings.filter((h) => h.depth === 2);
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Blog', path: '/blog/' },
+  { name: cat.name, path: `/blog/category/${cat.slug}/` },
+  { name: d.title, path },
+];
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: d.title,
+  description: d.description,
+  url,
+  mainEntityOfPage: url,
+  datePublished: d.publishDate.toISOString(),
+  dateModified: (d.updatedDate ?? d.publishDate).toISOString(),
+  author: { '@type': 'Organization', name: author.name, url: new URL(author.url, site.url).href },
+  publisher: { '@id': `${site.url}/#organization` },
+  image: new URL(site.ogImage, site.url).href,
+  articleSection: cat.name,
+  wordCount: post.body?.split(/\s+/).length,
+  inLanguage: site.lang,
+};
+const shareText = encodeURIComponent(d.title);
+const shareUrl = encodeURIComponent(url);
+---
+<Base
+  title={d.title}
+  description={d.description}
+  path={path}
+  type="article"
+  noindex={d.draft}
+  publishedTime={d.publishDate.toISOString()}
+  modifiedTime={(d.updatedDate ?? d.publishDate).toISOString()}
+  schema={[articleSchema, breadcrumbSchema(crumbs)]}
+>
+  <article class="art">
+    <header class="art__head">
+      <div class="container">
+        <Breadcrumbs crumbs={crumbs} />
+        {d.draft && (
+          <p class="art__draft mono" role="note">Draft — under editorial review. Not yet indexed by search engines.</p>
+        )}
+        <a class="eyebrow art__cat" href={`/blog/category/${cat.slug}/`}>{cat.name}</a>
+        <h1 class="art__title">{d.title}</h1>
+        <p class="lede">{d.description}</p>
+        <p class="art__meta mono">
+          <span>{author.name}</span><span>·</span>
+          <time datetime={d.publishDate.toISOString()}>{formatDate(d.publishDate)}</time>
+          {d.updatedDate && <><span>·</span><span>Updated <time datetime={d.updatedDate.toISOString()}>{formatDate(d.updatedDate)}</time></span></>}
+          <span>·</span><span>{readingTime(post.body)} min read</span>
+        </p>
+      </div>
+    </header>
+
+    <div class="container art__grid">
+      <aside class="art__aside">
+        {toc.length > 2 && (
+          <nav class="art__toc" aria-label="In this article">
+            <h2 class="mono">In this article</h2>
+            <ol role="list">{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
+          </nav>
+        )}
+        <div class="art__share">
+          <h2 class="mono">Share</h2>
+          <ul role="list">
+            <li><a href={`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`} target="_blank" rel="noopener">LinkedIn</a></li>
+            <li><a href={`https://x.com/intent/post?text=${shareText}&url=${shareUrl}`} target="_blank" rel="noopener">X</a></li>
+            <li><a href={`mailto:?subject=${shareText}&body=${shareUrl}`}>Email</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="prose art__body">
+        <Content />
+      </div>
+    </div>
+
+    <div class="container">
+      <aside class="art__cta" aria-label="Work with us">
+        <div>
+          <p class="eyebrow eyebrow--plain">Longform Edits</p>
+          <p class="h3">Rather spend the hours filming? We'll edit it.</p>
+          <p class="muted">Long-form editing from {formatPrice(plans[0].price)} per video. First draft in {facts.firstDraft}, unlimited revisions, thumbnail included.</p>
+        </div>
+        <div class="art__cta-actions">
+          <a href={cta.primary.href} class="btn">{cta.primary.label} <span class="btn__arrow" aria-hidden="true">→</span></a>
+          <a href="/pricing/" class="btn btn--ghost">See pricing</a>
+        </div>
+      </aside>
+
+      <div class="art__author">
+        <span class="art__avatar" aria-hidden="true">LE</span>
+        <div>
+          <p class="mono muted">Written by</p>
+          <p><strong>{author.name}</strong> — {author.role}</p>
+          <p class="muted">{author.bio}</p>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  {related.length > 0 && (
+    <section class="section section--tight" aria-labelledby="related-title">
+      <div class="container">
+        <h2 id="related-title" class="h3">Keep reading</h2>
+        <div class="art__related">{related.map((p) => <BlogCard post={p} />)}</div>
+      </div>
+    </section>
+  )}
+</Base>
+
+<style>
+  .art__head { padding-top: clamp(2rem, 1rem + 3vw, 4rem); padding-bottom: var(--s-7); border-bottom: 1px solid var(--line); }
+  .art__head .container { display: grid; gap: var(--s-5); }
+  .art__head .container > * { max-width: 56rem; }
+  .art__draft { padding: 0.6rem 0.9rem; border: 1px dashed var(--line-strong); border-radius: var(--r-1); color: var(--ink-2); justify-self: start; }
+  .art__cat { justify-self: start; margin-top: var(--s-4); }
+  .art__title { font-size: clamp(2.25rem, 1.5rem + 3vw, 4.25rem); letter-spacing: -0.045em; line-height: 1; }
+  .art__meta { display: flex; flex-wrap: wrap; gap: var(--s-2); color: var(--muted); }
+
+  .art__grid { display: grid; gap: var(--s-6); padding-top: var(--s-7); }
+  .art__aside { display: grid; gap: var(--s-6); align-content: start; }
+  .art__aside h2 { text-transform: uppercase; color: var(--muted); font-weight: 500; margin-bottom: var(--s-3); font-size: var(--fs-mono); }
+  .art__toc ol { display: grid; gap: var(--s-2); border-left: 1px solid var(--line-strong); padding-left: var(--s-4); }
+  .art__toc a { font-size: var(--fs-sm); color: var(--ink-2); line-height: 1.4; display: block; }
+  .art__toc a:hover { color: var(--green); }
+  .art__share ul { display: flex; gap: var(--s-4); font-size: var(--fs-sm); font-weight: 500; }
+  .art__share a:hover { color: var(--green); }
+  @media (min-width: 1100px) {
+    .art__grid { grid-template-columns: 16rem minmax(0, 1fr); gap: var(--s-9); }
+    .art__aside { position: sticky; top: 6rem; order: 0; }
+  }
+  @media (max-width: 1099px) { .art__toc { display: none; } .art__aside { order: 2; } }
+
+  .art__cta { margin-top: var(--s-9); display: grid; gap: var(--s-5); padding: clamp(1.5rem, 1rem + 2vw, 3rem); background: var(--forest); border-radius: var(--r-2); color: var(--on-forest-muted); }
+  .art__cta .h3 { color: var(--on-forest); margin: var(--s-3) 0; max-width: 22ch; }
+  .art__cta .eyebrow { color: var(--signal); }
+  .art__cta .muted { color: var(--on-forest-muted); }
+  .art__cta .btn { --btn-bg: var(--signal); --btn-fg: var(--forest); --btn-bd: var(--signal); }
+  .art__cta .btn--ghost { --btn-bg: transparent; --btn-fg: var(--on-forest); --btn-bd: var(--forest-line); }
+  .art__cta-actions { display: flex; flex-wrap: wrap; gap: var(--s-3); align-items: center; }
+  @media (min-width: 900px) { .art__cta { grid-template-columns: 1.4fr 1fr; align-items: center; } .art__cta-actions { justify-content: flex-end; } }
+
+  .art__author { display: grid; grid-template-columns: 3.5rem 1fr; gap: var(--s-4); margin-top: var(--s-7); padding: var(--s-6) 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); font-size: 0.9375rem; }
+  .art__author strong { color: var(--ink); }
+  .art__avatar { width: 3.5rem; height: 3.5rem; border-radius: 50%; background: var(--green); color: var(--white); display: grid; place-items: center; font-weight: 600; letter-spacing: -0.02em; }
+  .art__related { display: grid; border-top: 1px solid var(--line-strong); margin-top: var(--s-5); }
+  @media (min-width: 900px) { .art__related { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--s-6); } }
+</style>

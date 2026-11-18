@@ -1,0 +1,276 @@
+---
+/**
+ * Project intake form.
+ * - Posts to /api/contact (website/api/contact.js, a Vercel serverless function).
+ * - Works without JavaScript (native POST + redirect); with JS it submits via
+ *   fetch and shows inline success / error states.
+ * - Spam protection: hidden honeypot field + minimum fill time, checked server-side.
+ * - If delivery isn't configured or fails, the visitor is told so plainly and
+ *   offered a prefilled email instead. We never show "sent" unless the server confirms it.
+ */
+import { site } from '../config/site';
+import { contentTypes, finalLengths, rawLengths, volumes, packageOptions, budgets } from '../data/contact';
+---
+<form class="cf" action="/api/contact" method="post" novalidate data-contact-form>
+  <input type="hidden" name="started_at" value="" data-started />
+  <div class="cf__hp" aria-hidden="true">
+    <label for="company_website">Leave this field empty</label>
+    <input id="company_website" name="company_website" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <fieldset class="cf__group">
+    <legend class="cf__legend"><span class="mono">01</span> About you</legend>
+    <div class="cf__row cf__row--2">
+      <div class="field">
+        <label for="name">Full name <span aria-hidden="true">*</span></label>
+        <input id="name" name="name" type="text" autocomplete="name" required maxlength="120" aria-describedby="name-err" />
+        <p class="field__err" id="name-err" data-err></p>
+      </div>
+      <div class="field">
+        <label for="email">Email <span aria-hidden="true">*</span></label>
+        <input id="email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="200" aria-describedby="email-err" />
+        <p class="field__err" id="email-err" data-err></p>
+      </div>
+    </div>
+    <div class="field">
+      <label for="channel">YouTube channel or website <span aria-hidden="true">*</span></label>
+      <input id="channel" name="channel" type="text" inputmode="url" required maxlength="300" placeholder="youtube.com/@yourchannel" aria-describedby="channel-hint channel-err" />
+      <p class="field__hint" id="channel-hint">Helps us see your current style. No channel yet? Write “Launching soon”.</p>
+      <p class="field__err" id="channel-err" data-err></p>
+    </div>
+  </fieldset>
+
+  <fieldset class="cf__group">
+    <legend class="cf__legend"><span class="mono">02</span> Your videos</legend>
+    <div class="cf__row cf__row--2">
+      <div class="field">
+        <label for="content_type">Type of content <span aria-hidden="true">*</span></label>
+        <select id="content_type" name="content_type" required aria-describedby="content_type-err">
+          <option value="">Select…</option>
+          {contentTypes.map((o) => <option>{o}</option>)}
+        </select>
+        <p class="field__err" id="content_type-err" data-err></p>
+      </div>
+      <div class="field">
+        <label for="volume">Videos needed per month <span aria-hidden="true">*</span></label>
+        <select id="volume" name="volume" required aria-describedby="volume-err">
+          <option value="">Select…</option>
+          {volumes.map((o) => <option>{o}</option>)}
+        </select>
+        <p class="field__err" id="volume-err" data-err></p>
+      </div>
+    </div>
+    <div class="cf__row cf__row--2">
+      <div class="field">
+        <label for="final_length">Average final video length</label>
+        <select id="final_length" name="final_length">
+          <option value="">Select…</option>
+          {finalLengths.map((o) => <option>{o}</option>)}
+        </select>
+      </div>
+      <div class="field">
+        <label for="raw_length">Average raw footage length</label>
+        <select id="raw_length" name="raw_length">
+          <option value="">Select…</option>
+          {rawLengths.map((o) => <option>{o}</option>)}
+        </select>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset class="cf__group">
+    <legend class="cf__legend"><span class="mono">03</span> Package &amp; budget</legend>
+    <div class="field">
+      <span class="field__label" id="package-label">Package of interest <span aria-hidden="true">*</span></span>
+      <div class="cf__choices" role="radiogroup" aria-labelledby="package-label" aria-describedby="package-err">
+        {packageOptions.map((o, i) => (
+          <label class="choice">
+            <input type="radio" name="package" value={o.value} required={i === 0} />
+            <span>{o.label}</span>
+          </label>
+        ))}
+      </div>
+      <p class="field__err" id="package-err" data-err></p>
+    </div>
+    <div class="field">
+      <label for="budget">Budget range</label>
+      <select id="budget" name="budget">
+        <option value="">Select…</option>
+        {budgets.map((o) => <option>{o}</option>)}
+      </select>
+    </div>
+  </fieldset>
+
+  <fieldset class="cf__group">
+    <legend class="cf__legend"><span class="mono">04</span> Anything else</legend>
+    <div class="field">
+      <label for="details">Additional details</label>
+      <textarea id="details" name="details" rows="5" maxlength="4000" placeholder="Reference videos you like, your publishing schedule, deadlines, style notes…"></textarea>
+    </div>
+  </fieldset>
+
+  <div class="cf__submit">
+    <button type="submit" class="btn" data-submit>
+      <span data-submit-label>Send project details</span> <span class="btn__arrow" aria-hidden="true">→</span>
+    </button>
+    <p class="field__hint">Fields marked * are required. We use your details only to reply to this enquiry.</p>
+  </div>
+
+  <div class="cf__status" role="status" aria-live="polite" tabindex="-1" data-status hidden></div>
+</form>
+
+<template data-success>
+  <div class="cf__ok">
+    <p class="eyebrow eyebrow--plain">Received</p>
+    <h2 class="h3">Thanks — your project details are with us.</h2>
+    <p>We'll reply by email to the address you gave, to confirm the details and how to send your footage. If you don't see our reply, check your spam folder or email <a class="link" href={`mailto:${site.email}`}>{site.email}</a>.</p>
+  </div>
+</template>
+
+<script define:vars={{ email: site.email }}>
+  // Inline (tiny) so the form logic has no extra request.
+  const form = document.querySelector('[data-contact-form]');
+  if (form) {
+    const started = form.querySelector('[data-started]');
+    started.value = String(Date.now());
+    const status = form.querySelector('[data-status]');
+    const btn = form.querySelector('[data-submit]');
+    const btnLabel = form.querySelector('[data-submit-label]');
+
+    // Preselect a package from ?package=… (pricing CTAs link here).
+    const pkg = new URLSearchParams(location.search).get('package');
+    if (pkg) {
+      const radio = form.querySelector(`input[name="package"][value="${CSS.escape(pkg)}"]`);
+      if (radio) radio.checked = true;
+    }
+    if (new URLSearchParams(location.search).get('error')) showError('unavailable');
+
+    const messages = {
+      name: 'Please enter your name.',
+      email: 'Please enter a valid email address.',
+      channel: 'Please add your channel or website (or “Launching soon”).',
+      content_type: 'Please choose the type of content.',
+      volume: 'Please choose how many videos you need.',
+      package: 'Please choose a package, or “Not sure yet”.',
+    };
+
+    function setError(name, msg) {
+      const el = form.querySelector(`#${name}-err`);
+      const input = form.querySelector(`[name="${name}"]`);
+      if (el) el.textContent = msg || '';
+      if (input && input.type !== 'radio') input.setAttribute('aria-invalid', msg ? 'true' : 'false');
+    }
+
+    function validate() {
+      const data = new FormData(form);
+      let first = null;
+      for (const [name, msg] of Object.entries(messages)) {
+        const v = String(data.get(name) || '').trim();
+        let bad = !v;
+        if (name === 'email' && v) bad = !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+        setError(name, bad ? msg : '');
+        if (bad && !first) first = name;
+      }
+      if (first) form.querySelector(`[name="${first}"]`)?.focus();
+      return !first;
+    }
+
+    form.querySelectorAll('input, select, textarea').forEach((el) =>
+      el.addEventListener('change', () => { if (el.name in messages) setError(el.name, ''); }));
+
+    function mailtoFallback() {
+      const d = new FormData(form);
+      const lines = ['name', 'email', 'channel', 'content_type', 'volume', 'final_length', 'raw_length', 'package', 'budget', 'details']
+        .map((k) => `${k.replace('_', ' ')}: ${d.get(k) || '-'}`);
+      return `mailto:${email}?subject=${encodeURIComponent('Project enquiry — ' + (d.get('name') || ''))}&body=${encodeURIComponent(lines.join('\n'))}`;
+    }
+
+    function showError(kind) {
+      status.hidden = false;
+      status.className = 'cf__status cf__status--err';
+      const lead = kind === 'invalid'
+        ? 'Some details need another look — please check the highlighted fields.'
+        : 'Sorry — your enquiry could not be sent from this page right now, and nothing has been submitted.';
+      status.innerHTML = `<p><strong>${lead}</strong></p>` + (kind === 'invalid' ? '' :
+        `<p>Please email us instead — we've prepared the message for you: <a class="link" href="${mailtoFallback()}">open a pre-filled email to ${email}</a>.</p>`);
+      status.focus();
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      status.hidden = true;
+      if (!validate()) return;
+      btn.disabled = true;
+      btnLabel.textContent = 'Sending…';
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+          body: JSON.stringify(Object.fromEntries(new FormData(form))),
+        });
+        const body = await res.json().catch(() => ({}));
+        if (res.ok && body.ok === true) {
+          const tpl = document.querySelector('[data-success]');
+          form.replaceWith(tpl.content.cloneNode(true));
+          document.querySelector('.cf__ok h2')?.setAttribute('tabindex', '-1');
+          document.querySelector('.cf__ok h2')?.focus();
+          return;
+        }
+        if (res.status === 422 && body.fields) {
+          Object.entries(body.fields).forEach(([k, m]) => setError(k, m));
+          showError('invalid');
+        } else {
+          showError('unavailable');
+        }
+      } catch {
+        showError('unavailable');
+      } finally {
+        btn.disabled = false;
+        btnLabel.textContent = 'Send project details';
+      }
+    });
+  }
+</script>
+
+<style>
+  .cf { display: grid; gap: var(--s-6); }
+  .cf__hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+  .cf__group { border: 0; padding: 0; display: grid; gap: var(--s-5); min-width: 0; }
+  .cf__legend { display: flex; align-items: center; gap: var(--s-3); width: 100%; padding-bottom: var(--s-3); margin-bottom: var(--s-2); border-bottom: 1px solid var(--line-strong); color: var(--ink); font-weight: 600; font-size: var(--fs-lg); letter-spacing: -0.02em; }
+  .cf__legend .mono { color: var(--green); }
+  .cf__row { display: grid; gap: var(--s-5); }
+  @media (min-width: 640px) { .cf__row--2 { grid-template-columns: 1fr 1fr; } }
+
+  .field { display: grid; gap: var(--s-2); min-width: 0; }
+  .field label, .field__label { font-weight: 500; color: var(--ink); font-size: 0.9375rem; }
+  .field label > span[aria-hidden], .field__label > span[aria-hidden] { color: var(--green); }
+  .field input, .field select, .field textarea {
+    width: 100%; min-height: 3.25rem; padding: 0.8rem 1rem; font-size: 1rem;
+    background: var(--white); border: 1px solid var(--line-strong); border-radius: var(--r-2);
+    transition: border-color var(--t-fast), box-shadow var(--t-fast);
+  }
+  .field select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%230b1a12' stroke-width='1.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 12px; padding-right: 2.5rem; }
+  .field textarea { resize: vertical; min-height: 8rem; line-height: 1.5; }
+  .field input::placeholder, .field textarea::placeholder { color: #8a968e; }
+  .field input:hover, .field select:hover, .field textarea:hover { border-color: var(--ink-2); }
+  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px rgb(23 96 61 / 0.18); }
+  .field [aria-invalid='true'] { border-color: var(--danger); }
+  .field__hint { font-size: var(--fs-sm); color: var(--muted); }
+  .field__err { font-size: var(--fs-sm); color: var(--danger); font-weight: 500; }
+  .field__err:empty { display: none; }
+
+  .cf__choices { display: grid; gap: var(--s-2); }
+  @media (min-width: 640px) { .cf__choices { grid-template-columns: 1fr 1fr; } }
+  .choice { display: flex; align-items: center; gap: var(--s-3); padding: 0.85rem 1rem; border: 1px solid var(--line-strong); border-radius: var(--r-2); background: var(--white); cursor: pointer; font-weight: 500; font-size: 0.9375rem; color: var(--ink); transition: border-color var(--t-fast), background var(--t-fast); }
+  .choice:hover { border-color: var(--ink-2); }
+  .choice input { accent-color: var(--green); width: 1.1rem; height: 1.1rem; flex: none; }
+  .choice:has(input:checked) { border-color: var(--green); background: var(--green-tint); }
+  .choice:has(input:focus-visible) { outline: 2px solid var(--green); outline-offset: 2px; }
+
+  .cf__submit { display: grid; gap: var(--s-3); justify-items: start; }
+  .cf__submit .btn[disabled] { opacity: 0.6; cursor: progress; }
+  .cf__status { padding: var(--s-5); border-radius: var(--r-2); display: grid; gap: var(--s-2); }
+  .cf__status--err { background: #f8e9e4; border: 1px solid #e2b9ad; color: #5b1e12; }
+  :global(.cf__ok) { display: grid; gap: var(--s-4); padding: var(--s-7) var(--s-6); background: var(--green-tint); border-radius: var(--r-2); border: 1px solid rgb(23 96 61 / 0.25); }
+  :global(.cf__ok h2:focus) { outline: none; }
+</style>

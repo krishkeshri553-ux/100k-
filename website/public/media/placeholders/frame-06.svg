@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+<defs>
+<linearGradient id="g06" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#08140f"/><stop offset="1" stop-color="#1a2f26"/></linearGradient>
+<radialGradient id="l06" cx="0.5" cy="0.7" r="0.6"><stop offset="0" stop-color="#9ee0b8" stop-opacity="0.55"/><stop offset="1" stop-color="#9ee0b8" stop-opacity="0"/></radialGradient>
+<filter id="b06" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="14"/></filter>
+<radialGradient id="v06" cx="0.5" cy="0.5" r="0.75"><stop offset="0.55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.55"/></radialGradient>
+</defs>
+<rect width="1600" height="900" fill="url(#g06)"/>
+<rect width="1600" height="900" fill="url(#l06)"/>
+<g filter="url(#b06)"><g fill="#e9f6d0" fill-opacity="0.35"><circle cx="300" cy="500" r="22"/><circle cx="420" cy="560" r="14"/><circle cx="640" cy="470" r="30"/><circle cx="820" cy="590" r="18"/><circle cx="1000" cy="450" r="26"/><circle cx="1180" cy="540" r="16"/><circle cx="1320" cy="480" r="24"/></g><path d="M0 700 H1600 V900 H0z" fill="#050c08"/></g>
+<rect width="1600" height="900" fill="url(#v06)"/>
+<g fill="none" stroke="#fff" stroke-opacity="0.22" stroke-width="2">
+<path d="M80 130V80h50M1520 130V80h-50M80 770v50h50M1520 770v50h-50"/>
+</g>
+<text x="80" y="860" font-family="ui-monospace,Menlo,monospace" font-size="22" letter-spacing="3" fill="#fff" fill-opacity="0.45">PLACEHOLDER · FACELESS</text>
+</svg>

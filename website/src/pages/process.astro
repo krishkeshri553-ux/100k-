@@ -1,0 +1,70 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Process from '../components/Process.astro';
+import Faq from '../components/Faq.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { faqs } from '../data/faq';
+import { breadcrumbSchema } from '../lib/schema';
+import { facts } from '../config/pricing';
+
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Process', path: '/process/' }];
+const processFaqs = faqs.filter((f) => /footage|long|process|happens|started/i.test(f.q));
+
+const brief = [
+  { t: 'Raw footage', d: 'All camera angles and audio files, unedited. Shared as a cloud link — we confirm the easiest method when we reply to your enquiry.' },
+  { t: 'A short brief', d: 'What the video is about, who it’s for, and anything that must stay in or come out.' },
+  { t: 'References', d: 'Links to one or two videos whose editing style you like. This does more than any written description.' },
+  { t: 'Brand assets', d: 'Logo, fonts, colours, intro or outro, lower-third style — whatever you already use.' },
+  { t: 'B-roll & screen recordings', d: 'Any supporting footage you have. We source B-roll where the edit needs more.' },
+  { t: 'Thumbnail direction', d: 'Your title idea, a photo if you want your face on it, and any thumbnails you like.' },
+];
+---
+<Base
+  title="Our Editing Process — How It Works"
+  description={`How Longform Edits works: submit your footage, we edit, you get a first draft in ${facts.firstDraft}, send feedback with unlimited revisions, and receive the final video.`}
+  path="/process/"
+  schema={[breadcrumbSchema(crumbs)]}
+>
+  <PageHero
+    crumbs={crumbs}
+    eyebrow="Process"
+    title="Simple on your side."
+    accent="Meticulous on ours."
+    lede="Five steps from raw recording to a finished, published-ready video. You stay in control of the direction; we do the hours of work in between."
+  />
+  <Process />
+
+  <section class="section sunken">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div>
+          <p class="eyebrow" data-reveal>Step 01, in detail</p>
+          <h2 class="h2" data-reveal style="--d:80ms">What to send us.</h2>
+        </div>
+        <p class="lede" data-reveal style="--d:140ms">Only the footage is required. Everything else helps the first draft land closer to what you have in your head.</p>
+      </div>
+      <ol class="brief" role="list">
+        {brief.map((b, i) => (
+          <li data-reveal style={`--d:${(i % 3) * 60}ms`}>
+            <span class="mono">{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="h4">{b.t}</h3>
+            <p>{b.d}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <Faq items={processFaqs} title="About the process." intro="How the work moves from your footage to your final video." />
+  <FinalCta />
+</Base>
+
+<style>
+  .brief { display: grid; gap: 0; border-top: 1px solid var(--line-strong); }
+  @media (min-width: 760px) { .brief { grid-template-columns: repeat(2, 1fr); column-gap: var(--s-7); } }
+  @media (min-width: 1100px) { .brief { grid-template-columns: repeat(3, 1fr); } }
+  .brief li { display: grid; gap: var(--s-2); padding: var(--s-6) 0; border-bottom: 1px solid var(--line); align-content: start; }
+  .brief .mono { color: var(--green); }
+  .brief p { font-size: 0.9875rem; max-width: 26rem; }
+</style>

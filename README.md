@@ -1,3 +1,5 @@
+> **Longform Edits website:** the marketing site for longformedits.com lives in [`website/`](website/README.md) and is independent of the system below.
+
 # HustleGrowthz AI Revenue Department
 
 A cloud-run sales and marketing operating system for HustleGrowthz Pvt. Ltd.: it revives old LinkedIn conversations, scores and researches real estate prospects (Dubai → USA → UK), prepares personalised outreach for **your** approval, analyses replies, books strategy calls on Google Calendar, researches competitors, runs a LinkedIn content department, and reports honest revenue numbers on a private black-and-gold **Revenue Command** tracker.

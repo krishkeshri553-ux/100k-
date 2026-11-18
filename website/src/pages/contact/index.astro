@@ -1,0 +1,78 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import { site } from '../../config/site';
+import { facts, formatPrice, lowestPrice } from '../../config/pricing';
+import { breadcrumbSchema } from '../../lib/schema';
+
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact/' }];
+const next = [
+  { t: 'We read your brief', d: 'We look at your channel and what you told us about your videos.' },
+  { t: 'We reply by email', d: 'To confirm scope, the right package and the easiest way to send your footage.' },
+  { t: 'You send footage', d: `Editing begins, and your first draft arrives within ${facts.firstDraft}.` },
+];
+---
+<Base
+  title="Start Your Project — Contact Longform Edits"
+  description={`Tell us about your channel and videos. Long-form editing from ${formatPrice(lowestPrice)} per video, with a first draft in ${facts.firstDraft} and unlimited revisions.`}
+  path="/contact/"
+  schema={[breadcrumbSchema(crumbs)]}
+>
+  <section class="ct">
+    <div class="container ct__grid">
+      <aside class="ct__side">
+        <Breadcrumbs crumbs={crumbs} />
+        <p class="eyebrow" data-reveal>Start your project</p>
+        <h1 class="ct__title" data-reveal style="--d:80ms">Tell us about <em class="serif">your videos.</em></h1>
+        <p class="lede" data-reveal style="--d:140ms">A few details about your channel and what you need. It takes about five minutes, and there's no commitment until you've seen what we'll do.</p>
+
+        <div class="ct__next" data-reveal style="--d:200ms">
+          <h2 class="mono ct__label">What happens next</h2>
+          <ol role="list">
+            {next.map((n, i) => (
+              <li><span class="mono">{String(i + 1).padStart(2, '0')}</span><div><strong>{n.t}</strong><p>{n.d}</p></div></li>
+            ))}
+          </ol>
+        </div>
+
+        <div class="ct__direct" data-reveal style="--d:240ms">
+          <h2 class="mono ct__label">Prefer email?</h2>
+          <a class="link" href={`mailto:${site.email}`}>{site.email}</a>
+        </div>
+
+        <ul class="ct__facts mono" role="list" data-reveal style="--d:280ms">
+          <li>From {formatPrice(lowestPrice)} per video</li>
+          <li>First draft in {facts.firstDraft}</li>
+          <li>Unlimited revisions</li>
+          <li>Thumbnail included</li>
+        </ul>
+      </aside>
+
+      <div class="ct__form" data-reveal style="--d:120ms">
+        <ContactForm />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .ct { padding-block: clamp(2rem, 1rem + 4vw, 5rem) var(--section); }
+  .ct__grid { display: grid; gap: var(--s-8); }
+  .ct__side { display: grid; gap: var(--s-5); align-content: start; }
+  .ct__title { font-size: clamp(2.5rem, 1.6rem + 3.6vw, 4.75rem); letter-spacing: -0.05em; line-height: 0.95; }
+  .ct__title em { color: var(--green); }
+  .ct__label { text-transform: uppercase; color: var(--muted); font-weight: 500; margin-bottom: var(--s-3); }
+  .ct__next ol { border-top: 1px solid var(--line-strong); }
+  .ct__next li { display: grid; grid-template-columns: 2rem 1fr; gap: var(--s-3); padding: var(--s-4) 0; border-bottom: 1px solid var(--line); }
+  .ct__next .mono { color: var(--green); padding-top: 0.2rem; }
+  .ct__next strong { color: var(--ink); }
+  .ct__next p { font-size: var(--fs-sm); color: var(--muted); }
+  .ct__facts { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+  .ct__facts li { padding: 0.35rem 0.6rem; border: 1px solid var(--line-strong); border-radius: var(--r-1); color: var(--ink-2); }
+  .ct__form { background: var(--white); border: 1px solid var(--line); border-radius: var(--r-2); padding: clamp(1.25rem, 0.8rem + 2vw, 3rem); }
+  @media (min-width: 1040px) {
+    .ct__grid { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--s-9); }
+    .ct__side { position: sticky; top: 6rem; }
+  }
+</style>

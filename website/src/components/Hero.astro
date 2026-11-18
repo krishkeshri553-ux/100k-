@@ -1,0 +1,63 @@
+---
+import Monitor from './Monitor.astro';
+import { cta } from '../config/site';
+import { facts, formatPrice, lowestPrice } from '../config/pricing';
+---
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container">
+    <p class="eyebrow hero__eyebrow" data-reveal>Done-for-you long-form video editing</p>
+    <h1 id="hero-title" class="hero__title">
+      <span class="hero__line" data-reveal style="--d:60ms">Your footage, cut into</span>
+      <span class="hero__line" data-reveal style="--d:140ms">long-form videos</span>
+      <span class="hero__line" data-reveal style="--d:220ms">worth <em class="serif">watching.</em></span>
+    </h1>
+
+    <div class="hero__body">
+      <div class="hero__copy" data-reveal style="--d:300ms">
+        <p class="lede">
+          You record. We edit. Longform Edits turns raw recordings into paced, polished
+          {facts.finalLength.replace(' minutes', '-minute')} videos for YouTube creators, podcasters, educators and brands —
+          with a first draft back in {facts.firstDraft}.
+        </p>
+        <div class="hero__ctas">
+          <a href={cta.primary.href} class="btn">{cta.primary.label} <span class="btn__arrow" aria-hidden="true">→</span></a>
+          <a href={cta.secondary.href} class="btn btn--ghost">{cta.secondary.label}</a>
+        </div>
+        <ul class="hero__facts" role="list">
+          <li><span class="mono">From</span><strong>{formatPrice(lowestPrice)}</strong><span>per video</span></li>
+          <li><span class="mono">Draft</span><strong>{facts.firstDraft.replace(/\s*hours/, 'h')}</strong><span>first cut</span></li>
+          <li><span class="mono">Revisions</span><strong>Unlimited</strong><span>on every plan</span></li>
+        </ul>
+      </div>
+      <div class="hero__bay" data-reveal style="--d:200ms">
+        <Monitor />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero { padding-top: clamp(1.75rem, 0.75rem + 3vw, 3.75rem); padding-bottom: var(--section); }
+  .hero__eyebrow { margin-bottom: var(--s-5); }
+  .hero__title { font-size: clamp(2.875rem, 1.5rem + 5.6vw, 7.25rem); font-weight: 600; letter-spacing: -0.048em; line-height: 0.93; }
+  .hero__line { display: block; }
+  .hero__title em { color: var(--green); letter-spacing: -0.03em; padding-right: 0.05em; }
+
+  .hero__body { display: grid; gap: var(--s-7); margin-top: clamp(2rem, 1.5rem + 2.5vw, 4rem); }
+  .hero__copy { display: grid; gap: var(--s-6); align-content: start; }
+  .hero__ctas { display: flex; flex-wrap: wrap; gap: var(--s-3); }
+  .hero__facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+  .hero__facts li { display: grid; gap: 0.15rem; padding: var(--s-4) var(--s-3) 0 0; }
+  .hero__facts li + li { padding-left: var(--s-4); border-left: 1px solid var(--line); }
+  .hero__facts .mono { color: var(--muted); text-transform: uppercase; font-size: 0.6875rem; }
+  .hero__facts strong { color: var(--ink); font-size: clamp(1.125rem, 1rem + 0.6vw, 1.5rem); font-weight: 600; letter-spacing: -0.03em; }
+  .hero__facts span:last-child { font-size: var(--fs-sm); color: var(--muted); }
+
+  @media (min-width: 1000px) {
+    .hero__body { grid-template-columns: minmax(0, 4.2fr) minmax(0, 7.8fr); gap: var(--s-8); align-items: start; }
+    .hero__copy { padding-top: var(--s-2); }
+  }
+  @media (max-width: 999px) {
+    .hero__bay { order: 2; }
+  }
+</style>

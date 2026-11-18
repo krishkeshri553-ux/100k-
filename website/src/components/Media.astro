@@ -1,0 +1,54 @@
+---
+/**
+ * Video-first media frame for portfolio items.
+ * - Always renders the poster (lazy, sized, no layout shift).
+ * - `preview`: a muted loop that only downloads when hovered.
+ * - `embed`: YouTube/Vimeo iframe loaded only after a click.
+ * - `video`: self-hosted full video with native controls (preload="none").
+ */
+import type { PortfolioItem } from '../data/portfolio';
+
+export interface Props {
+  item: PortfolioItem;
+  eager?: boolean;
+  sizes?: string;
+}
+const { item, eager = false } = Astro.props;
+const alt = item.placeholder
+  ? `Placeholder frame for a future ${item.category.toLowerCase()} portfolio video`
+  : `${item.title} — ${item.category} video edited by Longform Edits`;
+---
+<div class="media" style={`aspect-ratio:${item.aspect ?? '16/9'}`} data-preview={item.preview ? '' : undefined}>
+  {item.video ? (
+    <video class="media__el" controls preload="none" poster={item.poster} playsinline>
+      <source src={item.video} type="video/mp4" />
+    </video>
+  ) : (
+    <>
+      <img class="media__el" src={item.poster} alt={alt} width="1600" height="900"
+        loading={eager ? 'eager' : 'lazy'} decoding="async" fetchpriority={eager ? 'high' : 'auto'} />
+      {item.preview && (
+        <video class="media__el media__preview" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1">
+          <source data-src={item.preview} type="video/mp4" />
+        </video>
+      )}
+      {item.embed && (
+        <button class="media__play" type="button" data-embed={item.embed} data-title={item.title} aria-label={`Play ${item.title}`}>
+          <span class="media__playicon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+        </button>
+      )}
+    </>
+  )}
+</div>
+
+<style>
+  .media { position: relative; overflow: hidden; background: var(--forest); border-radius: var(--r-2); isolation: isolate; }
+  .media__el { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform var(--t-slow) var(--ease), opacity var(--t-med) var(--ease); }
+  .media__preview { opacity: 0; }
+  :global(.is-playing) .media__preview { opacity: 1; }
+  .media__play { position: absolute; inset: 0; display: grid; place-items: center; z-index: 2; }
+  .media__playicon { width: 4.5rem; height: 4.5rem; border-radius: 50%; background: var(--signal); color: var(--forest); display: grid; place-items: center; transition: transform var(--t-med) var(--ease); }
+  .media__playicon svg { width: 1.6rem; margin-left: 3px; }
+  .media__play:hover .media__playicon { transform: scale(1.08); }
+  :global(.embed-frame) { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+</style>

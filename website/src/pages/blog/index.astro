@@ -1,0 +1,38 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import BlogIndex from '../../components/BlogIndex.astro';
+import FinalCta from '../../components/FinalCta.astro';
+import { getPosts } from '../../lib/blog';
+import { breadcrumbSchema } from '../../lib/schema';
+import { site } from '../../config/site';
+
+const posts = await getPosts();
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Blog', path: '/blog/' }];
+const allDrafts = posts.length > 0 && posts.every((p) => p.data.draft);
+---
+<Base
+  title="Blog — Long-Form Video Editing Guides"
+  description="Practical guides on long-form YouTube editing: hiring an editor, editing costs, audience retention, storytelling and building a consistent content workflow."
+  path="/blog/"
+  schema={[breadcrumbSchema(crumbs), {
+    '@context': 'https://schema.org', '@type': 'Blog', name: `${site.name} Blog`, url: `${site.url}/blog/`,
+    publisher: { '@id': `${site.url}/#organization` },
+  }]}
+>
+  <PageHero
+    crumbs={crumbs}
+    eyebrow="Blog"
+    title="Notes from"
+    accent="the edit bay."
+    lede="Practical, no-fluff guides on long-form video: how editing works, what it costs, and the decisions that keep viewers watching."
+  />
+  <section class="section section--tight">
+    <div class="container">
+      {allDrafts && <p class="draft-note mono">Articles marked “Draft” are under editorial review.</p>}
+      <BlogIndex posts={posts} />
+    </div>
+  </section>
+  <FinalCta />
+</Base>
+<style>.draft-note { color: var(--muted); margin-bottom: var(--s-5); }</style>

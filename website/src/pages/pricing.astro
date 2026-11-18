@@ -1,0 +1,97 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Pricing from '../components/Pricing.astro';
+import Faq from '../components/Faq.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { faqs } from '../data/faq';
+import { plans, formatPrice, perVideo, lowestPrice, facts } from '../config/pricing';
+import { serviceSchema, breadcrumbSchema } from '../lib/schema';
+
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Pricing', path: '/pricing/' }];
+const pricingFaqs = faqs.filter((f) => /package|revisions|thumbnail|length|raw footage/i.test(f.q));
+
+// Comparison rows are derived from each plan's feature list — no second source of truth.
+const has = (re: RegExp) => plans.map((p) => p.features.find((f) => re.test(f)) ?? null);
+const rows: { label: string; cells: (string | null)[] }[] = [
+  { label: 'Videos included', cells: plans.map((p) => String(p.videos)) },
+  { label: 'Effective price per video', cells: plans.map((p) => formatPrice(perVideo(p))) },
+  { label: 'Billing', cells: plans.map((p) => (p.recurring ? 'Monthly' : 'One-off')) },
+  { label: 'Professional editing', cells: has(/professional editing/i) },
+  { label: 'B-roll integration', cells: has(/b-roll/i) },
+  { label: 'Sound design', cells: has(/sound design/i) },
+  { label: 'Music', cells: has(/^music$/i) },
+  { label: 'Thumbnail', cells: has(/thumbnail/i) },
+  { label: 'Unlimited revisions', cells: has(/unlimited revisions/i) },
+  { label: 'First draft turnaround', cells: has(/first draft/i).map((f) => f && f.replace(/first draft within /i, '')) },
+  { label: 'Consistent monthly editing', cells: has(/consistent monthly/i) },
+  { label: 'Visual enhancements', cells: has(/visual enhancements/i) },
+  { label: 'Final video length', cells: has(/final video length/i).map((f) => f && f.split(': ')[1]) },
+  { label: 'Raw footage', cells: has(/raw footage/i).map((f) => f && f.split(': ')[1]) },
+];
+const isTick = (label: string, v: string) => v.toLowerCase().startsWith(label.toLowerCase().slice(0, 5)) || /thumbnail/i.test(v);
+---
+<Base
+  title="Pricing — Long-Form Video Editing Packages"
+  description={`Long-form video editing from ${formatPrice(lowestPrice)} per video. Monthly plans for 4 or 8 videos. Thumbnail, unlimited revisions and a first draft in ${facts.firstDraft} included.`}
+  path="/pricing/"
+  schema={[serviceSchema(), breadcrumbSchema(crumbs)]}
+>
+  <PageHero
+    crumbs={crumbs}
+    eyebrow="Pricing"
+    title="Know the price"
+    accent="before you send a file."
+    lede={`Every package includes professional editing, B-roll, sound design, music, a thumbnail, unlimited revisions and a first draft within ${facts.firstDraft}. Pick the volume that matches how often you publish.`}
+  />
+  <Pricing />
+
+  <section class="section section--tight">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow" data-reveal>Side by side</p>
+        <h2 class="h3" data-reveal style="--d:80ms">Compare packages.</h2>
+      </div>
+      <div class="cmp-wrap" data-reveal>
+        <table class="cmp">
+          <caption class="sr-only">What each package includes</caption>
+          <thead>
+            <tr>
+              <th scope="col"><span class="sr-only">Feature</span></th>
+              {plans.map((p) => <th scope="col">{p.name}<span>{formatPrice(p.price)} {p.period}</span></th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr>
+                <th scope="row">{r.label}</th>
+                {r.cells.map((v) => (
+                  <td>{v === null
+                    ? <span class="no" aria-label="Not listed for this package">—</span>
+                    : isTick(r.label, v) ? <span class="yes" aria-label="Included">✓</span> : v}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="muted cmp-note">“—” means the item isn't listed for that package. Ask us if you need it.</p>
+    </div>
+  </section>
+
+  <Faq items={pricingFaqs} title="Pricing questions." intro="Choosing a package and what each one covers." />
+  <FinalCta />
+</Base>
+
+<style>
+  .cmp-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r-2); background: var(--white); }
+  .cmp { width: 100%; border-collapse: collapse; min-width: 40rem; font-size: 0.9375rem; }
+  .cmp th, .cmp td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--line); text-align: left; }
+  .cmp thead th { color: var(--ink); font-size: 1rem; vertical-align: bottom; }
+  .cmp thead th span { display: block; font-weight: 400; color: var(--muted); font-size: var(--fs-sm); }
+  .cmp tbody th { font-weight: 500; color: var(--ink-2); }
+  .cmp td { color: var(--ink); font-weight: 600; }
+  .cmp tbody tr:last-child > * { border-bottom: 0; }
+  .yes { color: var(--green); } .no { color: var(--muted); font-weight: 400; }
+  .cmp-note { margin-top: var(--s-4); font-size: var(--fs-sm); }
+</style>

@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import WorkShowcase from '../components/WorkShowcase.astro';
+import Formats from '../components/Formats.astro';
+import Capabilities from '../components/Capabilities.astro';
+import Reasons from '../components/Reasons.astro';
+import Process from '../components/Process.astro';
+import Pricing from '../components/Pricing.astro';
+import Faq from '../components/Faq.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { serviceSchema } from '../lib/schema';
+import { formatPrice, lowestPrice, facts } from '../config/pricing';
+---
+<Base
+  title="Longform Edits — Done-for-You Long-Form Video Editing"
+  description={`Professional long-form video editing for YouTube creators, podcasters, educators and brands. From ${formatPrice(lowestPrice)} per video, first draft in ${facts.firstDraft}, unlimited revisions.`}
+  path="/"
+  schema={[serviceSchema()]}
+>
+  <Hero />
+  <WorkShowcase />
+  <Formats />
+  <Capabilities />
+  <Reasons />
+  <Process />
+  <Pricing />
+  <Faq />
+  <FinalCta />
+</Base>

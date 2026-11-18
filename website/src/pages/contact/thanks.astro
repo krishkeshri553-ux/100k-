@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import { site } from '../../config/site';
+---
+<Base title="Enquiry received" description="Thanks for your enquiry. Longform Edits will reply by email." path="/contact/thanks/" noindex>
+  <section class="section">
+    <div class="container ty">
+      <p class="eyebrow">Received</p>
+      <h1 class="h1">Thanks — we've got <em class="serif">your details.</em></h1>
+      <p class="lede">We'll reply by email to confirm scope and how to send your footage. If you don't see our reply, check your spam folder or write to <a class="link" href={`mailto:${site.email}`}>{site.email}</a>.</p>
+      <div><a href="/work/" class="btn btn--ghost">Look through our work</a></div>
+    </div>
+  </section>
+</Base>
+<style>
+  .ty { display: grid; gap: var(--s-5); max-width: 52rem; }
+  .ty em { color: var(--green); }
+</style>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+<defs>
+<linearGradient id="g05" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1d15"/><stop offset="1" stop-color="#163d2c"/></linearGradient>
+<radialGradient id="l05" cx="0.65" cy="0.25" r="0.6"><stop offset="0" stop-color="#bfe8cf" stop-opacity="0.55"/><stop offset="1" stop-color="#bfe8cf" stop-opacity="0"/></radialGradient>
+<filter id="b05" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="14"/></filter>
+<radialGradient id="v05" cx="0.5" cy="0.5" r="0.75"><stop offset="0.55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.55"/></radialGradient>
+</defs>
+<rect width="1600" height="900" fill="url(#g05)"/>
+<rect width="1600" height="900" fill="url(#l05)"/>
+<g filter="url(#b05)"><g fill="#7fc79b" fill-opacity="0.5"><rect x="360" y="520" width="110" height="200"/><rect x="530" y="440" width="110" height="280"/><rect x="700" y="380" width="110" height="340"/><rect x="870" y="300" width="110" height="420"/><rect x="1040" y="220" width="110" height="500"/></g><path d="M300 720 H1250" stroke="#fff" stroke-opacity="0.3" stroke-width="4"/></g>
+<rect width="1600" height="900" fill="url(#v05)"/>
+<g fill="none" stroke="#fff" stroke-opacity="0.22" stroke-width="2">
+<path d="M80 130V80h50M1520 130V80h-50M80 770v50h50M1520 770v50h-50"/>
+</g>
+<text x="80" y="860" font-family="ui-monospace,Menlo,monospace" font-size="22" letter-spacing="3" fill="#fff" fill-opacity="0.45">PLACEHOLDER · BUSINESS</text>
+</svg>

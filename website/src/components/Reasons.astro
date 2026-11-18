@@ -1,0 +1,35 @@
+---
+import { reasons } from '../data/services';
+---
+<section class="section on-dark why" aria-labelledby="why-title">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow" data-reveal>Why Longform Edits</p>
+      <h2 id="why-title" class="h2" data-reveal style="--d:80ms">
+        An editing partner you can <em class="serif">plan a channel around.</em>
+      </h2>
+    </div>
+
+    <ol class="why__list" role="list">
+      {reasons.map((r, i) => (
+        <li class="why__item" data-reveal style={`--d:${(i % 2) * 80}ms`}>
+          <span class="why__num mono">{String(i + 1).padStart(2, '0')}</span>
+          <h3 class="why__title">{r.title}</h3>
+          <p>{r.body}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .why__list { display: grid; grid-template-columns: 1fr; border-top: 1px solid var(--forest-line); }
+  .why__item { display: grid; gap: var(--s-3); padding: var(--s-6) 0; border-bottom: 1px solid var(--forest-line); align-content: start; }
+  .why__num { color: var(--signal); }
+  .why__title { font-size: var(--fs-h3); letter-spacing: -0.035em; line-height: 1.05; }
+  .why__item p { max-width: 32rem; }
+  @media (min-width: 860px) {
+    .why__list { grid-template-columns: 1fr 1fr; column-gap: var(--s-8); }
+    .why__item { padding: var(--s-7) 0; }
+  }
+</style>

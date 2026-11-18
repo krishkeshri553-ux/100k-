@@ -1,0 +1,28 @@
+---
+/**
+ * Wordmark. The mark is an in-point / out-point bracket pair — the two marks
+ * an editor sets to define a clip. Replace with supplied logo assets by
+ * swapping this component's markup (keep the aria-label).
+ */
+export interface Props { class?: string }
+const { class: cls = '' } = Astro.props;
+---
+<span class={`logo ${cls}`} aria-label="Longform Edits">
+  <svg class="logo__mark" viewBox="0 0 28 28" aria-hidden="true" focusable="false">
+    <path d="M3 3h7v3H6v16h4v3H3z" fill="currentColor" />
+    <path d="M25 3h-7v3h4v16h-4v3h7z" fill="currentColor" />
+    <rect x="11.5" y="9" width="5" height="10" rx="0.5" class="logo__clip" />
+  </svg>
+  <span class="logo__word" aria-hidden="true">Longform<span class="logo__soft">Edits</span></span>
+</span>
+
+<style>
+  .logo { display: inline-flex; align-items: center; gap: 0.6rem; color: var(--ink); line-height: 1; }
+  .logo__mark { width: 1.5rem; height: 1.5rem; flex: none; }
+  .logo__clip { fill: var(--green-2); }
+  .logo__word { font-weight: 650; font-size: 1.125rem; letter-spacing: -0.035em; }
+  .logo__soft { font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: 1.25em; letter-spacing: -0.01em; margin-left: 0.18em; color: var(--green); }
+  :global(.on-dark) .logo { color: var(--on-forest); }
+  :global(.on-dark) .logo__soft { color: var(--signal); }
+  :global(.on-dark) .logo__clip { fill: var(--signal); }
+</style>
