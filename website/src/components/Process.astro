@@ -14,10 +14,10 @@ const { showCta = true } = Astro.props;
     <div class="section-head section-head--split">
       <div>
         <p class="eyebrow" data-reveal>How it works</p>
-        <h2 id="process-title" class="h2" data-reveal style="--d:80ms">From raw footage to <em class="serif">final cut</em> in five steps.</h2>
+        <h2 id="process-title" class="h2" data-reveal style="--d:80ms">From raw footage to final cut in five steps.</h2>
       </div>
       <p class="lede" data-reveal style="--d:140ms">
-        No production meetings, no software to learn. You send the footage and the brief; we handle everything between the first frame and the final export.
+        You send the footage and the brief. We handle everything between the first frame and the final export.
       </p>
     </div>
 
@@ -37,7 +37,6 @@ const { showCta = true } = Astro.props;
     {showCta && (
       <div class="proc__cta" data-reveal>
         <a href={cta.primary.href} class="btn">{cta.primary.label} <span class="btn__arrow" aria-hidden="true">→</span></a>
-        <span class="muted">Step 01 takes about five minutes.</span>
       </div>
     )}
   </div>
@@ -45,7 +44,7 @@ const { showCta = true } = Astro.props;
 
 <style>
   .proc__track { display: grid; gap: 0; position: relative; counter-reset: s; }
-  .proc__step { position: relative; display: grid; gap: var(--s-2); padding: 0 0 var(--s-6) var(--s-6); border-left: 1px solid var(--line-strong); }
+  .proc__step { position: relative; display: grid; align-content: start; gap: var(--s-2); padding: 0 0 var(--s-6) var(--s-6); border-left: 1px solid var(--line-strong); }
   .proc__step::before { content: ''; position: absolute; left: -5px; top: 0.2rem; width: 9px; height: 9px; background: var(--green); border-radius: 50%; }
   .proc__clip { display: none; }
   .proc__num { color: var(--green); text-transform: uppercase; }

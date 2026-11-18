@@ -3,7 +3,6 @@ import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
 import WorkShowcase from '../components/WorkShowcase.astro';
 import Formats from '../components/Formats.astro';
-import Capabilities from '../components/Capabilities.astro';
 import Reasons from '../components/Reasons.astro';
 import Process from '../components/Process.astro';
 import Pricing from '../components/Pricing.astro';
@@ -20,11 +19,10 @@ import { formatPrice, lowestPrice, facts } from '../config/pricing';
 >
   <Hero />
   <WorkShowcase />
-  <Formats />
-  <Capabilities />
-  <Reasons />
+  <Formats compact />
   <Process />
+  <Reasons />
   <Pricing />
-  <Faq />
+  <Faq limit={6} more />
   <FinalCta />
 </Base>

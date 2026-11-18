@@ -2,12 +2,15 @@
 /** Native <details> accordion: works without JavaScript, keyboard accessible. */
 import { faqs, type Faq } from '../data/faq';
 
-export interface Props { items?: Faq[]; title?: string; intro?: string }
+export interface Props { items?: Faq[]; title?: string; intro?: string; /** Show only the first n questions. */ limit?: number; /** Link to the full list on /process/. */ more?: boolean }
 const {
   items = faqs,
   title = 'Questions, answered.',
   intro = 'The things people ask before sending their first video.',
+  limit,
+  more = false,
 } = Astro.props;
+const shown = limit ? items.slice(0, limit) : items;
 ---
 <section class="section faq" id="faq" aria-labelledby="faq-title">
   <div class="container faq__grid">
@@ -18,7 +21,7 @@ const {
       <p data-reveal style="--d:200ms">Still unsure? <a class="link" href="/contact/">Ask us directly</a>.</p>
     </div>
     <div class="faq__list">
-      {items.map((f) => (
+      {shown.map((f) => (
         <details class="faq__item" data-reveal>
           <summary>
             <span>{f.q}</span>
@@ -27,6 +30,7 @@ const {
           <div class="faq__a"><p>{f.a}</p></div>
         </details>
       ))}
+      {more && shown.length < items.length && <p class="faq__more"><a class="link" href="/process/#faq">See all {items.length} questions</a></p>}
     </div>
   </div>
 </section>
@@ -51,5 +55,6 @@ const {
   .faq__icon::after { rotate: 90deg; }
   .faq__item[open] .faq__icon::after { rotate: 0deg; }
   .faq__item[open] .faq__icon { background: var(--green); border-color: var(--green); color: var(--white); }
+  .faq__more { padding-top: var(--s-5); }
   .faq__a { padding: 0 3rem var(--s-5) 0; max-width: 46rem; }
 </style>

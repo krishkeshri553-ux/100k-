@@ -3,7 +3,7 @@
  * choose us. All formats are long-form; nothing here is a separate service.
  */
 
-import { facts, formatPrice, lowestPrice } from '../config/pricing';
+import { facts } from '../config/pricing';
 
 export const formats = [
   {
@@ -60,31 +60,23 @@ export const capabilities = [
   { code: '012', name: 'Finishing & export', core: true, detail: 'Final pass on audio, levels and frame-accuracy, exported to the spec your platform needs.' },
 ] as const;
 
-/** Differentiators — each one specific and backed by how the service works. */
+/**
+ * Differentiators. Each is backed by something stated in the pricing config
+ * or the service definition. Facts already shown in the hero and pricing
+ * (price, turnaround, revisions) are deliberately not repeated here.
+ */
 export const reasons = [
   {
     title: 'Long-form is all we edit.',
-    body: 'No shorts, no reels, no social management. Every edit we make is built to hold attention for ten minutes or more — that is a different craft, and it is the only one we practise.',
-  },
-  {
-    title: `A first draft in ${facts.firstDraft}.`,
-    body: 'Send footage, get a full draft back within our standard turnaround window. Your publishing schedule stops depending on when you find a free weekend.',
-  },
-  {
-    title: 'Revisions until it’s right.',
-    body: 'Unlimited revisions on every package. You review the draft, leave notes, and we work through them until the video is ready to publish.',
-  },
-  {
-    title: 'Prices on the page.',
-    body: `From ${formatPrice(lowestPrice)} per video. No quote calls, no hourly billing surprises. You know what a video costs before you send a single file.`,
+    body: 'No shorts, no reels, no social media management. Holding attention for ten minutes or more is a different craft from a 30-second clip, and it is the only one we practise.',
   },
   {
     title: 'The same standard, every upload.',
-    body: 'Monthly plans keep your brief, references and style notes carrying from one video to the next, so episode twelve looks like it belongs with episode one.',
+    body: 'Both monthly plans include consistent monthly editing, so your videos keep a recognisable look from one upload to the next instead of changing with whoever had time that week.',
   },
   {
-    title: 'Your time goes back to the camera.',
-    body: 'Editing a long-form video can take longer than recording it. Hand that part off, and spend the hours on ideas, filming and running the business.',
+    title: 'Your hours go back to the camera.',
+    body: 'Editing a long-form video often takes longer than recording it. Hand that part off and spend the time on ideas, filming and running the business.',
   },
 ] as const;
 

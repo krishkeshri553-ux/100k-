@@ -96,11 +96,16 @@ if (tc && !reduceMotion.matches) {
     const f = frame % fps, s = Math.floor(frame / fps) % 60, m = Math.floor(frame / fps / 60) % 60, h = Math.floor(frame / fps / 3600);
     tc.textContent = `${pad(h)}:${pad(m)}:${pad(s)}:${pad(f)}`;
   };
-  let last = 0, running = true;
+  // Runs only while the monitor is on screen and the tab is visible.
+  let last = 0, raf = 0, inView = false;
   const tick = (t: number) => {
-    if (running && t - last > 1000 / fps) { frame++; render(); last = t; }
-    requestAnimationFrame(tick);
+    if (t - last > 1000 / fps) { frame++; render(); last = t; }
+    raf = requestAnimationFrame(tick);
   };
-  document.addEventListener('visibilitychange', () => { running = !document.hidden; });
-  requestAnimationFrame(tick);
+  const sync = () => {
+    cancelAnimationFrame(raf);
+    if (inView && !document.hidden) raf = requestAnimationFrame(tick);
+  };
+  new IntersectionObserver(([e]) => { inView = e.isIntersecting; sync(); }).observe(tc);
+  document.addEventListener('visibilitychange', sync);
 }

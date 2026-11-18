@@ -1,7 +1,10 @@
 ---
 import Logo from './Logo.astro';
-import { site, nav, cta } from '../config/site';
-import { categories } from '../config/blog';
+import { site, nav as allNav, cta } from '../config/site';
+import { activeCategories } from '../lib/blog';
+
+const categories = await activeCategories();
+const nav = allNav.filter((n) => n.href !== '/blog/' || categories.length > 0);
 
 const socials = Object.entries(site.social).filter(([, url]) => url);
 const year = new Date().getFullYear();
@@ -23,12 +26,12 @@ const year = new Date().getFullYear();
         </ul>
       </nav>
 
-      <nav class="ftr__col" aria-label="Blog topics">
+      {categories.length > 0 && <nav class="ftr__col" aria-label="Blog topics">
         <h2 class="mono">From the blog</h2>
         <ul role="list">
           {categories.map((c) => <li><a href={`/blog/category/${c.slug}/`}>{c.name}</a></li>)}
         </ul>
-      </nav>
+      </nav>}
 
       <div class="ftr__col">
         <h2 class="mono">Contact</h2>
@@ -39,10 +42,8 @@ const year = new Date().getFullYear();
       </div>
     </div>
 
-    <div class="ftr__wordmark" aria-hidden="true">Longform<span class="serif">Edits</span></div>
-
     <div class="ftr__base mono">
-      <span>© {year} {site.legalName}</span>
+      <span>© {year} {site.legalName} · <a href="/privacy/">Privacy</a></span>
       <span>Long-form video editing · <a href={site.url}>longformedits.com</a></span>
     </div>
   </div>
@@ -58,12 +59,6 @@ const year = new Date().getFullYear();
   .ftr__col ul { display: grid; gap: var(--s-2); }
   .ftr__col a { color: var(--on-forest); font-size: 0.9375rem; transition: color var(--t-fast); word-break: break-word; }
   .ftr__col a:hover { color: var(--signal); }
-  .ftr__wordmark {
-    margin-top: var(--s-9); color: var(--on-forest); opacity: 0.08; font-weight: 700;
-    font-size: clamp(3.5rem, 15vw, 15rem); letter-spacing: -0.06em; line-height: 0.85; white-space: nowrap;
-    user-select: none;
-  }
-  .ftr__wordmark .serif { font-weight: 400; margin-left: 0.06em; }
-  .ftr__base { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s-3); border-top: 1px solid var(--forest-line); padding-top: var(--s-5); margin-top: var(--s-5); color: var(--on-forest-muted); }
+  .ftr__base { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s-3); border-top: 1px solid var(--forest-line); padding-top: var(--s-5); margin-top: var(--s-9); color: var(--on-forest-muted); }
   .ftr__base a:hover { color: var(--signal); }
 </style>

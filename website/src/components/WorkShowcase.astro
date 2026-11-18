@@ -5,26 +5,24 @@
  * row carries its own frame. Data: src/data/portfolio.ts.
  */
 import Media from './Media.astro';
-import { portfolio, hasRealWork } from '../data/portfolio';
+import PortfolioPending from './PortfolioPending.astro';
+import { realProjects, hasRealWork } from '../data/portfolio';
 
 export interface Props { limit?: number }
 const { limit = 4 } = Astro.props;
-const items = [...portfolio].sort((a, b) => Number(!!b.featured) - Number(!!a.featured)).slice(0, limit);
+const items = [...realProjects].sort((a, b) => Number(!!b.featured) - Number(!!a.featured)).slice(0, limit);
 ---
 <section class="section work" id="work" aria-labelledby="work-title">
   <div class="container">
     <div class="section-head section-head--split">
       <div>
         <p class="eyebrow" data-reveal>Selected work</p>
-        <h2 id="work-title" class="h2" data-reveal style="--d:80ms">The edit is the <em class="serif">proof.</em></h2>
+        <h2 id="work-title" class="h2" data-reveal style="--d:80ms">The edit is the proof.</h2>
       </div>
-      <p class="lede" data-reveal style="--d:140ms">
-        {hasRealWork
-          ? 'A selection of long-form edits across formats. Hover a project to preview it.'
-          : 'Our reel is being added now. Each slot below is reserved for a real long-form edit in that format — no stand-in clients, no borrowed footage.'}
-      </p>
+      {hasRealWork && <p class="lede" data-reveal style="--d:140ms">A selection of long-form edits across formats. Hover a project to preview it.</p>}
     </div>
 
+    {!hasRealWork ? <PortfolioPending /> : (<>
     <div class="work__grid" data-showcase>
       <div class="work__stage" aria-hidden="true">
         {items.map((item, i) => (
@@ -59,6 +57,7 @@ const items = [...portfolio].sort((a, b) => Number(!!b.featured) - Number(!!a.fe
     <div class="work__more" data-reveal>
       <a href="/work/" class="btn btn--ghost">See all work <span class="btn__arrow" aria-hidden="true">→</span></a>
     </div>
+    </>)}
   </div>
 </section>
 

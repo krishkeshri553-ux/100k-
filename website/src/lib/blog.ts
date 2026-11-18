@@ -9,6 +9,13 @@ export async function getPosts(): Promise<Post[]> {
   return all.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
 }
 
+/** Categories that have at least one visible post. */
+export async function activeCategories() {
+  const { categories } = await import('../config/blog');
+  const posts = await getPosts();
+  return categories.filter((c) => posts.some((p) => p.data.category === c.slug));
+}
+
 export const readingTime = (body = '') => Math.max(1, Math.round(body.trim().split(/\s+/).length / 230));
 
 export const formatDate = (d: Date) =>

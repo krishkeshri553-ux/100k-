@@ -1,0 +1,30 @@
+---
+/**
+ * Shown instead of the portfolio while there is no real work in
+ * src/data/portfolio.ts. Disappears automatically once one project has
+ * `placeholder: false`.
+ */
+import { portfolio } from '../data/portfolio';
+const formats = [...new Set(portfolio.map((p) => p.category))];
+---
+<div class="pend on-dark" data-reveal>
+  <div class="pend__copy">
+    <p class="eyebrow">Portfolio</p>
+    <p class="pend__title">Our edits are being added here.</p>
+    <p>We'd rather leave this space empty than fill it with stand-in footage. If you'd like to see work in your format before you decide, ask on the contact form.</p>
+    <a href="/contact/" class="btn">Ask for samples <span class="btn__arrow" aria-hidden="true">→</span></a>
+  </div>
+  <div class="pend__list">
+    <p class="mono pend__label">Formats the portfolio will cover</p>
+    <ul role="list">{formats.map((f) => <li>{f}</li>)}</ul>
+  </div>
+</div>
+<style>
+  .pend { display: grid; gap: var(--s-7); padding: clamp(1.75rem, 1rem + 3vw, 4rem); border-radius: var(--r-2); }
+  .pend__copy { display: grid; gap: var(--s-4); justify-items: start; max-width: 34rem; }
+  .pend__title { color: var(--on-forest); font-size: var(--fs-h3); font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; }
+  .pend__label { text-transform: uppercase; color: var(--on-forest-muted); margin-bottom: var(--s-3); }
+  .pend__list ul { border-top: 1px solid var(--forest-line); }
+  .pend__list li { padding: 0.75rem 0; border-bottom: 1px solid var(--forest-line); color: var(--on-forest); font-weight: 500; }
+  @media (min-width: 900px) { .pend { grid-template-columns: 1.3fr 1fr; align-items: center; gap: var(--s-9); } }
+</style>

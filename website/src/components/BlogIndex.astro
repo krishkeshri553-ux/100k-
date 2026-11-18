@@ -1,21 +1,22 @@
 ---
 import BlogCard from './BlogCard.astro';
-import { categories } from '../config/blog';
+import { activeCategories } from '../lib/blog';
 import type { Post } from '../lib/blog';
 
 export interface Props { posts: Post[]; active?: string }
 const { posts, active } = Astro.props;
 const [lead, ...rest] = posts;
+const categories = await activeCategories();
 ---
-<nav class="bi__cats" aria-label="Blog categories">
+{categories.length > 1 && <nav class="bi__cats" aria-label="Blog categories">
   <a href="/blog/" aria-current={!active ? 'page' : undefined}>All</a>
   {categories.map((c) => <a href={`/blog/category/${c.slug}/`} aria-current={active === c.slug ? 'page' : undefined}>{c.name}</a>)}
-</nav>
+</nav>}
 
 {posts.length === 0 ? (
   <div class="bi__empty">
-    <p class="h4">No articles in this category yet.</p>
-    <p class="muted">We publish practical guides on editing long-form video. <a class="link" href="/blog/">See all articles</a>.</p>
+    <p class="h4">The first articles are on their way.</p>
+    <p class="muted">Practical guides on hiring an editor, editing costs and keeping viewers watching. In the meantime, <a class="link" href="/contact/">ask us anything</a>.</p>
   </div>
 ) : (
   <div class="bi">

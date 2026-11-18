@@ -1,20 +1,20 @@
 ---
-import { plans, formatPrice, perVideo, facts } from '../config/pricing';
+import { plans, formatPrice, perVideo } from '../config/pricing';
 
-export interface Props { headingTag?: 'h1' | 'h2'; id?: string }
-const { headingTag: H = 'h2', id = 'pricing' } = Astro.props;
+export interface Props { headingTag?: 'h1' | 'h2'; id?: string; /** Omit the section heading (when the page already has one). */ bare?: boolean }
+const { headingTag: H = 'h2', id = 'pricing', bare = false } = Astro.props;
 ---
-<section class="section sunken price" id={id} aria-labelledby="pricing-title">
+<section class="section sunken price" id={id} aria-labelledby={bare ? undefined : 'pricing-title'} aria-label={bare ? 'Packages' : undefined}>
   <div class="container">
-    <div class="section-head section-head--split">
+    {!bare && <div class="section-head section-head--split">
       <div>
         <p class="eyebrow" data-reveal>Pricing</p>
-        <H id="pricing-title" class="h2" data-reveal style="--d:80ms">Clear prices. <em class="serif">No quote calls.</em></H>
+        <H id="pricing-title" class="h2" data-reveal style="--d:80ms">Clear prices. No quote calls.</H>
       </div>
       <p class="lede" data-reveal style="--d:140ms">
-        Start with one video, or set up a monthly plan for a steady publishing schedule. Every package includes a thumbnail, unlimited revisions and a first draft within {facts.firstDraft}.
+        Start with one video, or set up a monthly plan for a steady publishing schedule.
       </p>
-    </div>
+    </div>}
 
     <div class="plans">
       {plans.map((p, i) => (
@@ -81,7 +81,7 @@ const { headingTag: H = 'h2', id = 'pricing' } = Astro.props;
   .plan__name { font-size: var(--fs-h4); letter-spacing: -0.03em; }
   .plan__fit { font-size: 0.9375rem; min-height: 3em; }
   .plan__price { display: flex; align-items: baseline; gap: var(--s-2); }
-  .plan__amount { font-size: clamp(3rem, 2.4rem + 2.4vw, 4.5rem); font-weight: 600; letter-spacing: -0.06em; color: var(--ink); line-height: 1; }
+  .plan__amount { font-size: clamp(3rem, 2.4rem + 2.4vw, 4.5rem); font-weight: 600; letter-spacing: -0.045em; color: var(--ink); line-height: 1; }
   .plan__period { color: var(--muted); }
   .plan--mid .plan__period { color: var(--on-forest-muted); }
   .plan__per { color: var(--green); margin-top: calc(var(--s-4) * -1); }

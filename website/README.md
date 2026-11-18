@@ -33,7 +33,7 @@ npm run preview    # serve dist/
 
 ## Adding real portfolio work
 
-Everything in the portfolio is currently a clearly labelled **placeholder slot** — no client work is implied.
+Until a project has `placeholder: false`, the homepage and `/work/` show a single "Our edits are being added here — ask for samples" panel instead of stand-in footage. Adding the first real project switches both to the video layout automatically.
 
 1. Add files to `public/media/portfolio/<slug>/`:
    - `poster.jpg` — 1600×900, under ~200 KB (required)
@@ -55,7 +55,7 @@ Articles are Markdown with validated frontmatter (`src/content.config.ts`). Thre
 - How Much Does Long-Form YouTube Editing Cost?
 - How to Improve Audience Retention in Long YouTube Videos
 
-Drafts are visible on the site with a "Draft — under review" banner and `noindex`, and are excluded from the sitemap. **To publish:** review the article and set `draft: false`. To hide drafts entirely, set `showDrafts: false` in `src/config/site.ts`.
+Drafts appear only in `npm run dev` (with a "Draft — under review" banner) so you can review them. Production builds leave them out, and the **Blog** link, footer topics and category pages stay hidden until at least one article is published. **To publish:** review the article and set `draft: false`.
 
 Prices in articles use tokens — `{{price:single}}`, `{{price:monthly-4}}`, `{{price:monthly-8}}`, `{{firstDraft}}`, `{{finalLength}}`, `{{rawFootage}}` — so they always match the pricing config. An unknown token fails the build.
 
@@ -84,11 +84,15 @@ Any static host works for the site itself (Netlify, Cloudflare Pages); only `api
 ## Quality checks
 
 ```bash
+npm run typecheck                        # astro check (TypeScript + templates)
 npm run build && npm run check:site      # static SEO/link/price checks over dist/
 npm run preview &                        # then, with Playwright available:
 node scripts/qa-browser.mjs              # 14 pages × 6 viewports, menu, reduced motion, form
 node scripts/test-api.mjs                # contact handler: validation, spam, delivery paths
+node scripts/perf.mjs                    # FCP / LCP / CLS / page weight on a throttled connection
 ```
+
+Last measured (throttled ~1.6 Mbps, 4× CPU on mobile): about 120–130 KB and 6–8 requests per page, LCP 0.6–2.0 s, CLS ≤ 0.06. Only Chromium has been tested; check Safari and Firefox before launch.
 
 ## Before launch
 
@@ -98,4 +102,6 @@ node scripts/test-api.mjs                # contact handler: validation, spam, de
 - [ ] Replace portfolio placeholders and the showreel with real work
 - [ ] Review the FAQ answer marked `confirm: true` (raw footage limits on monthly plans)
 - [ ] Review and publish (or hide) the draft articles
-- [ ] Add privacy policy / terms pages if you collect enquiries from regions that require them
+- [ ] Have `/privacy/` reviewed for the regions you serve, and update it if you add analytics or other tools
+- [ ] Test in Safari (iOS and macOS) and Firefox
+- [ ] Choose an analytics tool if you want to measure enquiries (none is installed; update the privacy page if you add one)

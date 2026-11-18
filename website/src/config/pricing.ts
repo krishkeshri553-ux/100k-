@@ -6,6 +6,13 @@
 
 export const currency = 'USD';
 
+/** Shared facts. Package features, FAQ answers and page copy all read these. */
+export const facts = {
+  firstDraft: '48–72 hours',
+  finalLength: '10–20 minutes',
+  rawFootage: '60 minutes',
+} as const;
+
 export interface Plan {
   id: 'single' | 'monthly-4' | 'monthly-8';
   name: string;
@@ -39,13 +46,13 @@ export const plans: Plan[] = [
     fit: 'One video, no commitment. The easiest way to see our work on your footage.',
     features: [
       '1 long-form video',
-      'Final video length: 10–20 minutes',
-      'Raw footage: up to 60 minutes',
+      `Final video length: ${facts.finalLength}`,
+      `Raw footage: up to ${facts.rawFootage}`,
       ...core,
       'Visual enhancements',
       'Thumbnail included',
       'Unlimited revisions',
-      'First draft within 48–72 hours',
+      `First draft within ${facts.firstDraft}`,
     ],
     cta: 'Get Started',
   },
@@ -63,7 +70,7 @@ export const plans: Plan[] = [
       ...core,
       'Thumbnail for each video',
       'Unlimited revisions',
-      'First draft within 48–72 hours',
+      `First draft within ${facts.firstDraft}`,
     ],
     cta: 'Choose 4 Videos',
   },
@@ -81,7 +88,7 @@ export const plans: Plan[] = [
       ...core,
       'Thumbnail for each video',
       'Unlimited revisions',
-      'First draft within 48–72 hours',
+      `First draft within ${facts.firstDraft}`,
     ],
     cta: 'Choose 8 Videos',
   },
@@ -102,10 +109,3 @@ export const perVideo = (p: Plan) => p.price / p.videos;
 
 export const planById = (id: string) => plans.find((p) => p.id === id);
 
-/** Shared facts referenced by FAQ copy, hero meta line, etc. */
-export const facts = {
-  // Word joiners (\u2060) stop the range breaking across lines.
-  firstDraft: '48\u2060–\u206072\u00a0hours',
-  finalLength: '10–20 minutes',
-  rawFootage: '60 minutes',
-} as const;

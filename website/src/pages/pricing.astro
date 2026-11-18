@@ -12,24 +12,29 @@ const crumbs = [{ name: 'Home', path: '/' }, { name: 'Pricing', path: '/pricing/
 const pricingFaqs = faqs.filter((f) => /package|revisions|thumbnail|length|raw footage/i.test(f.q));
 
 // Comparison rows are derived from each plan's feature list — no second source of truth.
-const has = (re: RegExp) => plans.map((p) => p.features.find((f) => re.test(f)) ?? null);
-const rows: { label: string; cells: (string | null)[] }[] = [
-  { label: 'Videos included', cells: plans.map((p) => String(p.videos)) },
-  { label: 'Effective price per video', cells: plans.map((p) => formatPrice(perVideo(p))) },
-  { label: 'Billing', cells: plans.map((p) => (p.recurring ? 'Monthly' : 'One-off')) },
-  { label: 'Professional editing', cells: has(/professional editing/i) },
-  { label: 'B-roll integration', cells: has(/b-roll/i) },
-  { label: 'Sound design', cells: has(/sound design/i) },
-  { label: 'Music', cells: has(/^music$/i) },
-  { label: 'Thumbnail', cells: has(/thumbnail/i) },
-  { label: 'Unlimited revisions', cells: has(/unlimited revisions/i) },
-  { label: 'First draft turnaround', cells: has(/first draft/i).map((f) => f && f.replace(/first draft within /i, '')) },
-  { label: 'Consistent monthly editing', cells: has(/consistent monthly/i) },
-  { label: 'Visual enhancements', cells: has(/visual enhancements/i) },
-  { label: 'Final video length', cells: has(/final video length/i).map((f) => f && f.split(': ')[1]) },
-  { label: 'Raw footage', cells: has(/raw footage/i).map((f) => f && f.split(': ')[1]) },
+// `tick` rows show ✓ when a plan lists a matching feature; value rows show text.
+type Cell = { kind: 'tick' } | { kind: 'text'; value: string } | { kind: 'none' };
+const find = (re: RegExp) => plans.map((p) => p.features.find((f) => re.test(f)));
+const ticks = (re: RegExp): Cell[] => find(re).map((f) => (f ? { kind: 'tick' } : { kind: 'none' }));
+const values = (re: RegExp, pick: (f: string) => string): Cell[] => find(re).map((f) => (f ? { kind: 'text', value: pick(f) } : { kind: 'none' }));
+const text = (fn: (p: (typeof plans)[number]) => string): Cell[] => plans.map((p) => ({ kind: 'text', value: fn(p) }));
+const afterColon = (f: string) => f.split(': ')[1] ?? f;
+const rows: { label: string; cells: Cell[] }[] = [
+  { label: 'Videos included', cells: text((p) => String(p.videos)) },
+  { label: 'Effective price per video', cells: text((p) => formatPrice(perVideo(p))) },
+  { label: 'Billing', cells: text((p) => (p.recurring ? 'Monthly' : 'One-off')) },
+  { label: 'Professional editing', cells: ticks(/professional editing/i) },
+  { label: 'B-roll integration', cells: ticks(/b-roll/i) },
+  { label: 'Sound design', cells: ticks(/sound design/i) },
+  { label: 'Music', cells: ticks(/^music$/i) },
+  { label: 'Thumbnail', cells: ticks(/thumbnail/i) },
+  { label: 'Unlimited revisions', cells: ticks(/unlimited revisions/i) },
+  { label: 'First draft', cells: values(/first draft/i, (f) => f.replace(/first draft within /i, '')) },
+  { label: 'Consistent monthly editing', cells: ticks(/consistent monthly/i) },
+  { label: 'Visual enhancements', cells: ticks(/visual enhancements/i) },
+  { label: 'Final video length', cells: values(/final video length/i, afterColon) },
+  { label: 'Raw footage', cells: values(/raw footage/i, afterColon) },
 ];
-const isTick = (label: string, v: string) => v.toLowerCase().startsWith(label.toLowerCase().slice(0, 5)) || /thumbnail/i.test(v);
 ---
 <Base
   title="Pricing — Long-Form Video Editing Packages"
@@ -44,7 +49,7 @@ const isTick = (label: string, v: string) => v.toLowerCase().startsWith(label.to
     accent="before you send a file."
     lede={`Every package includes professional editing, B-roll, sound design, music, a thumbnail, unlimited revisions and a first draft within ${facts.firstDraft}. Pick the volume that matches how often you publish.`}
   />
-  <Pricing />
+  <Pricing bare />
 
   <section class="section section--tight">
     <div class="container">
@@ -65,10 +70,10 @@ const isTick = (label: string, v: string) => v.toLowerCase().startsWith(label.to
             {rows.map((r) => (
               <tr>
                 <th scope="row">{r.label}</th>
-                {r.cells.map((v) => (
-                  <td>{v === null
-                    ? <span class="no" aria-label="Not listed for this package">—</span>
-                    : isTick(r.label, v) ? <span class="yes" aria-label="Included">✓</span> : v}</td>
+                {r.cells.map((c) => (
+                  <td>{c.kind === 'tick' ? <span class="yes" aria-label="Included">✓</span>
+                    : c.kind === 'text' ? c.value
+                    : <span class="no" aria-label="Not listed for this package">—</span>}</td>
                 ))}
               </tr>
             ))}

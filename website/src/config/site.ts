@@ -30,11 +30,12 @@ export const site = {
   ogImage: '/og/default.png',
 
   /**
-   * Blog drafts. While `true`, articles marked `draft: true` are published
-   * with a visible "Draft — under review" banner and a `noindex` tag, and are
-   * kept out of the sitemap. Set to `false` to hide drafts entirely.
+   * Blog drafts (`draft: true`) are shown only in `npm run dev`, with a
+   * "Draft — under review" banner, so you can review them. Production builds
+   * leave them out entirely. The Blog link and category pages appear on the
+   * live site once at least one article has `draft: false`.
    */
-  showDrafts: true,
+  showDrafts: import.meta.env.DEV,
 } as const;
 
 /** One primary CTA, used everywhere. */

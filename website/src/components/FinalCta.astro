@@ -1,11 +1,10 @@
 ---
 import { cta } from '../config/site';
-import { facts, formatPrice, lowestPrice } from '../config/pricing';
 
 export interface Props { title?: string; body?: string }
 const {
   title = 'Your next video is already recorded.',
-  body = `Send us the footage and a short brief. You'll have a first draft in ${facts.firstDraft} — and the hours you would have spent editing back on your calendar.`,
+  body = 'Send us the footage and a short brief. We\u2019ll turn it into a video you\u2019re proud to publish.',
 } = Astro.props;
 ---
 <section class="fcta on-dark" aria-labelledby="fcta-title">
@@ -17,25 +16,15 @@ const {
     <p class="lede" data-reveal style="--d:140ms">{body}</p>
     <div class="fcta__actions" data-reveal style="--d:200ms">
       <a href={cta.primary.href} class="btn">{cta.primary.label} <span class="btn__arrow" aria-hidden="true">→</span></a>
-      <a href="/pricing/" class="btn btn--ghost">See pricing — from {formatPrice(lowestPrice)}</a>
+      <a href="/pricing/" class="btn btn--ghost">See pricing</a>
     </div>
-  </div>
-  <div class="fcta__strip" aria-hidden="true">
-    {Array.from({ length: 24 }).map(() => <i></i>)}
   </div>
 </section>
 
 <style>
   .fcta { position: relative; padding-block: var(--section); overflow: hidden; background: var(--forest); border-bottom: 1px solid var(--forest-line); }
   .fcta__inner { display: grid; gap: var(--s-5); justify-items: start; position: relative; z-index: 1; }
-  .fcta__title { font-size: var(--fs-h1); letter-spacing: -0.05em; line-height: 0.95; max-width: 14ch; }
+  .fcta__title { font-size: var(--fs-h1); letter-spacing: -0.038em; line-height: 0.98; max-width: 8em; }
   .fcta__title em { color: var(--signal); }
   .fcta__actions { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-3); }
-  /* A strip of film frames drifting along the bottom edge. */
-  .fcta__strip { position: absolute; left: 0; right: 0; bottom: 1.5rem; display: flex; gap: 6px; width: max-content; animation: drift 60s linear infinite; opacity: 0.5; }
-  .fcta__strip i { width: 7.5rem; aspect-ratio: 16/9; border: 1px solid var(--forest-line); border-radius: 2px; background: var(--forest-2); }
-  .fcta__strip i:nth-child(5n + 2) { background: #1b4a35; }
-  @keyframes drift { to { transform: translateX(-50%); } }
-  @media (max-width: 700px) { .fcta__strip { display: none; } }
-  @media (prefers-reduced-motion: reduce) { .fcta__strip { animation: none; } }
 </style>

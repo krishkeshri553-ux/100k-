@@ -48,6 +48,5 @@ const frames = [
 for (const [id, a, b, l, body, label] of frames) {
   writeFileSync(new URL(`frame-${id}.svg`, out), base(id, a, b, l, body, label));
 }
-writeFileSync(new URL('showreel.svg', out), base('sr', '#0c2a1d', '#1a4a35', [0.68, 0.28, '#f4e3c0'],
-  `<circle cx="1010" cy="350" r="130" fill="#c9b79a" fill-opacity="0.5"/><path d="M770 900c20-230 130-360 240-360s220 130 240 360z" fill="#262622" fill-opacity="0.85"/><rect x="150" y="200" width="360" height="460" fill="#2f6b4c" fill-opacity="0.3"/><rect x="1330" y="160" width="140" height="540" fill="#f4e3c0" fill-opacity="0.12"/>`, 'SHOWREEL', false)); // labelled in markup instead
+// showreel.svg is hand-made (a clean frame, not fake footage) — not generated here.
 console.log('placeholders written');

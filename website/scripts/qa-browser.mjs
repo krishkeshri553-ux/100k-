@@ -6,9 +6,12 @@ import { createRequire } from 'node:module';
 const { chromium } = createRequire(import.meta.url)('playwright');
 
 const BASE = process.env.BASE_URL || 'http://localhost:4321';
-const pages = ['/', '/work/', '/services/', '/process/', '/pricing/', '/contact/', '/contact/thanks/', '/blog/',
-  '/blog/how-to-hire-a-youtube-video-editor/', '/blog/how-much-does-long-form-youtube-editing-cost/',
-  '/blog/how-to-improve-audience-retention-in-youtube-videos/', '/blog/category/youtube-editing/', '/blog/category/creator-growth/', '/nope/'];
+// Every page in the sitemap, plus pages deliberately left out of it.
+const sitemap = await (await fetch(BASE + '/sitemap.xml')).text();
+const pages = [...new Set([
+  ...[...sitemap.matchAll(/<loc>https:\/\/longformedits\.com([^<]*)<\/loc>/g)].map((m) => m[1]),
+  '/blog/', '/contact/thanks/', '/nope/',
+])];
 const widths = [320, 375, 768, 1024, 1440, 1920];
 const fails = [];
 

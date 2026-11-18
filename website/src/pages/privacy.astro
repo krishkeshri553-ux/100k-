@@ -1,0 +1,58 @@
+---
+/**
+ * Privacy policy. Describes what this site actually does today: no cookies,
+ * no analytics, fonts self-hosted, one enquiry form. If you add analytics,
+ * a booking tool or a newsletter, update this page. Have it reviewed for the
+ * regions you serve before relying on it.
+ */
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../config/site';
+import { breadcrumbSchema } from '../lib/schema';
+
+const updated = '2026-11-18';
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Privacy', path: '/privacy/' }];
+---
+<Base
+  title="Privacy Policy"
+  description="How Longform Edits handles the information you send through our project enquiry form, and how to ask us to access or delete it."
+  path="/privacy/"
+  schema={[breadcrumbSchema(crumbs)]}
+>
+  <PageHero crumbs={crumbs} eyebrow="Legal" title="Privacy policy" lede={`Last updated ${new Date(updated).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}.`} />
+  <section class="section section--tight">
+    <div class="container">
+      <div class="prose">
+        <p>This policy explains what information {site.legalName} (“we”) collects through {site.url.replace('https://', '')}, why, and what you can ask us to do with it.</p>
+
+        <h2>What we collect</h2>
+        <p>We only collect what you choose to send us through the project enquiry form on our <a href="/contact/">contact page</a>:</p>
+        <ul>
+          <li>your name and email address;</li>
+          <li>your YouTube channel or website;</li>
+          <li>details about your videos — content type, video and footage length, volume, package and budget;</li>
+          <li>anything you write in the “additional details” field.</li>
+        </ul>
+        <p>If you email us directly, we receive your email address and whatever your message contains.</p>
+
+        <h2>What we don't collect</h2>
+        <p>This website does not use cookies, analytics, advertising trackers or third-party embeds. Fonts are served from our own domain. Our hosting provider keeps standard technical server logs (such as IP address and request time) to operate and secure the site.</p>
+
+        <h2>Why we use it</h2>
+        <p>We use your enquiry to reply to you, to understand your project and recommend a package, and — if you become a client — to manage our work together. We don't sell your information or use it for unrelated marketing.</p>
+
+        <h2>Who processes it</h2>
+        <p>The site is hosted on Vercel. Enquiries are delivered to our inbox by an email-delivery or automation service. These providers process your information only to provide that service to us.</p>
+
+        <h2>How long we keep it</h2>
+        <p>We keep enquiries for as long as needed to respond and, if we work together, for the duration of that relationship and any records we are legally required to keep. You can ask us to delete your enquiry at any time.</p>
+
+        <h2>Your rights</h2>
+        <p>You can ask us to see, correct or delete the information we hold about you, or to stop using it. Email <a href={`mailto:${site.email}`}>{site.email}</a> and we'll respond. Depending on where you live, you may also have the right to complain to your local data-protection authority.</p>
+
+        <h2>Changes</h2>
+        <p>If we change how we handle information, we'll update this page and the date above.</p>
+      </div>
+    </div>
+  </section>
+</Base>

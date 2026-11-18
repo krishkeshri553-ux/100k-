@@ -1,6 +1,10 @@
 ---
 import Logo from './Logo.astro';
-import { nav, cta } from '../config/site';
+import { nav as allNav, cta } from '../config/site';
+import { getPosts } from '../lib/blog';
+
+const hasPosts = (await getPosts()).length > 0;
+const nav = allNav.filter((n) => n.href !== '/blog/' || hasPosts);
 
 const current = Astro.url.pathname;
 const isActive = (href: string) => current === href || (href !== '/' && current.startsWith(href));
@@ -78,7 +82,7 @@ const isActive = (href: string) => current === href || (href !== '/' && current.
     .mnav__list { margin-bottom: var(--s-6); border-top: 1px solid var(--line); }
     .mnav__list a {
       display: flex; align-items: baseline; gap: var(--s-4); padding: 1rem 0; border-bottom: 1px solid var(--line);
-      font-size: clamp(1.75rem, 1.2rem + 3vw, 2.5rem); font-weight: 600; letter-spacing: -0.035em; color: var(--ink);
+      font-size: clamp(1.75rem, 1.2rem + 3vw, 2.5rem); font-weight: 600; letter-spacing: -0.03em; color: var(--ink);
     }
     .mnav__list a .mono { color: var(--green); font-size: 0.75rem; transform: translateY(-0.4em); }
     .mnav__list a[aria-current='page'] { color: var(--green); }

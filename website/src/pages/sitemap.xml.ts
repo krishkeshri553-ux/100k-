@@ -7,7 +7,7 @@ import { getPosts } from '../lib/blog';
 export const GET: APIRoute = async () => {
   const posts = (await getPosts()).filter((p) => !p.data.draft);
   const today = new Date().toISOString().slice(0, 10);
-  const staticPages = ['/', '/work/', '/services/', '/process/', '/pricing/', '/contact/', '/blog/'];
+  const staticPages = ['/', '/work/', '/services/', '/process/', '/pricing/', '/contact/', '/privacy/', ...(posts.length ? ['/blog/'] : [])];
   const catPages = categories
     .filter((c) => posts.some((p) => p.data.category === c.slug))
     .map((c) => `/blog/category/${c.slug}/`);

@@ -9,14 +9,13 @@ import { breadcrumbSchema } from '../lib/schema';
 import { facts } from '../config/pricing';
 
 const crumbs = [{ name: 'Home', path: '/' }, { name: 'Process', path: '/process/' }];
-const processFaqs = faqs.filter((f) => /footage|long|process|happens|started/i.test(f.q));
 
 const brief = [
   { t: 'Raw footage', d: 'All camera angles and audio files, unedited. Shared as a cloud link — we confirm the easiest method when we reply to your enquiry.' },
   { t: 'A short brief', d: 'What the video is about, who it’s for, and anything that must stay in or come out.' },
   { t: 'References', d: 'Links to one or two videos whose editing style you like. This does more than any written description.' },
   { t: 'Brand assets', d: 'Logo, fonts, colours, intro or outro, lower-third style — whatever you already use.' },
-  { t: 'B-roll & screen recordings', d: 'Any supporting footage you have. We source B-roll where the edit needs more.' },
+  { t: 'B-roll & screen recordings', d: 'Any supporting footage you have — product shots, screen recordings, photos. The more relevant B-roll you send, the more specific the edit.' },
   { t: 'Thumbnail direction', d: 'Your title idea, a photo if you want your face on it, and any thumbnails you like.' },
 ];
 ---
@@ -30,7 +29,7 @@ const brief = [
     crumbs={crumbs}
     eyebrow="Process"
     title="Simple on your side."
-    accent="Meticulous on ours."
+    accent="Thorough on ours."
     lede="Five steps from raw recording to a finished, published-ready video. You stay in control of the direction; we do the hours of work in between."
   />
   <Process />
@@ -56,7 +55,7 @@ const brief = [
     </div>
   </section>
 
-  <Faq items={processFaqs} title="About the process." intro="How the work moves from your footage to your final video." />
+  <Faq items={faqs} />
   <FinalCta />
 </Base>
 

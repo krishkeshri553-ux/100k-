@@ -3,6 +3,9 @@ import '@fontsource-variable/inter-tight';
 import '@fontsource-variable/jetbrains-mono';
 import '@fontsource/instrument-serif/400-italic.css';
 import '../styles/global.css';
+// Preloaded so headings render in their final font on first paint (avoids layout shift).
+import interTightLatin from '@fontsource-variable/inter-tight/files/inter-tight-latin-wght-normal.woff2?url';
+import serifItalicLatin from '@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff2?url';
 import Seo from '../components/Seo.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -17,6 +20,8 @@ const props = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <script is:inline>document.documentElement.classList.add('js')</script>
+    <link rel="preload" href={interTightLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={serifItalicLatin} as="font" type="font/woff2" crossorigin />
     <Seo {...props} />
     <meta name="theme-color" content="#f5f4ee" />
     <meta name="format-detection" content="telephone=no" />

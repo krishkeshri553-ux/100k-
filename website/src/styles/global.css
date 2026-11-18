@@ -3,6 +3,12 @@
    Tokens first. Components reference tokens only; no ad-hoc colours.
    ========================================================================== */
 
+/* Metric-matched fallbacks: text set in these occupies the same width as
+   Inter Tight, so lines don't re-wrap (layout shift) when the web font loads.
+   Ratios measured against Arial: 0.934 at weight 600, 0.968 at 400. */
+@font-face { font-family: 'Inter Tight Fallback'; src: local('Arial'), local('Liberation Sans'), local('Helvetica'); size-adjust: 96.8%; }
+@font-face { font-family: 'Inter Tight Heading Fallback'; src: local('Arial'), local('Liberation Sans'), local('Helvetica'); size-adjust: 93.4%; }
+
 :root {
   /* Colour — paper & ink */
   --paper: #f5f4ee;          /* primary background: warm white */
@@ -31,7 +37,7 @@
   --danger: #a3311f;
 
   /* Type */
-  --font-sans: 'Inter Tight Variable', 'Inter Tight', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans: 'Inter Tight Variable', 'Inter Tight Fallback', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-serif: 'Instrument Serif', 'Iowan Old Style', Georgia, serif;
   --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
@@ -90,7 +96,7 @@ input, button, textarea, select { font: inherit; color: inherit; }
 button { cursor: pointer; background: none; border: 0; padding: 0; }
 a { color: inherit; text-decoration: none; }
 ul[role='list'], ol[role='list'] { list-style: none; padding: 0; }
-:where(h1, h2, h3, h4) { color: var(--ink); font-weight: 600; line-height: 1.02; letter-spacing: -0.035em; text-wrap: balance; }
+:where(h1, h2, h3, h4) { font-family: 'Inter Tight Variable', 'Inter Tight Heading Fallback', var(--font-sans); color: var(--ink); font-weight: 600; line-height: 1.02; letter-spacing: -0.028em; text-wrap: balance; }
 p { text-wrap: pretty; }
 ::selection { background: var(--signal); color: var(--forest); }
 
@@ -140,6 +146,7 @@ p { text-wrap: pretty; }
 .lede { font-size: var(--fs-lg); line-height: 1.5; color: var(--ink-2); max-width: 38rem; }
 .on-dark .lede { color: var(--on-forest-muted); }
 .muted { color: var(--muted); }
+.nowrap { white-space: nowrap; }
 
 .section-head { display: grid; gap: var(--s-5); margin-bottom: clamp(2.5rem, 2rem + 3vw, 5rem); max-width: 56rem; }
 .section-head--split { max-width: none; grid-template-columns: 1fr; align-items: end; }

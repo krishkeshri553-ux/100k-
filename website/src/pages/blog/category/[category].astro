@@ -7,8 +7,11 @@ import { categories } from '../../../config/blog';
 import { getPosts } from '../../../lib/blog';
 import { breadcrumbSchema } from '../../../lib/schema';
 
-export function getStaticPaths() {
-  return categories.map((c) => ({ params: { category: c.slug }, props: { category: c } }));
+export async function getStaticPaths() {
+  const visible = await getPosts();
+  return categories
+    .filter((c) => visible.some((p) => p.data.category === c.slug))
+    .map((c) => ({ params: { category: c.slug }, props: { category: c } }));
 }
 const { category } = Astro.props;
 const posts = (await getPosts()).filter((p) => p.data.category === category.slug);
