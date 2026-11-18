@@ -10,24 +10,26 @@ const current = Astro.url.pathname;
 const isActive = (href: string) => current === href || (href !== '/' && current.startsWith(href));
 ---
 <header class="hdr" data-header>
-  <div class="container hdr__bar">
-    <a href="/" class="hdr__logo" aria-label="Longform Edits — home"><Logo /></a>
+  <div class="hdr__wrap">
+    <div class="hdr__bar">
+      <a href="/" class="hdr__logo" aria-label="Longform Edits — home"><Logo /></a>
 
-    <nav class="hdr__nav" aria-label="Primary">
-      <ul role="list">
-        {nav.filter((n) => n.href !== '/contact/').map((item) => (
-          <li><a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a></li>
-        ))}
-      </ul>
-    </nav>
+      <nav class="hdr__nav" aria-label="Primary">
+        <ul role="list">
+          {nav.filter((n) => n.href !== '/contact/').map((item) => (
+            <li><a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a></li>
+          ))}
+          <li><a href="/contact/" aria-current={isActive('/contact/') ? 'page' : undefined}>Contact</a></li>
+        </ul>
+      </nav>
 
-    <div class="hdr__actions">
-      <a href="/contact/" class="hdr__contact" aria-current={isActive('/contact/') ? 'page' : undefined}>Contact</a>
-      <a href={cta.primary.href} class="btn btn--sm hdr__cta">{cta.primary.label}</a>
-      <button class="hdr__toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" data-nav-toggle>
-        <span class="sr-only" data-nav-label>Open menu</span>
-        <span class="hdr__burger" aria-hidden="true"><i></i><i></i></span>
-      </button>
+      <div class="hdr__actions">
+        <a href={cta.primary.href} class="btn btn--white btn--sm hdr__cta">{cta.primary.label} <span aria-hidden="true">↗</span></a>
+        <button class="hdr__toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" data-nav-toggle>
+          <span class="sr-only" data-nav-label>Open menu</span>
+          <span class="hdr__burger" aria-hidden="true"><i></i><i></i></span>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -48,21 +50,29 @@ const isActive = (href: string) => current === href || (href !== '/' && current.
 </header>
 
 <style>
-  .hdr { position: sticky; top: 0; z-index: 50; background: var(--paper); border-bottom: 1px solid transparent; transition: border-color var(--t-med) var(--ease); }
-  .hdr.is-scrolled { border-bottom-color: var(--line); }
-  .hdr__bar { display: flex; align-items: center; justify-content: space-between; gap: var(--s-5); height: 4.25rem; }
+  .hdr { position: sticky; top: 0; z-index: 50; height: 0; }
+  .hdr__wrap { padding: 0.75rem var(--gutter) 0; max-width: calc(var(--max) + 1rem); margin-inline: auto; }
+  .hdr__bar {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--s-4);
+    height: 3.5rem; padding: 0 0.5rem 0 1.1rem;
+    background: rgb(5 12 9 / 0.62); border: 1px solid var(--line);
+    border-radius: var(--r-pill);
+    -webkit-backdrop-filter: blur(16px) saturate(140%); backdrop-filter: blur(16px) saturate(140%);
+    transition: background var(--t-med) var(--ease), border-color var(--t-med) var(--ease);
+  }
+  .hdr.is-scrolled .hdr__bar { background: rgb(5 12 9 / 0.82); border-color: var(--line-strong); }
   .hdr__logo { flex: none; }
-  .hdr__nav ul { display: flex; gap: var(--s-1); }
-  .hdr__nav a, .hdr__contact {
-    display: inline-block; padding: 0.5rem 0.8rem; font-size: 0.9375rem; font-weight: 500; color: var(--ink-2);
+  .hdr__nav ul { display: flex; gap: 0.15rem; }
+  .hdr__nav a {
+    display: inline-block; padding: 0.45rem 0.85rem; font-size: 0.875rem; font-weight: 500; color: var(--ink-2);
     border-radius: var(--r-pill); transition: color var(--t-fast), background var(--t-fast);
   }
-  .hdr__nav a:hover, .hdr__contact:hover { color: var(--ink); background: var(--paper-2); }
-  .hdr__nav a[aria-current='page'], .hdr__contact[aria-current='page'] { color: var(--ink); background: var(--green-tint); }
+  .hdr__nav a:hover { color: var(--ink); background: rgb(255 255 255 / 0.05); }
+  .hdr__nav a[aria-current='page'] { color: var(--ink); background: rgb(255 255 255 / 0.07); }
   .hdr__actions { display: flex; align-items: center; gap: var(--s-2); }
 
-  .hdr__toggle { display: none; width: 2.75rem; height: 2.75rem; border-radius: 50%; border: 1px solid var(--line-strong); align-items: center; justify-content: center; }
-  .hdr__burger { display: grid; gap: 5px; width: 18px; }
+  .hdr__toggle { display: none; width: 2.5rem; height: 2.5rem; border-radius: 50%; border: 1px solid var(--line-strong); align-items: center; justify-content: center; }
+  .hdr__burger { display: grid; gap: 5px; width: 16px; }
   .hdr__burger i { display: block; height: 1.5px; background: var(--ink); transition: transform var(--t-med) var(--ease); }
   [aria-expanded='true'] .hdr__burger i:first-child { transform: translateY(3.25px) rotate(45deg); }
   [aria-expanded='true'] .hdr__burger i:last-child { transform: translateY(-3.25px) rotate(-45deg); }
@@ -70,32 +80,30 @@ const isActive = (href: string) => current === href || (href !== '/' && current.
   .mnav { display: none; }
 
   @media (max-width: 960px) {
-    .hdr__nav, .hdr__contact { display: none; }
+    .hdr__nav { display: none; }
     .hdr__toggle { display: inline-flex; }
     .mnav {
-      display: block; position: fixed; inset: 4.25rem 0 0; background: var(--paper);
-      padding-block: var(--s-6) var(--s-7); overflow-y: auto;
-      visibility: hidden; opacity: 0; transform: translateY(-8px);
-      transition: opacity var(--t-med) var(--ease), transform var(--t-med) var(--ease), visibility 0s linear var(--t-med);
+      display: block; position: fixed; inset: 0; z-index: -1; background: var(--bg);
+      padding-block: 6rem var(--s-7); overflow-y: auto;
+      visibility: hidden; opacity: 0;
+      transition: opacity var(--t-med) var(--ease), visibility 0s linear var(--t-med);
     }
-    .mnav.is-open { visibility: visible; opacity: 1; transform: none; transition-delay: 0s; }
+    .mnav.is-open { visibility: visible; opacity: 1; transition-delay: 0s; }
     .mnav__list { margin-bottom: var(--s-6); border-top: 1px solid var(--line); }
     .mnav__list a {
       display: flex; align-items: baseline; gap: var(--s-4); padding: 1rem 0; border-bottom: 1px solid var(--line);
-      font-size: clamp(1.75rem, 1.2rem + 3vw, 2.5rem); font-weight: 600; letter-spacing: -0.03em; color: var(--ink);
+      font-family: var(--font-display); font-size: clamp(1.75rem, 1.2rem + 3vw, 2.5rem); font-weight: 750; letter-spacing: -0.035em; color: var(--ink);
     }
-    .mnav__list a .mono { color: var(--green); font-size: 0.75rem; transform: translateY(-0.4em); }
-    .mnav__list a[aria-current='page'] { color: var(--green); }
+    .mnav__list a .mono { color: var(--brand); font-size: 0.7rem; transform: translateY(-0.5em); }
+    .mnav__list a[aria-current='page'] { color: var(--brand); }
     .mnav__list li { opacity: 0; transform: translateY(10px); transition: opacity var(--t-med) var(--ease), transform var(--t-med) var(--ease); transition-delay: calc(var(--i) * 40ms); }
     .mnav.is-open .mnav__list li { opacity: 1; transform: none; }
   }
-  @media (max-width: 420px) {
-    .hdr__cta { display: none; }
-  }
-  /* Without JavaScript the toggle can't work, so show the menu as a static list. */
+  @media (max-width: 400px) { .hdr__cta { display: none; } }
   :global(html:not(.js)) .hdr__toggle { display: none; }
   @media (max-width: 960px) {
-    :global(html:not(.js)) .mnav { position: static; visibility: visible; opacity: 1; transform: none; padding-block: 0 var(--s-5); }
+    :global(html:not(.js)) .hdr { height: auto; position: static; }
+    :global(html:not(.js)) .mnav { position: static; visibility: visible; opacity: 1; padding-block: var(--s-5); }
     :global(html:not(.js)) .mnav__list li { opacity: 1; transform: none; }
   }
 </style>

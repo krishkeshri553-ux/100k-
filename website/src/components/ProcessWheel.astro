@@ -1,0 +1,92 @@
+---
+/** Five-step workflow as a dial. Advances on its own while visible; click any step. Steps are also listed in text. */
+import { process } from '../data/services';
+import { cta } from '../config/site';
+const n = process.length;
+const pos = process.map((_, i) => {
+  const a = (i / n) * Math.PI * 2 - Math.PI / 2;
+  return { x: 50 + 44 * Math.cos(a), y: 50 + 44 * Math.sin(a) };
+});
+---
+<section class="section wheel glow" id="process" aria-labelledby="wheel-title" style="--gx:25%;--gy:55%">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow" data-reveal>How it works</p>
+      <h2 id="wheel-title" class="h2" data-reveal style="--d:80ms">Five steps from raw footage to <em class="serif">final cut.</em></h2>
+    </div>
+    <div class="wheel__grid" data-wheel>
+      <div class="wheel__dial" aria-hidden="true">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="44" class="wheel__ring" />
+          <circle cx="50" cy="50" r="44" class="wheel__arc" pathLength="100" data-arc />
+        </svg>
+        {pos.map((p, i) => (
+          <span class="wheel__node" style={`left:${p.x}%;top:${p.y}%`} data-node>{i + 1}</span>
+        ))}
+        <div class="wheel__core">
+          <span class="wheel__big" data-big>01</span>
+          <span class="wheel__lbl" data-lbl>{process[0].title}</span>
+        </div>
+      </div>
+      <ol class="wheel__list" role="list">
+        {process.map((p, i) => (
+          <li>
+            <button type="button" class:list={['wheel__item', { 'is-on': i === 0 }]} data-item aria-pressed={i === 0 ? 'true' : 'false'}>
+              <span class="mono wheel__meta">Step {p.step} / 0{n}</span>
+              <span class="wheel__title">{p.title}</span>
+              <span class="wheel__body">{p.body}</span>
+            </button>
+          </li>
+        ))}
+      </ol>
+    </div>
+    <div class="wheel__cta" data-reveal><a href={cta.primary.href} class="btn">{cta.primary.label} <span aria-hidden="true">↗</span></a></div>
+  </div>
+</section>
+<script>
+  const root = document.querySelector<HTMLElement>('[data-wheel]');
+  if (root) {
+    const items = [...root.querySelectorAll<HTMLButtonElement>('[data-item]')];
+    const nodes = [...root.querySelectorAll<HTMLElement>('[data-node]')];
+    const arc = root.querySelector<SVGCircleElement>('[data-arc]')!;
+    const big = root.querySelector<HTMLElement>('[data-big]')!;
+    const lbl = root.querySelector<HTMLElement>('[data-lbl]')!;
+    const n = items.length;
+    let cur = 0, timer = 0, auto = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const set = (i: number) => {
+      cur = i;
+      items.forEach((b, k) => { b.classList.toggle('is-on', k === i); b.setAttribute('aria-pressed', String(k === i)); });
+      nodes.forEach((nd, k) => nd.classList.toggle('is-on', k <= i));
+      arc.style.strokeDasharray = `${((i + 1) / n) * 100} 100`;
+      big.textContent = String(i + 1).padStart(2, '0');
+      lbl.textContent = items[i].querySelector('.wheel__title')!.textContent;
+    };
+    const loop = () => { timer = window.setTimeout(() => { set((cur + 1) % n); loop(); }, 3800); };
+    items.forEach((b, k) => b.addEventListener('click', () => { auto = false; clearTimeout(timer); set(k); }));
+    set(0);
+    new IntersectionObserver(([e]) => { clearTimeout(timer); if (e.isIntersecting && auto) loop(); }, { threshold: 0.4 }).observe(root);
+  }
+</script>
+<style>
+  .wheel__grid { display: grid; gap: var(--s-7); align-items: center; }
+  @media (min-width: 960px) { .wheel__grid { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: var(--s-9); } }
+  .wheel__dial { position: relative; width: min(100%, 26rem); aspect-ratio: 1; margin-inline: auto; }
+  .wheel__dial svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible; }
+  .wheel__ring { fill: none; stroke: rgb(255 255 255 / 0.1); stroke-width: 0.5; }
+  .wheel__arc { fill: none; stroke: var(--brand); stroke-width: 0.8; stroke-linecap: round; stroke-dasharray: 20 100; transition: stroke-dasharray 900ms var(--ease); filter: drop-shadow(0 0 2px var(--brand)); }
+  .wheel__node { position: absolute; translate: -50% -50%; width: 2.25rem; height: 2.25rem; border-radius: 50%; display: grid; place-items: center; font: 700 0.75rem var(--font-mono); background: var(--surface); border: 1px solid var(--line-strong); color: var(--muted); transition: all var(--t-med) var(--ease); }
+  .wheel__node.is-on { background: var(--brand); border-color: var(--brand); color: var(--on-brand); box-shadow: 0 0 20px var(--brand); }
+  .wheel__core { position: absolute; inset: 26%; border-radius: 50%; display: grid; place-content: center; text-align: center; background: radial-gradient(circle, rgb(47 209 128 / 0.08), transparent 70%), var(--bg-soft); border: 1px solid var(--line); }
+  .wheel__big { font-family: var(--font-serif); font-style: italic; font-size: clamp(3rem, 2rem + 3vw, 4.5rem); color: var(--brand); line-height: 1; }
+  .wheel__lbl { color: var(--ink); font-weight: 700; font-size: 0.875rem; max-width: 9rem; }
+  .wheel__list { display: grid; gap: 0.5rem; }
+  .wheel__item { width: 100%; text-align: left; display: grid; gap: 0.3rem; padding: 1rem 1.25rem; border-radius: var(--r-2); border: 1px solid transparent; transition: background var(--t-med), border-color var(--t-med); }
+  .wheel__item:hover { background: rgb(255 255 255 / 0.03); }
+  .wheel__item.is-on { background: linear-gradient(90deg, var(--brand-soft), transparent); border-color: rgb(47 209 128 / 0.25); }
+  .wheel__meta { color: var(--brand); text-transform: uppercase; letter-spacing: 0.12em; }
+  .wheel__title { color: var(--ink); font-family: var(--font-display); font-weight: 750; font-size: var(--fs-h4); letter-spacing: -0.025em; }
+  .wheel__body { color: var(--ink-2); font-size: 0.9375rem; max-height: 0; overflow: hidden; opacity: 0; transition: max-height 500ms var(--ease), opacity 400ms; }
+  .wheel__item.is-on .wheel__body { max-height: 8rem; opacity: 1; }
+  html:not(.js) .wheel__body { max-height: none; opacity: 1; }
+  .wheel__cta { margin-top: var(--s-7); display: flex; justify-content: center; }
+</style>

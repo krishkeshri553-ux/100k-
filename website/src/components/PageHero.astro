@@ -10,19 +10,19 @@ export interface Props {
 }
 const { eyebrow, title, accent, lede, crumbs } = Astro.props;
 ---
-<section class="phero">
+<section class="phero glow" style="--gy:20%;--gx:30%">
   <div class="container">
     {crumbs && <div class="phero__crumbs"><Breadcrumbs crumbs={crumbs} /></div>}
     <p class="eyebrow" data-reveal>{eyebrow}</p>
-    <h1 class="phero__title" data-reveal style="--d:80ms">{title}{accent && <> <span class="phero__accent">{accent}</span></>}</h1>
+    <h1 class="phero__title" data-reveal style="--d:80ms">{title}{accent && <> <em class="serif">{accent}</em></>}</h1>
     {lede && <p class="lede phero__lede" data-reveal style="--d:160ms">{lede}</p>}
     <slot />
   </div>
 </section>
 <style>
-  .phero { padding-top: clamp(2rem, 1rem + 4vw, 5rem); padding-bottom: clamp(3rem, 2rem + 4vw, 6rem); border-bottom: 1px solid var(--line); }
+  .phero { padding-top: clamp(7rem, 5rem + 4vw, 10rem); padding-bottom: clamp(3rem, 2rem + 4vw, 6rem); border-bottom: 1px solid var(--line); }
   .phero__crumbs { margin-bottom: var(--s-6); }
   .phero__title { font-size: var(--fs-h1); letter-spacing: -0.038em; line-height: 0.98; margin-top: var(--s-5); max-width: 9em; }
-  .phero__accent { color: var(--green); }
+  .phero__title { font-weight: 800; }
   .phero__lede { margin-top: var(--s-6); }
 </style>

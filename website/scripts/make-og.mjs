@@ -11,20 +11,20 @@ const favicon = readFileSync(new URL('public/favicon.svg', root), 'utf8');
 const font = (pkg, file) => `data:font/woff2;base64,${readFileSync(new URL(`node_modules/${pkg}/files/${file}`, root)).toString('base64')}`;
 
 const og = `<!doctype html><html><head><style>
-@font-face{font-family:IT;src:url(${font('@fontsource-variable/inter-tight', 'inter-tight-latin-wght-normal.woff2')});font-weight:100 900}
+@font-face{font-family:IT;src:url(${font('@fontsource-variable/montserrat', 'montserrat-latin-wght-normal.woff2')});font-weight:100 900}
 @font-face{font-family:IS;font-style:italic;src:url(${font('@fontsource/instrument-serif', 'instrument-serif-latin-400-italic.woff2')})}
 @font-face{font-family:JB;src:url(${font('@fontsource-variable/jetbrains-mono', 'jetbrains-mono-latin-wght-normal.woff2')})}
-*{margin:0;box-sizing:border-box}body{width:1200px;height:630px;background:#f5f4ee;font-family:IT;color:#0b1a12;padding:64px 72px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
-.top{display:flex;justify-content:space-between;align-items:center;font-family:JB;font-size:20px;letter-spacing:.08em;text-transform:uppercase;color:#17603d}
-.logo{display:flex;align-items:center;gap:14px;font-family:IT;font-weight:650;font-size:34px;letter-spacing:-.035em;text-transform:none;color:#0b1a12}
-.logo em{font-family:IS;font-weight:400;font-size:1.25em;color:#17603d;letter-spacing:-.01em}
-h1{font-size:96px;line-height:.93;letter-spacing:-.048em;font-weight:600;max-width:900px}
-h1 em{font-family:IS;font-weight:400;color:#17603d;letter-spacing:-.02em}
-.tl{display:flex;gap:4px;height:22px}.tl i{display:block;height:100%;border-radius:2px;background:#6fb68b}.tl i.g{background:#b9f27a}
-.foot{display:flex;justify-content:space-between;align-items:flex-end;font-family:JB;font-size:20px;color:#3c4b42}
+*{margin:0;box-sizing:border-box}body{width:1200px;height:630px;background:radial-gradient(60% 70% at 78% 40%,rgba(47,209,128,.28),transparent 70%),#030806;font-family:IT;color:#f3f7f4;padding:64px 72px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.top{display:flex;justify-content:space-between;align-items:center;font-family:JB;font-size:20px;letter-spacing:.08em;text-transform:uppercase;color:#2fd180}
+.logo{display:flex;align-items:center;gap:14px;font-family:IT;font-weight:800;font-size:32px;letter-spacing:-.04em;text-transform:none;color:#f3f7f4}
+.logo em{font-style:normal;color:#2fd180}
+h1{font-size:104px;line-height:.95;letter-spacing:-.045em;font-weight:800;max-width:1000px}
+h1 em{font-family:IS;font-weight:400;color:#2fd180;letter-spacing:-.02em}
+.tl{display:flex;gap:4px;height:22px}.tl i{display:block;height:100%;border-radius:3px;background:#3f8f68}.tl i.g{background:#2fd180;box-shadow:0 0 16px #2fd180}
+.foot{display:flex;justify-content:space-between;align-items:flex-end;font-family:JB;font-size:18px;letter-spacing:.12em;color:#a6b4ac}
 </style></head><body>
-<div class="top"><span class="logo"><svg width="38" height="38" viewBox="0 0 28 28"><path d="M3 3h7v3H6v16h4v3H3z" fill="#0b1a12"/><path d="M25 3h-7v3h4v16h-4v3h7z" fill="#0b1a12"/><rect x="11.5" y="9" width="5" height="10" fill="#2f8a5c"/></svg>Longform <em>Edits</em></span><span>longformedits.com</span></div>
-<h1>Your footage, cut into long-form videos worth <em>watching.</em></h1>
+<div class="top"><span class="logo"><span style="width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(160deg,#5fe3a0,#149a5a);box-shadow:0 0 24px rgba(47,209,128,.6)"><svg width="30" height="30" viewBox="0 0 28 28"><path d="M5 5h6v2.6H7.6v12.8H11V23H5z" fill="#021209"/><path d="M23 5h-6v2.6h3.4v12.8H17V23h6z" fill="#021209"/><rect x="12.2" y="10" width="3.6" height="8" rx=".6" fill="#021209"/></svg></span>Longform<em>Edits</em></span><span>longformedits.com</span></div>
+<h1>Long videos. <em>Edited</em> to be watched.</h1>
 <div><div class="tl"><i style="width:170px"></i><i class="g" style="width:60px"></i><i style="width:240px"></i><i style="width:90px"></i><i style="width:200px"></i><i class="g" style="width:70px"></i><i style="width:226px"></i></div>
 <div class="foot" style="margin-top:22px"><span>DONE-FOR-YOU LONG-FORM VIDEO EDITING</span></div></div>
 </body></html>`;

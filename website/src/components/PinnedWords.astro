@@ -1,0 +1,101 @@
+---
+/**
+ * Scroll story: one giant word at a time while the section is pinned.
+ * Desktop with motion: sticky stage, word changes with scroll progress.
+ * Mobile / reduced motion / no JS: the four panels simply stack.
+ */
+import { facts } from '../config/pricing';
+const panels = [
+  { word: 'Cut', note: 'Dead air, retakes and tangents removed, so the video gets to the point.', vis: 'cut' },
+  { word: 'Story', note: 'Structured with a hook, a build and a payoff, to hold attention for ten minutes or more.', vis: 'story' },
+  { word: 'Sound', note: 'Clean dialogue, music sitting under your voice, sound design used with restraint.', vis: 'sound' },
+  { word: 'Ship', note: `Exported, thumbnail ready, first draft back in ${facts.firstDraft}.`, vis: 'ship' },
+];
+const wave = Array.from({ length: 28 }, (_, i) => Math.min(1, 0.2 + Math.abs(Math.sin(i * 0.8) * 0.6 + Math.sin(i * 0.3) * 0.3)));
+---
+<section class="pin" data-pin aria-label="What happens to your footage">
+  <div class="pin__stage glow">
+    <div class="container pin__inner">
+      {panels.map((p, i) => (
+        <div class:list={['pin__panel', { 'is-on': i === 0 }]} data-panel>
+          <h2 class="pin__word">{p.word}<span class="pin__dot">.</span></h2>
+          <div class="pin__side">
+            <div class={`pin__vis pin__vis--${p.vis}`} aria-hidden="true">
+              {p.vis === 'cut' && [18, 9, 26, 7, 14, 11, 20].map((w, k) => <i style={`flex:${w}`} class={k % 2 ? 'gap' : ''}></i>)}
+              {p.vis === 'story' && ['Hook', 'Build', 'Payoff'].map((t, k) => <i style={`width:${[38, 72, 100][k]}%`}><b>{t}</b></i>)}
+              {p.vis === 'sound' && wave.map((h) => <i style={`--h:${h.toFixed(2)}`}></i>)}
+              {p.vis === 'ship' && <><i class="thumb"></i><i class="ok">✓ Draft delivered</i></>}
+            </div>
+            <p class="pin__note mono">{p.note}</p>
+          </div>
+        </div>
+      ))}
+      <ol class="pin__bar mono" role="list" aria-hidden="true">
+        {panels.map((_, i) => <li data-seg><span></span>{String(i + 1).padStart(2, '0')}</li>)}
+      </ol>
+    </div>
+  </div>
+</section>
+<script>
+  const pin = document.querySelector<HTMLElement>('[data-pin]');
+  const mq = window.matchMedia('(min-width: 760px) and (prefers-reduced-motion: no-preference)');
+  if (pin) {
+    const panels = pin.querySelectorAll<HTMLElement>('[data-panel]');
+    const segs = pin.querySelectorAll<HTMLElement>('[data-seg]');
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      if (!mq.matches) return;
+      const r = pin.getBoundingClientRect();
+      const total = pin.offsetHeight - window.innerHeight;
+      const p = Math.min(0.9999, Math.max(0, -r.top / total));
+      const n = panels.length, idx = Math.floor(p * n), local = p * n - idx;
+      panels.forEach((el, i) => el.classList.toggle('is-on', i === idx));
+      segs.forEach((s, i) => s.style.setProperty('--fill', i < idx ? '1' : i === idx ? local.toFixed(3) : '0'));
+      segs.forEach((s, i) => s.classList.toggle('is-now', i === idx));
+    };
+    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+    const arm = () => { pin.classList.toggle('is-pinned', mq.matches); update(); };
+    mq.addEventListener('change', arm);
+    arm();
+    new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) window.addEventListener('scroll', onScroll, { passive: true });
+      else window.removeEventListener('scroll', onScroll);
+    }).observe(pin);
+  }
+</script>
+<style>
+  .pin { position: relative; }
+  .pin__stage { padding-block: var(--section); --gy: 50%; --gx: 45%; }
+  .pin__inner { display: grid; gap: var(--s-8); }
+  .pin__panel { display: grid; gap: var(--s-5); align-items: center; }
+  .pin__word { font-size: clamp(4.5rem, 2rem + 13vw, 15rem); font-weight: 800; letter-spacing: -0.06em; line-height: 0.85; text-transform: uppercase; }
+  .pin__dot { color: var(--brand); text-shadow: 0 0 30px var(--brand); }
+  .pin__side { display: grid; gap: var(--s-4); max-width: 22rem; }
+  .pin__note { color: var(--ink-2); text-transform: uppercase; letter-spacing: 0.1em; line-height: 1.8; }
+  .pin__bar { display: none; }
+
+  .pin__vis { display: flex; gap: 4px; height: 4.5rem; align-items: stretch; }
+  .pin__vis i { display: block; border-radius: 4px; }
+  .pin__vis--cut i { background: var(--brand); box-shadow: 0 0 20px -4px var(--brand); }
+  .pin__vis--cut i.gap { background: transparent; border: 1px dashed rgb(255 255 255 / 0.2); box-shadow: none; }
+  .pin__vis--story { flex-direction: column; height: auto; gap: 6px; }
+  .pin__vis--story i { height: 1.6rem; background: linear-gradient(90deg, var(--brand-deep), var(--brand)); display: flex; align-items: center; padding-left: 0.6rem; }
+  .pin__vis--story b { font: 600 0.625rem var(--font-mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--on-brand); }
+  .pin__vis--sound { align-items: center; gap: 3px; }
+  .pin__vis--sound i { flex: 1; height: calc(var(--h) * 100%); background: var(--brand); }
+  .pin__vis--ship { flex-direction: column; height: auto; gap: 8px; }
+  .pin__vis--ship .thumb { aspect-ratio: 16/9; width: 12rem; border-radius: var(--r-2); background: linear-gradient(135deg, #2fd180, #0b4a2c); box-shadow: 0 20px 50px -20px var(--brand); }
+  .pin__vis--ship .ok { font: 600 0.6875rem var(--font-mono); color: var(--brand); text-transform: uppercase; letter-spacing: 0.1em; font-style: normal; }
+
+  /* Pinned mode (desktop with motion) */
+  .pin.is-pinned { height: 420vh; }
+  .pin.is-pinned .pin__stage { position: sticky; top: 0; height: 100vh; padding: 0; display: grid; align-items: center; overflow: hidden; }
+  .pin.is-pinned .pin__inner { grid-template-areas: 'stack' 'bar'; gap: var(--s-6); }
+  .pin.is-pinned .pin__panel { grid-area: stack; grid-template-columns: auto minmax(0, 22rem); gap: var(--s-8); justify-content: start; opacity: 0; transform: translateY(30px); transition: opacity 600ms var(--ease), transform 700ms var(--ease); pointer-events: none; }
+  .pin.is-pinned .pin__panel.is-on { opacity: 1; transform: none; }
+  .pin.is-pinned .pin__bar { grid-area: bar; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; color: var(--muted); }
+  .pin__bar li { display: grid; gap: 0.5rem; }
+  .pin__bar span { height: 2px; background: linear-gradient(90deg, var(--brand) calc(var(--fill, 0) * 100%), rgb(255 255 255 / 0.12) 0); }
+  .pin__bar .is-now { color: var(--ink); }
+</style>

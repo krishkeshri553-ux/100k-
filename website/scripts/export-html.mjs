@@ -26,7 +26,7 @@ html = html.replace(/<link rel="stylesheet" href="([^"]+)"[^>]*>/g, (_, href) =>
   css = css.replace(/@font-face\{[^}]*\}/g, (block) => {
     const src = block.match(/url\(([^)]+)\)/)?.[1];
     if (src && /\/_astro\//.test(src) && !/-latin-(wght|400)/.test(src)) return '';
-    return block.replace(/url\((\/_astro\/[^)]+)\)/g, (m, u) => `url(${dataUri(u) || u})`);
+    return block.replace(/url\((\/_astro\/[^)]+)\)/g, (_m, u) => `url(${dataUri(u) || u})`);
   });
   return `<style>${css}</style>`;
 });

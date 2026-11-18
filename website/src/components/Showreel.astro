@@ -1,0 +1,51 @@
+---
+/**
+ * Big showreel card. Plays the reel (click-to-play) once `showreel.src` is set
+ * in src/data/portfolio.ts; until then it's a labelled "coming soon" panel.
+ */
+import { showreel } from '../data/portfolio';
+import { facts } from '../config/pricing';
+---
+<section class="section reel glow" id="how" aria-labelledby="reel-title" style="--gy:55%">
+  <div class="container">
+    <p class="reel__eyebrow eyebrow eyebrow--plain" data-reveal>The whole job, in one line</p>
+    <div class="reel__card" data-reveal style="--d:80ms">
+      {showreel.src && (
+        <video class="reel__video" controls preload="none" poster={showreel.poster} playsinline>
+          <source src={showreel.src} type="video/mp4" />
+        </video>
+      )}
+      <div class="reel__inner" style={showreel.src ? 'pointer-events:none' : ''}>
+        <p class="mono reel__label">Longform Edits · {showreel.src ? 'Showreel' : 'Showreel coming soon'}</p>
+        <h2 id="reel-title" class="reel__title">Raw footage in.<br /><em class="serif">A finished video</em> out.</h2>
+        <p class="mono reel__label">You film · We edit · You publish</p>
+      </div>
+      {!showreel.src && <span class="reel__play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>}
+    </div>
+    <ul class="reel__chips" role="list" data-reveal style="--d:140ms">
+      <li class="tag">{facts.finalLength} final</li>
+      <li class="tag">B-roll · sound · music</li>
+      <li class="tag">Thumbnail included</li>
+    </ul>
+  </div>
+</section>
+<style>
+  .reel { padding-top: calc(var(--section) * 0.7); }
+  .reel__eyebrow { display: block; text-align: center; margin-bottom: var(--s-5); color: var(--muted); }
+  .reel__card {
+    position: relative; aspect-ratio: 16/8; min-height: 22rem; border-radius: var(--r-3); overflow: hidden;
+    border: 1px solid rgb(47 209 128 / 0.25);
+    background: radial-gradient(70% 90% at 85% 50%, #2fd180 0%, #128a50 28%, #07301d 60%, #04140c 100%);
+    box-shadow: 0 40px 140px -40px rgb(47 209 128 / 0.5);
+  }
+  .reel__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .reel__inner { position: relative; height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding: clamp(1.25rem, 1rem + 2vw, 2.75rem); }
+  .reel__label { color: rgb(255 255 255 / 0.7); text-transform: uppercase; letter-spacing: 0.14em; }
+  .reel__title { font-size: clamp(2.25rem, 1.4rem + 4vw, 5.25rem); font-weight: 800; letter-spacing: -0.045em; line-height: 0.98; color: #fff; }
+  .reel__title em { color: #b8ffd8; font-size: 1.06em; }
+  .reel__play { position: absolute; right: clamp(1.25rem, 6vw, 6rem); top: 50%; translate: 0 -50%; width: clamp(4rem, 3rem + 3vw, 6rem); aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; background: #04140c; color: #fff; box-shadow: 0 0 0 10px rgb(255 255 255 / 0.06); }
+  .reel__play svg { width: 38%; margin-left: 6%; }
+  .reel__chips { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--s-2); margin-top: var(--s-5); }
+  .reel__chips .tag { font-size: 0.625rem; padding: 0.6em 1em; }
+  @media (max-width: 700px) { .reel__card { aspect-ratio: auto; min-height: 24rem; } .reel__play { top: auto; bottom: 1.25rem; translate: none; } }
+</style>

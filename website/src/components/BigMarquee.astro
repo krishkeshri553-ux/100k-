@@ -1,0 +1,23 @@
+---
+/** Oversized scrolling format names. Decorative; the same list exists as text in "What we edit". */
+const words = ['Talking-head', 'Podcasts', 'Documentary', 'Educational', 'Business', 'Faceless', 'Vlogs'];
+---
+<section class="bigm" aria-label="Formats we edit">
+  <p class="container eyebrow">Who we edit for</p>
+  <div class="bigm__wrap" aria-hidden="true">
+    <div class="bigm__track">
+      {[0, 1].map(() => words.map((w, i) => <span class:list={['bigm__w', { 'bigm__w--hi': i % 3 === 1 }]}>{w}<i>/</i></span>))}
+    </div>
+  </div>
+  <p class="sr-only">YouTube talking-head videos, podcasts, documentary, educational, business, faceless and vlog content.</p>
+</section>
+<style>
+  .bigm { padding-block: calc(var(--section) * 0.55); overflow: hidden; }
+  .bigm .eyebrow { display: flex; margin-bottom: var(--s-5); }
+  .bigm__track { display: flex; width: max-content; animation: bigm 55s linear infinite; }
+  .bigm__w { font-family: var(--font-display); font-weight: 800; text-transform: uppercase; letter-spacing: -0.045em; line-height: 1; font-size: clamp(3.5rem, 2rem + 7vw, 9rem); color: rgb(255 255 255 / 0.12); white-space: nowrap; padding-right: 0.3em; }
+  .bigm__w--hi { color: rgb(255 255 255 / 0.85); }
+  .bigm__w i { font-style: normal; color: var(--brand); padding-left: 0.3em; }
+  @keyframes bigm { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .bigm__track { animation: none; } }
+</style>

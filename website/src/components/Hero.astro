@@ -1,63 +1,170 @@
 ---
-import Monitor from './Monitor.astro';
 import { cta } from '../config/site';
 import { facts, formatPrice, lowestPrice } from '../config/pricing';
----
-<section class="hero" aria-labelledby="hero-title">
-  <div class="container">
-    <p class="eyebrow hero__eyebrow" data-reveal>Done-for-you long-form video editing</p>
-    <h1 id="hero-title" class="hero__title">
-      <span class="hero__line" data-reveal style="--d:60ms">Your footage, cut into</span>
-      <span class="hero__line" data-reveal style="--d:140ms">long-form videos</span>
-      <span class="hero__line" data-reveal style="--d:220ms">worth <em class="serif">watching.</em></span>
-    </h1>
+import { showreel } from '../data/portfolio';
 
-    <div class="hero__body">
-      <div class="hero__copy" data-reveal style="--d:300ms">
-        <p class="lede">
-          You record. We edit. Longform Edits turns raw recordings into paced, polished
-          {facts.finalLength.replace(' minutes', '-minute')} videos for YouTube creators, podcasters, educators and brands —
-          with a first draft back in <span class="nowrap">{facts.firstDraft}</span>.
-        </p>
-        <div class="hero__ctas">
-          <a href={cta.primary.href} class="btn">{cta.primary.label} <span class="btn__arrow" aria-hidden="true">→</span></a>
-          <a href={cta.secondary.href} class="btn btn--ghost">{cta.secondary.label}</a>
-        </div>
-        <ul class="hero__facts" role="list">
-          <li><span class="mono">From</span><strong>{formatPrice(lowestPrice)}</strong><span>per video</span></li>
-          <li><span class="mono">Draft</span><strong>{facts.firstDraft.replace(/\s*hours/, 'h')}</strong><span>first cut</span></li>
-          <li><span class="mono">Revisions</span><strong>Unlimited</strong><span>on every plan</span></li>
-        </ul>
+const steps = [
+  { key: 'Footage', title: 'RAW FOOTAGE', note: '58 min of takes received' },
+  { key: 'Cut', title: 'THE CUT', note: 'Dead air and retakes removed' },
+  { key: 'B-roll', title: 'B-ROLL', note: 'Supporting shots placed' },
+  { key: 'Sound', title: 'SOUND', note: 'Music ducked under voice' },
+  { key: 'Colour', title: 'COLOUR', note: 'Cameras matched' },
+  { key: 'Thumb', title: 'THUMBNAIL', note: 'Designed with the edit' },
+  { key: 'Deliver', title: 'DELIVERED', note: `First draft in ${facts.firstDraft}` },
+];
+const ruler = ['00:00:00:00', '00:05:00:00', '00:10:00:00', '00:15:00:00', '00:20:00:00'];
+const bars = Array.from({ length: 64 }, (_, i) => Math.min(1, 0.18 + Math.abs(Math.sin(i * 0.9) * 0.5 + Math.sin(i * 0.27) * 0.35)));
+---
+<section class="hero glow" aria-labelledby="hero-title">
+  <div class="hero__ruler mono" aria-hidden="true">
+    <div class="container">{ruler.map((r) => <span>{r}</span>)}</div>
+  </div>
+
+  <div class="container hero__grid">
+    <div class="hero__copy">
+      <p class="tag tag--brand hero__badge" data-reveal><i></i>Done-for-you long-form editing · 10–20 min videos</p>
+      <h1 id="hero-title" class="hero__title">
+        <span class="hero__line" data-reveal style="--d:60ms">Long videos.</span>
+        <span class="hero__line" data-reveal style="--d:140ms"><em class="serif">Edited</em> to be</span>
+        <span class="hero__line" data-reveal style="--d:220ms">watched.</span>
+      </h1>
+      <p class="hero__lede" data-reveal style="--d:300ms">
+        Send us the raw recording. Our editors cut it into a paced, polished video — B-roll, sound, music and a
+        thumbnail included — with a first draft in <span class="nowrap">{facts.firstDraft}</span>. <strong>That's the whole job.</strong>
+      </p>
+      <div class="hero__ctas" data-reveal style="--d:360ms">
+        <a href={cta.primary.href} class="btn">{cta.primary.label} <span aria-hidden="true">↗</span></a>
+        <a href="#how" class="btn btn--ghost">See how it works <span aria-hidden="true">↓</span></a>
       </div>
-      <div class="hero__bay" data-reveal style="--d:200ms">
-        <Monitor />
-      </div>
+      <ul class="hero__facts" role="list" data-reveal style="--d:420ms">
+        <li><strong>{formatPrice(lowestPrice)}</strong> per video</li>
+        <li><strong>48–72h</strong> first draft</li>
+        <li><strong>Unlimited</strong> revisions</li>
+      </ul>
     </div>
+
+    <figure class="bay" data-bay data-reveal style="--d:200ms" aria-label="Illustration of how a long-form video moves through our edit">
+      <div class="bay__screen">
+        {showreel.src && (
+          <video class="bay__video" muted loop playsinline preload="none" poster={showreel.poster} data-ambient aria-label="Longform Edits showreel">
+            <source data-src={showreel.src} type="video/mp4" />
+          </video>
+        )}
+        <div class="bay__hud mono" aria-hidden="true">
+          <span><i class="rec"></i>Edit · LF_014</span>
+          <span class="bay__tc" data-timecode>00:12:48:16</span>
+        </div>
+        <div class="bay__stage" aria-hidden="true">
+          {steps.map((s, i) => <p class:list={['bay__word', { 'is-on': i === steps.length - 1 }]} data-word>{s.title}</p>)}
+        </div>
+        <div class="bay__tl" aria-hidden="true">
+          <div class="bay__lane"><span style="left:4%;width:12%">Hook</span><span style="left:30%;width:14%">B-roll</span><span style="left:62%;width:9%">Title</span><span style="left:80%;width:13%">B-roll</span></div>
+          <div class="bay__lane bay__lane--v"><span style="left:0;width:18%"></span><span style="left:18.4%;width:13%"></span><span style="left:31.8%;width:22%"></span><span style="left:54.2%;width:10%"></span><span style="left:64.6%;width:16%"></span><span style="left:81%;width:19%"></span></div>
+          <div class="bay__wave">{bars.map((h) => <i style={`--h:${h.toFixed(2)}`}></i>)}</div>
+          <span class="bay__head"></span>
+        </div>
+      </div>
+
+      <ol class="bay__checks" role="list" aria-hidden="true">
+        {steps.slice(1).map((s) => <li data-check><span class="bay__tick">✓</span><b>{s.key}</b> · {s.note}</li>)}
+      </ol>
+
+      <div class="bay__steps mono" aria-hidden="true">
+        {steps.map((s) => <span class="is-done" data-step><i></i>{s.key}</span>)}
+      </div>
+      <figcaption class="bay__cap mono">Illustration of a typical edit — not client footage.</figcaption>
+    </figure>
   </div>
 </section>
 
+<script>
+  const bay = document.querySelector<HTMLElement>('[data-bay]');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (bay && !reduce) {
+    const words = bay.querySelectorAll<HTMLElement>('[data-word]');
+    const steps = bay.querySelectorAll<HTMLElement>('[data-step]');
+    const checks = bay.querySelectorAll<HTMLElement>('[data-check]');
+    let i = 0, timer = 0;
+    const show = (n: number) => {
+      words.forEach((w, k) => w.classList.toggle('is-on', k === n));
+      steps.forEach((s, k) => { s.classList.toggle('is-done', k < n); s.classList.toggle('is-now', k === n); });
+      checks.forEach((c, k) => c.classList.toggle('is-on', k < n));
+    };
+    const run = () => { show(i); i = (i + 1) % words.length; timer = window.setTimeout(run, i === 0 ? 2600 : 1500); };
+    new IntersectionObserver(([e]) => { clearTimeout(timer); if (e.isIntersecting) run(); }).observe(bay);
+  }
+</script>
+
 <style>
-  .hero { padding-top: clamp(1.5rem, 0.75rem + 2vw, 3rem); padding-bottom: calc(var(--section) * 0.45); }
-  .hero__eyebrow { margin-bottom: var(--s-4); }
-  .hero__title { font-size: clamp(2.625rem, 1.55rem + 4.2vw, 5.5rem); font-weight: 600; letter-spacing: -0.038em; line-height: 0.96; max-width: 8.6em; }
+  .hero { padding-top: 4.25rem; padding-bottom: clamp(3rem, 2rem + 4vw, 6rem); --gx: 72%; --gy: 38%; overflow: hidden; }
+  .hero__ruler { border-bottom: 1px solid var(--line); color: rgb(255 255 255 / 0.28); font-size: 0.625rem; padding: 0.55rem 0 0.4rem; position: relative; }
+  .hero__ruler .container { display: flex; justify-content: space-between; }
+  .hero__ruler::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 6px; background: repeating-linear-gradient(90deg, rgb(255 255 255 / 0.18) 0 1px, transparent 1px 12px); }
+  @media (max-width: 700px) { .hero__ruler span:nth-child(even) { display: none; } }
+
+  .hero__grid { display: grid; gap: var(--s-8); padding-top: clamp(2.5rem, 1.5rem + 3vw, 4.5rem); }
+  @media (min-width: 1060px) { .hero__grid { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); align-items: center; gap: var(--s-7); } }
+
+  .hero__copy { display: grid; gap: var(--s-5); align-content: start; justify-items: start; }
+  .hero__badge i { width: 6px; height: 6px; border-radius: 50%; background: var(--brand); box-shadow: 0 0 8px var(--brand); }
+  .hero__title { font-size: clamp(3rem, 1.6rem + 5.4vw, 6.75rem); font-weight: 800; letter-spacing: -0.045em; line-height: 0.95; }
   .hero__line { display: block; }
-  .hero__title em { color: var(--green); letter-spacing: -0.03em; padding-right: 0.05em; }
-
-  .hero__body { display: grid; gap: var(--s-7); margin-top: clamp(1.75rem, 1.25rem + 1.8vw, 3rem); }
-  .hero__copy { display: grid; gap: var(--s-5); align-content: start; }
+  .hero__title em { font-size: 1.08em; letter-spacing: -0.02em; padding-right: 0.06em; }
+  .hero__lede { font-size: var(--fs-lg); max-width: 34rem; color: var(--ink-2); }
+  .hero__lede strong { color: var(--ink); font-weight: 650; }
   .hero__ctas { display: flex; flex-wrap: wrap; gap: var(--s-3); }
-  .hero__facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); }
-  .hero__facts li { display: grid; gap: 0.15rem; padding: var(--s-4) var(--s-3) 0 0; }
-  .hero__facts li + li { padding-left: var(--s-4); border-left: 1px solid var(--line); }
-  .hero__facts .mono { color: var(--muted); text-transform: uppercase; font-size: 0.6875rem; }
-  .hero__facts strong { color: var(--ink); font-size: clamp(1.125rem, 1rem + 0.6vw, 1.5rem); font-weight: 600; letter-spacing: -0.03em; }
-  .hero__facts span:last-child { font-size: var(--fs-sm); color: var(--muted); }
+  .hero__facts { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-5); font-size: var(--fs-sm); color: var(--muted); }
+  .hero__facts strong { color: var(--ink); font-weight: 700; margin-right: 0.25em; }
 
-  @media (min-width: 1000px) {
-    .hero__body { grid-template-columns: minmax(0, 4.2fr) minmax(0, 7.8fr); gap: var(--s-8); align-items: start; }
-    .hero__copy { padding-top: var(--s-2); }
+  /* Edit window */
+  .bay { position: relative; display: grid; gap: var(--s-4); }
+  .bay__screen {
+    position: relative; aspect-ratio: 16/10; border-radius: var(--r-3); overflow: hidden; border: 1px solid var(--line-strong);
+    background: radial-gradient(90% 80% at 50% 30%, #0f3a26 0%, #061a11 55%, #030a07 100%);
+    box-shadow: 0 30px 120px -30px rgb(47 209 128 / 0.35), inset 0 1px 0 rgb(255 255 255 / 0.06);
   }
-  @media (max-width: 999px) {
-    .hero__bay { order: 2; }
+  .bay__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+  .bay__hud { position: absolute; inset: 0.9rem 1rem auto; display: flex; justify-content: space-between; color: rgb(255 255 255 / 0.7); font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.12em; }
+  .bay__hud span { display: inline-flex; align-items: center; gap: 0.45rem; }
+  .rec { width: 7px; height: 7px; border-radius: 50%; background: #ff4d4d; box-shadow: 0 0 8px #ff4d4d; animation: blink 1.6s var(--ease-in-out) infinite; }
+  @keyframes blink { 50% { opacity: 0.25; } }
+  .bay__tc { color: var(--brand); font-variant-numeric: tabular-nums; }
+  .bay__stage { position: absolute; inset: 0 0 34% 0; display: grid; place-items: center; }
+  @media (min-width: 1241px) { .bay__stage { right: 44%; place-items: center; } }
+  .bay__word {
+    grid-area: 1 / 1; font-family: var(--font-display); font-weight: 800; letter-spacing: -0.03em;
+    font-size: clamp(1.75rem, 1rem + 2.6vw, 2.75rem); color: #fff; text-shadow: 0 0 40px rgb(47 209 128 / 0.5);
+    opacity: 0; transform: translateY(10px) scale(0.98); transition: opacity 500ms var(--ease), transform 600ms var(--ease);
   }
+  .bay__word.is-on { opacity: 1; transform: none; }
+  .bay__tl { position: absolute; left: 0.9rem; right: 0.9rem; bottom: 0.9rem; display: grid; gap: 4px; padding: 0.6rem; background: rgb(0 0 0 / 0.35); border: 1px solid var(--line); border-radius: var(--r-2); }
+  .bay__lane { position: relative; height: 0.95rem; border-radius: 3px; background: rgb(255 255 255 / 0.03); }
+  .bay__lane span { position: absolute; top: 0; bottom: 0; border-radius: 3px; background: var(--brand); color: var(--on-brand); font: 600 0.5rem/0.95rem var(--font-mono); text-transform: uppercase; padding: 0 0.35rem; overflow: hidden; white-space: nowrap; }
+  .bay__lane--v span { background: #3f8f68; }
+  .bay__wave { display: flex; align-items: center; gap: 2px; height: 1.1rem; }
+  .bay__wave i { flex: 1; height: calc(var(--h) * 100%); background: rgb(47 209 128 / 0.55); border-radius: 1px; }
+  .bay__head { position: absolute; top: 0.3rem; bottom: 0.3rem; left: 30%; width: 2px; background: #fff; box-shadow: 0 0 10px #fff; animation: head 9s linear infinite; }
+  @keyframes head { from { left: 0.6rem; } to { left: calc(100% - 0.6rem); } }
+
+  .bay__checks { position: absolute; right: -0.5rem; top: 14%; display: grid; gap: 0.4rem; width: min(15.5rem, 46%); }
+  .bay__checks li {
+    display: flex; gap: 0.5rem; align-items: center; padding: 0.5rem 0.7rem; font-size: 0.6875rem; color: var(--ink-2);
+    background: rgb(8 16 12 / 0.85); border: 1px solid var(--line-strong); border-radius: var(--r-2);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    opacity: 1; transform: none; transition: opacity 400ms var(--ease), transform 500ms var(--ease);
+  }
+  .js .bay__checks li { opacity: 0; transform: translateX(10px); }
+  .js .bay__checks li.is-on { opacity: 1; transform: none; }
+  .bay__checks b { color: var(--ink); font-weight: 650; }
+  .bay__tick { width: 1rem; height: 1rem; flex: none; display: grid; place-items: center; border-radius: 50%; background: var(--brand); color: var(--on-brand); font-size: 0.55rem; font-weight: 800; }
+  @media (max-width: 1240px) { .bay__checks { display: none; } }
+
+  .bay__steps { display: flex; justify-content: space-between; gap: var(--s-2); font-size: 0.5625rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); overflow: hidden; }
+  .bay__steps span { display: inline-flex; flex-direction: column; align-items: center; gap: 0.4rem; transition: color var(--t-med); }
+  .bay__steps i { width: 7px; height: 7px; border-radius: 50%; background: rgb(255 255 255 / 0.15); transition: background var(--t-med), box-shadow var(--t-med); }
+  .bay__steps .is-done i { background: var(--brand-deep); }
+  .bay__steps .is-now { color: var(--ink); }
+  .bay__steps .is-now i { background: var(--brand); box-shadow: 0 0 10px var(--brand); }
+  .bay__cap { color: var(--muted); font-size: 0.5625rem; text-align: center; text-transform: uppercase; letter-spacing: 0.12em; }
+  @media (prefers-reduced-motion: reduce) { .bay__head, .rec { animation: none; } }
 </style>

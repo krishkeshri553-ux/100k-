@@ -1,11 +1,17 @@
 ---
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
-import WorkShowcase from '../components/WorkShowcase.astro';
-import Formats from '../components/Formats.astro';
-import Reasons from '../components/Reasons.astro';
-import Process from '../components/Process.astro';
+import Ticker from '../components/Ticker.astro';
+import Showreel from '../components/Showreel.astro';
+import Problem from '../components/Problem.astro';
+import Compare from '../components/Compare.astro';
+import PinnedWords from '../components/PinnedWords.astro';
+import FormatsRail from '../components/FormatsRail.astro';
+import ProcessWheel from '../components/ProcessWheel.astro';
+import Calculator from '../components/Calculator.astro';
 import Pricing from '../components/Pricing.astro';
+import BigMarquee from '../components/BigMarquee.astro';
+import Fit from '../components/Fit.astro';
 import Faq from '../components/Faq.astro';
 import FinalCta from '../components/FinalCta.astro';
 import { serviceSchema } from '../lib/schema';
@@ -18,11 +24,17 @@ import { formatPrice, lowestPrice, facts } from '../config/pricing';
   schema={[serviceSchema()]}
 >
   <Hero />
-  <WorkShowcase />
-  <Formats compact />
-  <Process />
-  <Reasons />
+  <Ticker />
+  <Showreel />
+  <Problem />
+  <Compare />
+  <PinnedWords />
+  <FormatsRail />
+  <ProcessWheel />
+  <Calculator />
   <Pricing />
+  <BigMarquee />
+  <Fit />
   <Faq limit={6} more />
   <FinalCta />
 </Base>

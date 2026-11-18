@@ -2,63 +2,58 @@
 import Logo from './Logo.astro';
 import { site, nav as allNav, cta } from '../config/site';
 import { activeCategories } from '../lib/blog';
+import { formats } from '../data/services';
 
 const categories = await activeCategories();
 const nav = allNav.filter((n) => n.href !== '/blog/' || categories.length > 0);
-
 const socials = Object.entries(site.social).filter(([, url]) => url);
 const year = new Date().getFullYear();
 ---
-<footer class="ftr on-dark">
+<footer class="ftr">
   <div class="container">
     <div class="ftr__top">
       <div class="ftr__brand">
         <a href="/" aria-label="Longform Edits — home"><Logo /></a>
-        <p>Done-for-you long-form video editing for creators, podcasters, educators and brands. Long-form is all we edit.</p>
-        <a href={cta.primary.href} class="btn btn--sm">{cta.primary.label} <span class="btn__arrow" aria-hidden="true">→</span></a>
+        <p>Done-for-you long-form video editing for creators, podcasters, educators and brands. You film it. We edit it.</p>
+        <p><a class="ftr__mail" href={`mailto:${site.email}`}>✉ {site.email}</a></p>
+        <a href={cta.primary.href} class="btn btn--sm">{cta.primary.label} <span aria-hidden="true">↗</span></a>
       </div>
-
       <nav class="ftr__col" aria-label="Footer">
         <h2 class="mono">Studio</h2>
-        <ul role="list">
-          <li><a href="/">Home</a></li>
-          {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
-        </ul>
+        <ul role="list"><li><a href="/">Home</a></li>{nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}</ul>
       </nav>
-
-      {categories.length > 0 && <nav class="ftr__col" aria-label="Blog topics">
-        <h2 class="mono">From the blog</h2>
+      <div class="ftr__col">
+        <h2 class="mono">Formats</h2>
+        <ul role="list">{formats.map((f) => <li><a href="/services/">{f.name}</a></li>)}</ul>
+      </div>
+      <div class="ftr__col">
+        <h2 class="mono">{categories.length ? 'From the blog' : 'Legal'}</h2>
         <ul role="list">
           {categories.map((c) => <li><a href={`/blog/category/${c.slug}/`}>{c.name}</a></li>)}
-        </ul>
-      </nav>}
-
-      <div class="ftr__col">
-        <h2 class="mono">Contact</h2>
-        <ul role="list">
-          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li><a href="/privacy/">Privacy policy</a></li>
           {socials.map(([name, url]) => <li><a href={url} rel="me noopener" target="_blank">{name.charAt(0).toUpperCase() + name.slice(1)}</a></li>)}
         </ul>
       </div>
     </div>
-
+    <div class="ftr__word" aria-hidden="true">LONGFORM</div>
     <div class="ftr__base mono">
-      <span>© {year} {site.legalName} · <a href="/privacy/">Privacy</a></span>
+      <span>© {year} {site.legalName}</span>
       <span>Long-form video editing · <a href={site.url}>longformedits.com</a></span>
     </div>
   </div>
 </footer>
-
 <style>
-  .ftr { padding-top: var(--s-9); padding-bottom: var(--s-5); overflow: hidden; }
-  .ftr__top { display: grid; gap: var(--s-7); grid-template-columns: 1fr; }
-  @media (min-width: 760px) { .ftr__top { grid-template-columns: 1.6fr 1fr 1fr 1fr; } }
-  .ftr__brand { display: grid; gap: var(--s-5); justify-items: start; max-width: 22rem; }
-  .ftr__brand p { color: var(--on-forest-muted); font-size: 0.9375rem; }
-  .ftr__col h2 { color: var(--on-forest-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: var(--s-4); font-size: var(--fs-mono); }
-  .ftr__col ul { display: grid; gap: var(--s-2); }
-  .ftr__col a { color: var(--on-forest); font-size: 0.9375rem; transition: color var(--t-fast); word-break: break-word; }
-  .ftr__col a:hover { color: var(--signal); }
-  .ftr__base { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s-3); border-top: 1px solid var(--forest-line); padding-top: var(--s-5); margin-top: var(--s-9); color: var(--on-forest-muted); }
-  .ftr__base a:hover { color: var(--signal); }
+  .ftr { padding-top: var(--s-9); padding-bottom: var(--s-5); border-top: 1px solid var(--line); overflow: hidden; }
+  .ftr__top { display: grid; gap: var(--s-7); }
+  @media (min-width: 760px) { .ftr__top { grid-template-columns: 1.6fr 0.8fr 1fr 1fr; } }
+  .ftr__brand { display: grid; gap: var(--s-4); justify-items: start; max-width: 22rem; font-size: 0.9rem; }
+  .ftr__mail { color: var(--ink-2); }
+  .ftr__mail:hover { color: var(--brand); }
+  .ftr__col h2 { color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: var(--s-4); font-size: 0.625rem; }
+  .ftr__col ul { display: grid; gap: 0.55rem; }
+  .ftr__col a { color: var(--ink-2); font-size: 0.875rem; transition: color var(--t-fast); }
+  .ftr__col a:hover { color: var(--brand); }
+  .ftr__word { margin-top: var(--s-8); font-family: var(--font-display); font-weight: 900; font-size: clamp(3.5rem, 14.5vw, 15rem); line-height: 0.8; letter-spacing: -0.06em; text-align: center; color: transparent; -webkit-text-stroke: 1px rgb(255 255 255 / 0.12); user-select: none; white-space: nowrap; }
+  .ftr__base { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s-3); border-top: 1px solid var(--line); padding-top: var(--s-5); margin-top: var(--s-6); color: var(--muted); }
+  .ftr__base a:hover { color: var(--brand); }
 </style>

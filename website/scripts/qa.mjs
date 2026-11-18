@@ -61,7 +61,8 @@ for (const file of pages) {
     if (u.startsWith('/') && !u.startsWith('/_astro') && !/\.[a-z0-9]+([?#]|$)/i.test(u) && !u.split(/[?#]/)[0].endsWith('/')) err(`link without trailing slash ${u}`);
   }
 
-  const text = html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, '');
+  // The calculator shows example outputs from the visitor's inputs, not prices.
+  const text = html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, '').replace(/<section[^>]*id="calculator"[\s\S]*?<\/section>/, '');
   for (const m of text.matchAll(/\$\d[\d,]*(?:\.\d+)?/g)) if (!ALLOWED_PRICES.has(m[0])) err(`unexpected price ${m[0]}`);
   if (/lorem ipsum|TODO|FIXME/i.test(text)) err('placeholder copy found');
 

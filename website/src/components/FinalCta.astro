@@ -1,30 +1,60 @@
 ---
-import { cta } from '../config/site';
+import { cta, site } from '../config/site';
+import { facts } from '../config/pricing';
 
-export interface Props { title?: string; body?: string }
+export interface Props { title?: string; accent?: string; body?: string }
 const {
-  title = 'Your next video is already recorded.',
-  body = 'Send us the footage and a short brief. We\u2019ll turn it into a video you\u2019re proud to publish.',
+  title = 'Your next video is already',
+  accent = 'recorded.',
+  body = 'Send us the footage and a short brief. We’ll turn it into a video you’re proud to publish.',
 } = Astro.props;
+const floats = [
+  { t: `Draft in ${facts.firstDraft.replace(' hours', 'h')}`, c: 'f1' },
+  { t: 'Unlimited revisions', c: 'f2' },
+  { t: 'Thumbnail included', c: 'f3' },
+  { t: `${facts.finalLength}`, c: 'f4' },
+];
 ---
-<section class="fcta on-dark" aria-labelledby="fcta-title">
+<section class="fcta glow" aria-labelledby="fcta-title" style="--gy:55%">
+  <div class="fcta__floats" aria-hidden="true">{floats.map((f) => <span class={`fcta__card ${f.c}`}>{f.t}</span>)}</div>
   <div class="container fcta__inner">
-    <p class="eyebrow" data-reveal>Start here</p>
-    <h2 id="fcta-title" class="fcta__title" data-reveal style="--d:80ms">
-      {title.split(' ').slice(0, -1).join(' ')} <em class="serif">{title.split(' ').slice(-1)}</em>
-    </h2>
+    <p class="mono fcta__kicker" data-reveal>You've seen the process. <span>Now send the footage.</span></p>
+    <h2 id="fcta-title" class="fcta__title" data-reveal style="--d:80ms">{title} <em class="serif">{accent}</em></h2>
     <p class="lede" data-reveal style="--d:140ms">{body}</p>
     <div class="fcta__actions" data-reveal style="--d:200ms">
-      <a href={cta.primary.href} class="btn">{cta.primary.label} <span class="btn__arrow" aria-hidden="true">→</span></a>
-      <a href="/pricing/" class="btn btn--ghost">See pricing</a>
+      <a href={cta.primary.href} class="btn btn--lg fcta__btn">{cta.primary.label} <span aria-hidden="true">↗</span></a>
+      <a href="/pricing/" class="btn btn--ghost btn--lg">See pricing</a>
     </div>
+    <p class="mono fcta__direct" data-reveal style="--d:240ms">Or email us directly · <a href={`mailto:${site.email}`}>{site.email}</a></p>
   </div>
 </section>
-
 <style>
-  .fcta { position: relative; padding-block: var(--section); overflow: hidden; background: var(--forest); border-bottom: 1px solid var(--forest-line); }
-  .fcta__inner { display: grid; gap: var(--s-5); justify-items: start; position: relative; z-index: 1; }
-  .fcta__title { font-size: var(--fs-h1); letter-spacing: -0.038em; line-height: 0.98; max-width: 8em; }
-  .fcta__title em { color: var(--signal); }
-  .fcta__actions { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-3); }
+  .fcta { position: relative; padding-block: calc(var(--section) * 1.1); overflow: hidden; border-top: 1px solid var(--line); }
+  .fcta::before { background: radial-gradient(45% 55% at 50% 55%, rgb(47 209 128 / 0.22), transparent 70%); }
+  .fcta__inner { position: relative; z-index: 1; display: grid; gap: var(--s-5); justify-items: center; text-align: center; }
+  .fcta__kicker { text-transform: uppercase; letter-spacing: 0.22em; color: var(--ink-2); }
+  .fcta__kicker span { color: var(--brand); }
+  .fcta__title { font-size: clamp(2.75rem, 1.4rem + 6vw, 7.5rem); font-weight: 800; letter-spacing: -0.05em; line-height: 0.95; text-transform: uppercase; max-width: 12em; }
+  .fcta__title em { text-transform: none; font-size: 1.1em; }
+  .fcta .lede { margin-inline: auto; }
+  .fcta__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--s-3); margin-top: var(--s-3); }
+  .fcta__btn { box-shadow: 0 0 60px -6px rgb(47 209 128 / 0.7); text-transform: uppercase; letter-spacing: 0.02em; font-weight: 800; }
+  .fcta__direct { color: var(--muted); text-transform: uppercase; letter-spacing: 0.14em; }
+  .fcta__direct a { color: var(--ink-2); text-transform: none; letter-spacing: 0.02em; }
+  .fcta__direct a:hover { color: var(--brand); }
+  .fcta__floats { position: absolute; inset: 0; pointer-events: none; }
+  .fcta__card {
+    position: absolute; width: 8.5rem; aspect-ratio: 3/4; border-radius: var(--r-3); display: grid; place-items: center; text-align: center; padding: 0.75rem;
+    font-family: var(--font-display); font-weight: 800; font-size: 0.8125rem; line-height: 1.15; text-transform: uppercase; color: #fff;
+    background: linear-gradient(160deg, #17734a, #062616); border: 1px solid rgb(47 209 128 / 0.35);
+    box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.8), 0 0 40px -10px rgb(47 209 128 / 0.5);
+    animation: float 7s var(--ease-in-out) infinite;
+  }
+  .f1 { left: 4%; top: 16%; rotate: -10deg; }
+  .f2 { right: 5%; top: 12%; rotate: 8deg; animation-delay: -2s; }
+  .f3 { left: 7%; bottom: 10%; rotate: 7deg; animation-delay: -4s; }
+  .f4 { right: 7%; bottom: 14%; rotate: -8deg; animation-delay: -1s; }
+  @keyframes float { 50% { translate: 0 -14px; } }
+  @media (max-width: 1100px) { .fcta__floats { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .fcta__card { animation: none; } }
 </style>

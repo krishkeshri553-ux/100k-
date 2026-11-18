@@ -5,7 +5,7 @@ import { faqs, type Faq } from '../data/faq';
 export interface Props { items?: Faq[]; title?: string; intro?: string; /** Show only the first n questions. */ limit?: number; /** Link to the full list on /process/. */ more?: boolean }
 const {
   items = faqs,
-  title = 'Questions, answered.',
+  title = 'Before you send footage.',
   intro = 'The things people ask before sending their first video.',
   limit,
   more = false,
@@ -24,7 +24,8 @@ const shown = limit ? items.slice(0, limit) : items;
       {shown.map((f) => (
         <details class="faq__item" data-reveal>
           <summary>
-            <span>{f.q}</span>
+            <span class="faq__n mono" aria-hidden="true">{String(shown.indexOf(f) + 1).padStart(2, '0')}</span>
+            <span class="faq__q">{f.q}</span>
             <span class="faq__icon" aria-hidden="true"></span>
           </summary>
           <div class="faq__a"><p>{f.a}</p></div>
@@ -38,23 +39,18 @@ const shown = limit ? items.slice(0, limit) : items;
 <style>
   .faq__grid { display: grid; gap: var(--s-7); }
   .faq__intro { display: grid; gap: var(--s-5); align-content: start; }
-  @media (min-width: 1000px) {
-    .faq__grid { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: var(--s-9); }
-    .faq__intro { position: sticky; top: 6rem; }
-  }
-  .faq__list { border-top: 1px solid var(--line-strong); }
+  @media (min-width: 1000px) { .faq__grid { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: var(--s-9); } .faq__intro { position: sticky; top: 7rem; } }
+  .faq__list { border-top: 1px solid var(--line); }
   .faq__item { border-bottom: 1px solid var(--line); }
-  .faq__item summary {
-    list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: var(--s-5);
-    padding: var(--s-5) 0; color: var(--ink); font-size: var(--fs-lg); font-weight: 600; letter-spacing: -0.02em; line-height: 1.3;
-  }
+  .faq__item summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 2.5rem 1fr auto; align-items: center; gap: var(--s-3); padding: 1.35rem 0; color: var(--ink); font-weight: 650; font-size: 1.0625rem; letter-spacing: -0.015em; line-height: 1.35; transition: color var(--t-fast); }
   .faq__item summary::-webkit-details-marker { display: none; }
-  .faq__item summary:hover { color: var(--green); }
-  .faq__icon { position: relative; width: 1.75rem; height: 1.75rem; flex: none; border: 1px solid var(--line-strong); border-radius: 50%; }
+  .faq__item summary:hover { color: var(--brand); }
+  .faq__n { color: var(--muted); }
+  .faq__icon { position: relative; width: 1.9rem; height: 1.9rem; border: 1px solid var(--line-strong); border-radius: 50%; color: var(--ink-2); transition: all var(--t-med) var(--ease); }
   .faq__icon::before, .faq__icon::after { content: ''; position: absolute; left: 50%; top: 50%; width: 10px; height: 1.5px; background: currentColor; translate: -50% -50%; transition: rotate var(--t-med) var(--ease); }
   .faq__icon::after { rotate: 90deg; }
   .faq__item[open] .faq__icon::after { rotate: 0deg; }
-  .faq__item[open] .faq__icon { background: var(--green); border-color: var(--green); color: var(--white); }
+  .faq__item[open] .faq__icon { background: var(--brand); border-color: var(--brand); color: var(--on-brand); }
+  .faq__a { padding: 0 3rem 1.4rem 2.5rem; max-width: 46rem; margin-left: var(--s-3); color: var(--ink-2); }
   .faq__more { padding-top: var(--s-5); }
-  .faq__a { padding: 0 3rem var(--s-5) 0; max-width: 46rem; }
 </style>

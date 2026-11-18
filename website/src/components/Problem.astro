@@ -1,0 +1,45 @@
+---
+/** Big statement whose words light up as it scrolls through the viewport. */
+const lead = "Most creators don't have an ideas problem. They have an";
+const accent = 'editing';
+const tail = 'problem. The recording takes an hour. The edit takes the weekend — so the upload slips.';
+const words = (s: string) => s.split(' ');
+---
+<section class="section prob" aria-labelledby="prob-title">
+  <div class="container">
+    <p class="eyebrow" data-reveal>The real problem</p>
+    <h2 id="prob-title" class="prob__text" data-lightup>
+      {words(lead).map((w) => <span>{w} </span>)}<em class="serif"><span>{accent}</span></em>{' '}{words(tail).map((w) => <span>{w} </span>)}
+    </h2>
+  </div>
+</section>
+<script>
+  const el = document.querySelector<HTMLElement>('[data-lightup]');
+  if (el && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const spans = [...el.querySelectorAll<HTMLElement>('span')];
+    el.classList.add('is-armed');
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const r = el.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const p = Math.min(1, Math.max(0, (vh * 0.85 - r.top) / (r.height + vh * 0.35)));
+      const lit = Math.round(p * spans.length);
+      spans.forEach((s, i) => s.classList.toggle('is-lit', i < lit));
+    };
+    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+    new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) window.addEventListener('scroll', onScroll, { passive: true });
+      else window.removeEventListener('scroll', onScroll);
+      update();
+    }).observe(el);
+  }
+</script>
+<style>
+  .prob__text { margin-top: var(--s-5); font-size: clamp(2rem, 1.3rem + 3vw, 4.25rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.08; max-width: 22ch; }
+  .prob__text em { font-size: 1.05em; }
+  .prob__text.is-armed span { color: rgb(255 255 255 / 0.18); transition: color 350ms var(--ease); }
+  .prob__text.is-armed em span { color: rgb(47 209 128 / 0.25); }
+  .prob__text.is-armed span.is-lit { color: var(--ink); }
+  .prob__text.is-armed em span.is-lit { color: var(--brand); }
+</style>

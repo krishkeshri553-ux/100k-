@@ -4,12 +4,12 @@ import { plans, formatPrice, perVideo } from '../config/pricing';
 export interface Props { headingTag?: 'h1' | 'h2'; id?: string; /** Omit the section heading (when the page already has one). */ bare?: boolean }
 const { headingTag: H = 'h2', id = 'pricing', bare = false } = Astro.props;
 ---
-<section class="section sunken price" id={id} aria-labelledby={bare ? undefined : 'pricing-title'} aria-label={bare ? 'Packages' : undefined}>
+<section class="section price glow" id={id} aria-labelledby={bare ? undefined : 'pricing-title'} aria-label={bare ? 'Packages' : undefined}>
   <div class="container">
     {!bare && <div class="section-head section-head--split">
       <div>
         <p class="eyebrow" data-reveal>Pricing</p>
-        <H id="pricing-title" class="h2" data-reveal style="--d:80ms">Clear prices. No quote calls.</H>
+        <H id="pricing-title" class="h2" data-reveal style="--d:80ms">Clear prices. <em class="serif">No quote calls.</em></H>
       </div>
       <p class="lede" data-reveal style="--d:140ms">
         Start with one video, or set up a monthly plan for a steady publishing schedule.
@@ -55,38 +55,27 @@ const { headingTag: H = 'h2', id = 'pricing', bare = false } = Astro.props;
 </section>
 
 <style>
-  .plans { display: grid; gap: var(--s-4); }
-  @media (min-width: 960px) { .plans { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; } }
+  .price { --gy: 55%; }
+  .plans { display: grid; gap: var(--s-4); align-items: stretch; }
+  @media (min-width: 960px) { .plans { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
   .plan {
-    display: flex; flex-direction: column; gap: var(--s-5);
-    background: var(--white); border: 1px solid var(--line); padding: clamp(1.5rem, 1.2rem + 1.2vw, 2.5rem);
-    border-radius: var(--r-2);
+    display: flex; flex-direction: column; gap: var(--s-5); position: relative;
+    padding: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem); border-radius: var(--r-3);
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.04), rgb(255 255 255 / 0.01)); border: 1px solid var(--line);
   }
-  @media (min-width: 960px) {
-    .plan { border-radius: 0; }
-    .plan:first-child { border-radius: var(--r-2) 0 0 var(--r-2); }
-    .plan:last-child { border-radius: 0 var(--r-2) var(--r-2) 0; }
-    .plan + .plan { border-left: 0; }
-  }
-  .plan--mid { background: var(--forest); border-color: var(--forest); color: var(--on-forest-muted); }
-  .plan--mid .plan__name, .plan--mid .plan__amount { color: var(--on-forest); }
-  .plan--mid .tag { border-color: var(--forest-line); color: var(--on-forest-muted); }
-  .plan--mid .plan__list li { border-color: var(--forest-line); }
-  .plan--mid .plan__list svg, .plan--mid .plan__per { color: var(--signal); }
-  .plan--mid .btn { --btn-bg: var(--signal); --btn-fg: var(--forest); --btn-bd: var(--signal); }
-  .plan--mid .btn:hover { --btn-bg: var(--on-forest); --btn-bd: var(--on-forest); }
-
+  .plan--mid { border-color: rgb(47 209 128 / 0.55); background: linear-gradient(180deg, rgb(47 209 128 / 0.12), rgb(47 209 128 / 0.02) 50%), var(--surface); box-shadow: 0 30px 100px -30px rgb(47 209 128 / 0.5); }
+  @media (min-width: 960px) { .plan--mid { transform: translateY(-12px); } }
   .plan__head { display: grid; gap: var(--s-3); }
   .plan__row { display: flex; justify-content: space-between; align-items: center; gap: var(--s-3); }
-  .plan__name { font-size: var(--fs-h4); letter-spacing: -0.03em; }
-  .plan__fit { font-size: 0.9375rem; min-height: 3em; }
+  .plan__name { font-size: var(--fs-h4); }
+  .plan--mid .tag { color: var(--brand); border-color: rgb(47 209 128 / 0.4); background: var(--brand-soft); }
+  .plan__fit { font-size: 0.9rem; min-height: 3em; color: var(--ink-2); }
   .plan__price { display: flex; align-items: baseline; gap: var(--s-2); }
-  .plan__amount { font-size: clamp(3rem, 2.4rem + 2.4vw, 4.5rem); font-weight: 600; letter-spacing: -0.045em; color: var(--ink); line-height: 1; }
-  .plan__period { color: var(--muted); }
-  .plan--mid .plan__period { color: var(--on-forest-muted); }
-  .plan__per { color: var(--green); margin-top: calc(var(--s-4) * -1); }
-  .plan__list { display: grid; flex: 1; align-content: start; }
-  .plan__list li { display: flex; gap: var(--s-3); align-items: flex-start; padding: 0.55rem 0; border-top: 1px solid var(--line); font-size: 0.9375rem; }
-  .plan__list svg { width: 1rem; flex: none; margin-top: 0.25rem; color: var(--green); }
-  .price__note { margin-top: var(--s-6); font-size: var(--fs-sm); }
+  .plan__amount { font-family: var(--font-display); font-size: clamp(3rem, 2.4rem + 2.4vw, 4.25rem); font-weight: 800; letter-spacing: -0.05em; color: var(--ink); line-height: 1; }
+  .plan__period { color: var(--muted); font-size: 0.9rem; }
+  .plan__per { color: var(--brand); margin-top: calc(var(--s-4) * -1); text-transform: uppercase; letter-spacing: 0.1em; }
+  .plan__list { display: grid; flex: 1; align-content: start; gap: 0.15rem; }
+  .plan__list li { display: flex; gap: var(--s-3); align-items: flex-start; padding: 0.45rem 0; font-size: 0.9rem; color: var(--ink); }
+  .plan__list svg { width: 1rem; flex: none; margin-top: 0.25rem; color: var(--brand); }
+  .price__note { margin-top: var(--s-6); font-size: var(--fs-sm); text-align: center; }
 </style>

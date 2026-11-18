@@ -1,0 +1,54 @@
+---
+/** Without vs with — editing yourself compared to sending it to us. */
+import { facts } from '../config/pricing';
+const rows = [
+  ['Footage', 'Hours scrubbing through takes', 'We organise and select the best takes'],
+  ['The cut', 'Your evenings, or a freelancer you chase', 'Paced, tight cuts — dead air and retakes gone'],
+  ['B-roll & graphics', 'Skipped when you run out of time', 'Placed where your point needs a picture'],
+  ['Sound & music', 'Levels all over the place', 'Clean dialogue, music ducked under your voice'],
+  ['Thumbnail', 'Another job at midnight', 'Included with every video'],
+  ['Schedule', 'Uploads slip when work gets busy', `First draft back in ${facts.firstDraft}`],
+];
+---
+<section class="section cmpx" aria-labelledby="cmpx-title">
+  <div class="container">
+    <div class="section-head section-head--split">
+      <div>
+        <p class="eyebrow" data-reveal>Side by side</p>
+        <h2 id="cmpx-title" class="h2" data-reveal style="--d:80ms">Editing it yourself <em class="serif">vs</em> sending it to us.</h2>
+      </div>
+      <p class="lede" data-reveal style="--d:140ms">Recording is the part only you can do. Everything after it can be handed off.</p>
+    </div>
+    <div class="cmpx__table card" role="table" aria-label="Editing yourself compared with Longform Edits" data-reveal>
+      <div class="cmpx__row cmpx__head mono" role="row">
+        <span role="columnheader"><span class="sr-only">Stage</span></span>
+        <span role="columnheader">Editing it yourself</span>
+        <span role="columnheader">With Longform Edits</span>
+      </div>
+      {rows.map(([stage, without, withUs]) => (
+        <div class="cmpx__row" role="row">
+          <span role="rowheader" class="cmpx__stage">{stage}</span>
+          <span role="cell" class="cmpx__no"><i aria-hidden="true">–</i>{without}</span>
+          <span role="cell" class="cmpx__yes"><i aria-hidden="true">✓</i>{withUs}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+<style>
+  .cmpx__table { overflow: hidden; box-shadow: 0 30px 100px -50px rgb(47 209 128 / 0.35); }
+  .cmpx__row { display: grid; grid-template-columns: 1fr; gap: 0.35rem; padding: 1.1rem 1.4rem; border-top: 1px solid var(--line); }
+  .cmpx__head { display: none; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); border-top: 0; }
+  .cmpx__head span:last-child { color: var(--ink); }
+  .cmpx__stage { color: var(--ink); font-weight: 700; font-size: 0.9375rem; }
+  .cmpx__no, .cmpx__yes { display: flex; gap: 0.7rem; font-size: 0.9rem; }
+  .cmpx__no { color: var(--muted); }
+  .cmpx__no i { color: #ff6b6b; font-style: normal; }
+  .cmpx__yes { color: var(--ink); }
+  .cmpx__yes i { color: var(--brand); font-style: normal; font-weight: 800; }
+  @media (min-width: 820px) {
+    .cmpx__row { grid-template-columns: 0.8fr 1.2fr 1.4fr; align-items: center; gap: var(--s-5); }
+    .cmpx__head { display: grid; }
+    .cmpx__yes { background: linear-gradient(90deg, var(--brand-soft), transparent); margin: -1.1rem -1.4rem -1.1rem 0; padding: 1.1rem 1.4rem; border-left: 1px solid rgb(47 209 128 / 0.2); }
+  }
+</style>

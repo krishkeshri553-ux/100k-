@@ -64,7 +64,7 @@ for (const w of widths) {
   const p = await ctx.newPage();
   await p.goto(BASE + '/');
   const op = await p.evaluate(() => getComputedStyle(document.querySelector('[data-reveal]')).opacity);
-  const anim = await p.evaluate(() => getComputedStyle(document.querySelector('.tl__head')).animationName);
+  const anim = await p.evaluate(() => getComputedStyle(document.querySelector('.bay__head')).animationName);
   if (op !== '1') fails.push(`reduced motion: reveal opacity ${op}`);
   if (anim !== 'none') fails.push(`reduced motion: playhead still animating (${anim})`);
   await ctx.close();
